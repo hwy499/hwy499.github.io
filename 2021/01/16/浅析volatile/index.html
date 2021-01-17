@@ -196,7 +196,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      701 字
+      1.3k 字
     </span>
   
 
@@ -206,7 +206,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      7
+      13
        分钟
     </span>
   
@@ -240,12 +240,12 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：1 天前
+                  本文最后更新于：几秒前
                 
               </p>
             
             <div class="markdown-body">
-              <h2 id="浅析volatile"><a href="#浅析volatile" class="headerlink" title="浅析volatile"></a>浅析volatile</h2><h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p><img src="https://i.loli.net/2021/01/17/frxhGLzC8VTpwmg.png" srcset="/img/loading.gif" alt="内存模型"></p>
+              <h2 id="浅析volatile"><a href="#浅析volatile" class="headerlink" title="浅析volatile"></a>浅析volatile</h2><h3 id="为什么引入volatile"><a href="#为什么引入volatile" class="headerlink" title="为什么引入volatile"></a>为什么引入volatile</h3><p><img src="https://i.loli.net/2021/01/17/frxhGLzC8VTpwmg.png" srcset="/img/loading.gif" alt="内存模型"></p>
 <blockquote>
 <p>举个例子，比如说有两个线程，他们的代码里都需要读取data这个变量的值，那么他们都会从主内存里加载data变量的值到自己的工作内存，然后才可以使用那个值。好了，现在大家从图里看到，每个线程都把data这个变量的副本加载到了自己的工作内存里了，所以每个线程都可以读到data = 0这个值。</p>
 <p>这样，在线程代码运行的过程中，对data的值都可以直接从工作内存里加载了，不需要再从主内存里加载了。</p>
@@ -270,6 +270,35 @@
 <p>那如果要解决这个问题怎么办呢？这时就轮到<strong>volatile</strong>闪亮登场了！你只要给data这个变量在定义的时候加一个volatile，就直接可以完美的解决这个可见性的问题。</p>
 </blockquote>
 <p>比如下面的这样的代码，在加了volatile之后，会有啥作用呢？</p>
+<div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ThreadTest</span> </span>&#123;
+
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">volatile</span> <span class="hljs-keyword">int</span> data = <span class="hljs-number">0</span>;
+
+&#125;
+<span class="hljs-comment">// 启用两个线程，一个线程会读取和修改data的值，一个线程会读取data的值</span></code></pre></div>
+<ul>
+<li><p>第一，一旦data变量定义的时候前面加了volatile来修饰的话，那么线程1只要修改data变量的值，就会在修改完自己本地工作内存的data变量值之后，强制将这个data变量最新的值刷回主内存，必须让主内存里的data变量值立马变成最新的值！</p>
+<p><strong>整个过程，如下图所示：</strong></p>
+<p><img src="https://i.loli.net/2021/01/17/R3dQ5fkvtGhZHCu.png" srcset="/img/loading.gif" alt="volatile2.png"></p>
+</li>
+<li><p>第二，如果此时别的线程的工作内存中有这个data变量的本地缓存，也就是一个变量副本的话，那么会强制让其他线程的工作内存中的data变量缓存直接失效过期，不允许再次读取和使用了！</p>
+<p><strong>整个过程，如下图所示：</strong></p>
+<p><img src="https://i.loli.net/2021/01/17/Zh2f3Kmq8dxE1u6.png" srcset="/img/loading.gif" alt="volatile3.png"></p>
+</li>
+</ul>
+<ul>
+<li><p>第三，如果线程2在代码运行过程中再次需要读取data变量的值，此时尝试从本地工作内存中读取，就会发现这个data = 0已经过期了！此时，他就必须重新从主内存中加载data变量最新的值！那么不就可以读取到data = 1这个最新的值了！</p>
+<p><strong>整个过程，参见下图：</strong></p>
+<p><img src="https://i.loli.net/2021/01/17/CyEIxFn1TQOWa39.png" srcset="/img/loading.gif" alt="volatile4.png"></p>
+</li>
+<li><p>至此，volatile完美解决了java并发中可见性的问题！对一个变量加了volatile关键字修饰之后，只要一个线程修改了这个变量的值，立马强制刷回主内存。接着强制过期其他线程的本地工作内存中的缓存，最后其他线程读取变量值的时候，强制重新从主内存来加载最新的值！这样就保证，任何一个线程修改了变量值，其他线程立马就可以看见了。这就是所谓的volatile保证了可见性的工作原理。</p>
+</li>
+</ul>
+<h3 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h3><p><strong>注意：volatile主要作用是保证可见性以及有序性。volatile是不能保证原子性的！，原子性问题，得依赖synchronized、ReentrantLock等加锁机制来解决。</strong></p>
+<blockquote>
+<p>volatile主要解决的是一个线程修改变量值之后，其他线程立马可以读到最新的值，是解决这个问题的，也就是可见性！</p>
+<p>如果是多个线程同时修改一个变量的值，那还是可能出现多线程并发的安全问题，导致数据值修改错乱，volatile是不负责解决这个问题的，也就是不负责解决原子性问题！</p>
+</blockquote>
 
             </div>
             <hr>
