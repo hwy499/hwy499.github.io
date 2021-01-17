@@ -193,7 +193,7 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2021/01/16/%E6%B5%85%E6%9E%90volatile/">浅析Vvolatile</a>
+        <a href="/2021/01/16/%E6%B5%85%E6%9E%90volatile/">浅析volatile</a>
       </h1>
 
       <p class="index-excerpt">
@@ -202,7 +202,10 @@
           
             
           
-          
+          浅析volatile前言
+
+举个例子，比如说有两个线程，他们的代码里都需要读取data这个变量的值，那么他们都会从主内存里加载data变量的值到自己的工作内存，然后才可以使用那个值。好了，现在大家从图里看到，每个线程都把data这个变量的副本加载到了自己的工作内存里了，所以每个线程都可以读到data = 0这个值。
+这样，在线程代码运行的过程中，对data的值都可以直接从工作内存里加载了，不需要再
         </a>
       </p>
 
@@ -216,6 +219,28 @@
           </div>
         
         
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a>
+            
+              <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a>
+            
+              <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/%E5%A4%9A%E7%BA%BF%E7%A8%8B/">多线程</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/java/">java</a>
+            
+              <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/">多线程</a>
+            
+              <a href="/tags/volatile/">volatile</a>
+            
+          </div>
         
       </div>
     </article>
