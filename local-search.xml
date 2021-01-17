@@ -4,39 +4,6 @@
   
   
   <entry>
-    <title>浅析volatile</title>
-    <link href="/2021/01/16/%E6%B5%85%E6%9E%90Vvolatile/"/>
-    <url>/2021/01/16/%E6%B5%85%E6%9E%90Vvolatile/</url>
-    
-    <content type="html"><![CDATA[<h2 id="浅析volatile"><a href="#浅析volatile" class="headerlink" title="浅析volatile"></a>浅析volatile</h2><h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p><img src="https://i.loli.net/2021/01/17/frxhGLzC8VTpwmg.png" alt="内存模型"></p><blockquote><p>举个例子，比如说有两个线程，他们的代码里都需要读取data这个变量的值，那么他们都会从主内存里加载data变量的值到自己的工作内存，然后才可以使用那个值。好了，现在大家从图里看到，每个线程都把data这个变量的副本加载到了自己的工作内存里了，所以每个线程都可以读到data = 0这个值。</p><p>这样，在线程代码运行的过程中，对data的值都可以直接从工作内存里加载了，不需要再从主内存里加载了。</p></blockquote><p>为啥一定要让每个线程用一个工作内存来存放变量的副本以供读取呢？直接让线程每次都从主内存加载变量的值不行吗？</p><blockquote><p>因为线程运行的代码对应的是一些指令，是由CPU执行的！CPU每次执行指令运算的时候，每次需要一个变量的值，都从主内存加载，性能会比较差。</p><p>所以说后来，就是提出了线程工作内存的概念，类似于一个<strong>高速的本地缓存。</strong>这样一来，线程的代码在执行过程中，就可以直接从自己本地缓存里加载变量副本，不需要从主内存加载变量值，性能可以提升很多！</p></blockquote><p>思考：这种方法性能是提升了，但是会带来其他的问题么？</p><p><img src="https://i.loli.net/2021/01/17/frxhGLzC8VTpwmg.png" alt="内存模型"></p><blockquote><p>如上图：有两个线程，两个线程都需要data变量，都将变量的副本加载到了自己的工作内存。假如这时线程1需要修改data变量的值为1，修改完之后将这个修改写入自己的本地工作内存。如下图</p></blockquote><p><img src="https://i.loli.net/2021/01/17/wseOE28YBFnpZH6.png" alt="volatile1.png"></p><blockquote><p>那么此时，线程1的工作内存里的data值为1，但是，主内存以及线程2里的data值还是为0。那么接下来，在线程1的代码运行过程中，他可以直接读到data最新的值是1，但是线程2的代码运行过程中读到的data的值还是0。这就不符合逻辑了。</p></blockquote><p>上述问题就是：<strong>java并发编程中的可见性问题:</strong></p><p><strong>多个线程并发读写一个共享变量的时候，某个线程修改了共享变量的值，其他线程看不到，即对其他线程不可见。</strong></p><h3 id="引入volatile"><a href="#引入volatile" class="headerlink" title="引入volatile"></a>引入volatile</h3><blockquote><p>那如果要解决这个问题怎么办呢？这时就轮到<strong>volatile</strong>闪亮登场了！你只要给data这个变量在定义的时候加一个volatile，就直接可以完美的解决这个可见性的问题。</p></blockquote><p>比如下面的这样的代码，在加了volatile之后，会有啥作用呢？</p>]]></content>
-    
-    
-    <categories>
-      
-      <category>编程语言</category>
-      
-      <category>Java</category>
-      
-      <category>多线程</category>
-      
-    </categories>
-    
-    
-    <tags>
-      
-      <tag>java</tag>
-      
-      <tag>多线程</tag>
-      
-      <tag>volatile</tag>
-      
-    </tags>
-    
-  </entry>
-  
-  
-  
-  <entry>
     <title>浅析Vvolatile</title>
     <link href="/2021/01/16/%E6%B5%85%E6%9E%90volatile/"/>
     <url>/2021/01/16/%E6%B5%85%E6%9E%90volatile/</url>
