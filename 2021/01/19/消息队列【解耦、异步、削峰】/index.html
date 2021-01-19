@@ -17,7 +17,7 @@
   <meta name="description" content="good good study,day day up">
   <meta name="author" content="何文垚">
   <meta name="keywords" content="">
-  <title>HashMap源码解析 - hwyblog</title>
+  <title>消息队列【解耦、异步、削峰】 - hwyblog</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
 
@@ -174,7 +174,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="HashMap源码解析">
+            <span class="h2" id="subtitle" title="消息队列【解耦、异步、削峰】">
               
             </span>
 
@@ -184,8 +184,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2021-01-06 21:57" pubdate>
-        2021年1月6日 晚上
+      <time datetime="2021-01-19 09:15" pubdate>
+        2021年1月19日 上午
       </time>
     </span>
   
@@ -196,7 +196,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      668 字
+      653 字
     </span>
   
 
@@ -206,7 +206,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      7
+      6
        分钟
     </span>
   
@@ -236,32 +236,40 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">HashMap源码解析</h1>
+            <h1 style="display: none">消息队列【解耦、异步、削峰】</h1>
             
               <p class="note note-info">
                 
-                  本文最后更新于：4 天前
+                  本文最后更新于：1 分钟前
                 
               </p>
             
             <div class="markdown-body">
-              <h2 id="HashMap源码解析-JDK1-8"><a href="#HashMap源码解析-JDK1-8" class="headerlink" title="HashMap源码解析(JDK1.8)"></a>HashMap源码解析(JDK1.8)</h2><h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在进行HashMap分析前，我期望解决以下问题：</p>
+              <h1 id="消息队列作用【解耦、异步、削峰】"><a href="#消息队列作用【解耦、异步、削峰】" class="headerlink" title="消息队列作用【解耦、异步、削峰】"></a>消息队列作用【解耦、异步、削峰】</h1><blockquote>
+<p>学习消息队列的笔记</p>
+</blockquote>
+<h2 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h2><p><img src="https://i.loli.net/2021/01/19/CfQSvH6btWscTle.png" srcset="/img/loading.gif" alt="mq.png"></p>
 <ul>
-<li>HashMap的底层数据结构是什么？</li>
-<li>HashMap中增删改查操作的底部实现原理是什么？</li>
-<li>HashMap是如何实现扩容的？</li>
-<li>HashMap是如何解决hash冲突的？</li>
-<li>HashMap为什么是非线程安全的？</li>
+<li>MQ 全称为 <code>Message Queue</code>, 消息队列（MQ）<code>是一种应用程序对应用程序的通信方法</code>。应用程序通过读写出入队列的消息（针对应用程序的数据）来通信，而无需专用连接来链接它们。</li>
+<li>消息传递指的是程序之间通过在消息中发送数据进行通信，而不是通过直接调用彼此来通信，直接调用通常是用于诸如远程过程调用的技术。排队指的是应用程序通过队列来通信。队列的使用除去了接收和发送应用程序同时执行的要求。</li>
+<li>消息队列中间件是分布式系统中重要的组件，主要解决<strong>应用耦合</strong>，<strong>异步消息</strong>，<strong>流量削锋</strong>等问题</li>
 </ul>
-<h3 id="初识HashMap"><a href="#初识HashMap" class="headerlink" title="初识HashMap"></a>初识HashMap</h3><p>HashMap 基于哈希表的 Map 接口的实现，key唯一的value可以重复，允许存储键为null(key = null),值为null(value = null)，元素没有顺序,同时不保证该顺序恒久不变。</p>
-<p>在 JDK 1.8 之前是由“数组+链表”组成。JDK1.8的HashMap对之前做了较大的优化，其中最重要的一个优化就是将底层的数据结构由“数组+链表”变为了“数组+链表+红黑树”，值得一提的是只有当链表的长度大于8时.。除此之外HashMap是非线程安全的，因此在多个线程同时对HashMap中的同一个元素进行修改时，不能保证数据的唯一性。</p>
-<h3 id="剖析结构"><a href="#剖析结构" class="headerlink" title="剖析结构"></a>剖析结构</h3><h4 id="前世今生"><a href="#前世今生" class="headerlink" title="前世今生"></a>前世今生</h4><p><img src="https://i.loli.net/2021/01/07/femFXPH2T8N5ZMv.png" srcset="/img/loading.gif" alt="DataStruct1.7.png"></p>
-<p>从上图我们可以看到，在jdk1.7中，首先是HashMap采用Entry数组来存储key-value对，每一个键值对组成了一个Entry实体，因为Entry具有Next引用，每一个Entry实体类实际上是一个单向的链表的头部，可以用来连接下一个Entry实体，又因为HashMap是按照Key的hash值来计算Entry在HashMap中存储的位置的，如果hash值相同，而key内容不相等，那么就用链表来解决这种hash冲突。就这样用了几年，后来存储的元素越来越多，链表也越来越长，在查找一个元素时候效率不仅没有提高<strong>（链表不适合查找，适合增删）</strong>，反倒是下降了不少。</p>
-<p>于是官方在JDK1.8的时候就对这条链表进行了一个改进。如何改进呢？就是把这条链表变成一个适合查找的树形结构，没错就是红黑树。于是HashMap的存储数据结构就变成了下面的这种。</p>
-<p><img src="https://i.loli.net/2021/01/07/1Qv4fyFu8rlpzXE.png" srcset="/img/loading.gif" alt="DataStruct1.8.png"></p>
-<p><strong>注意：</strong> <strong>要注意的是只有在链表的长度不小于8，且数组的长度不小于64的时候才会将链表转化为红黑树，</strong></p>
-<h4 id="这里我们需要考虑为什么要把链表转为红黑树，而不是其他的数据结构。"><a href="#这里我们需要考虑为什么要把链表转为红黑树，而不是其他的数据结构。" class="headerlink" title="这里我们需要考虑为什么要把链表转为红黑树，而不是其他的数据结构。"></a><strong>这里我们需要考虑为什么要把链表转为红黑树，而不是其他的数据结构。</strong></h4><p><strong>因为：红黑树是一个自平衡的二叉查找树，也就是说红黑树的查找效率是非常的高，查找一个元素的时间复杂度会从链表的o(n)降低为o(logn)。</strong></p>
-<p><strong>未完待续……</strong></p>
+<h2 id="解耦"><a href="#解耦" class="headerlink" title="解耦"></a>解耦</h2><h3 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h3><p>现有一个系统 A 要与其他系统（BCD）打交道（即调用其中的方法，推送的元数据一样）如下图</p>
+<h3 id="传统模式"><a href="#传统模式" class="headerlink" title="传统模式"></a>传统模式</h3><h4 id="架构图"><a href="#架构图" class="headerlink" title="架构图"></a>架构图</h4><p><img src="https://i.loli.net/2021/01/19/6ubPkKTeQCAlYn2.png" srcset="/img/loading.gif" alt="mq_1.png"></p>
+<p>系统运行了一段时间后，D系统不需要A系统推送数据了，同时又新增加了一个E系统需要A系统推送数据，如下图</p>
+<p><img src="https://i.loli.net/2021/01/19/4GzdOlYFSrvRHZx.png" srcset="/img/loading.gif" alt="mq_2.png"></p>
+<h4 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h4><p>如果其它系统改变或者新增系统，那么 A 系统都会改变，这样的话耦合度比较高，比较麻烦,在这个场景中，A 系统跟其它各种乱七八糟的系统严重耦合，A 系统产生一条比较关键的数据，很多系统都需要 A 系统将这个数据发送过来。A 系统要时时刻刻考虑 BCDE 四个系统如果挂了该咋办？要不要重发，要不要把消息存起来？。</p>
+<h4 id="如何解决问题"><a href="#如何解决问题" class="headerlink" title="如何解决问题"></a>如何解决问题</h4><p>答：使用 MQ，A 系统产生一条数据，发送到 MQ 里面去，哪个系统需要数据自己去 MQ 里面消费。如果新系统需要数据，直接从 MQ 里消费即可；如果某个系统不需要这条数据了，就取消对 MQ 消息的消费即可。这样下来，A 系统压根儿不需要去考虑要给谁发送数据，不需要维护这个代码，也不需要考虑人家是否调用成功、失败超时等情况。</p>
+<h4 id="消息队列解耦"><a href="#消息队列解耦" class="headerlink" title="消息队列解耦"></a>消息队列解耦</h4><p><img src="https://i.loli.net/2021/01/19/WhMGblrtjYzKdRU.png" srcset="/img/loading.gif" alt="mq_3.png"></p>
+<h2 id="异步"><a href="#异步" class="headerlink" title="异步"></a>异步</h2><h3 id="场景-1"><a href="#场景-1" class="headerlink" title="场景"></a>场景</h3><blockquote>
+<p>用户注册后，需要发注册邮件和注册短信</p>
+</blockquote>
+<h3 id="传统模式-1"><a href="#传统模式-1" class="headerlink" title="传统模式"></a>传统模式</h3><h4 id="架构图-1"><a href="#架构图-1" class="headerlink" title="架构图"></a>架构图</h4><h5 id="串行"><a href="#串行" class="headerlink" title="串行"></a>串行</h5><p><img src="https://i.loli.net/2021/01/19/fQGWLHUCo4Zl9i2.png" srcset="/img/loading.gif" alt="mq_5.png"></p>
+<p><strong>响应时间150ms</strong></p>
+<h5 id="并行"><a href="#并行" class="headerlink" title="并行"></a>并行</h5><p><img src="https://i.loli.net/2021/01/19/UmYfDwJpGaZTSie.png" srcset="/img/loading.gif" alt="mq_4.png"></p>
+<p><strong>响应时间100ms</strong></p>
+<h3 id="消息队列优化"><a href="#消息队列优化" class="headerlink" title="消息队列优化"></a>消息队列优化</h3><p><img src="https://i.loli.net/2021/01/19/lU2Q9BxNcCDFt6a.png" srcset="/img/loading.gif" alt="mq_6.png"></p>
+<p><strong>响应时间55ms</strong></p>
 
             </div>
             <hr>
@@ -271,11 +279,9 @@
                   <div class="post-meta mr-3">
                     <i class="iconfont icon-category"></i>
                     
-                      <a class="hover-with-bg" href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a>
+                      <a class="hover-with-bg" href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/">中间件</a>
                     
-                      <a class="hover-with-bg" href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a>
-                    
-                      <a class="hover-with-bg" href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/">源码阅读</a>
+                      <a class="hover-with-bg" href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/">消息队列</a>
                     
                   </div>
                 
@@ -283,11 +289,9 @@
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/tags/HashMap/">HashMap</a>
+                      <a class="hover-with-bg" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/">中间件</a>
                     
-                      <a class="hover-with-bg" href="/tags/%E6%BA%90%E7%A0%81/">源码</a>
-                    
-                      <a class="hover-with-bg" href="/tags/java/">java</a>
+                      <a class="hover-with-bg" href="/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/">消息队列</a>
                     
                   </div>
                 
@@ -300,18 +304,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2021/01/08/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">快速排序</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2021/01/06/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F/">
-                        <span class="hidden-mobile">归并排序</span>
+                      <a href="/2021/01/16/%E6%B5%85%E6%9E%90volatile/">
+                        <span class="hidden-mobile">浅析volatile</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

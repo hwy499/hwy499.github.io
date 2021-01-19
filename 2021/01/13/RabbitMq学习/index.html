@@ -196,7 +196,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.5k 字
+      2.3k 字
     </span>
   
 
@@ -206,7 +206,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      21
+      34
        分钟
     </span>
   
@@ -240,7 +240,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：20 分钟前
+                  本文最后更新于：22 分钟前
                 
               </p>
             
@@ -279,14 +279,10 @@
 <span class="hljs-meta">spring.rabbitmq.password</span>=<span class="hljs-string">xxxx</span></code></pre></div>
 
 
-<h2 id="一-simple：简单模式"><a href="#一-simple：简单模式" class="headerlink" title="一. simple：简单模式"></a>一. simple：简单模式</h2><h3 id="1-要点"><a href="#1-要点" class="headerlink" title="1. 要点"></a>1. 要点</h3><blockquote>
-<p>一个生产者，一个消费者。 一对一</p>
-</blockquote>
-<h3 id="2-原理"><a href="#2-原理" class="headerlink" title="2. 原理"></a>2. 原理</h3><p><img src="https://img-blog.csdnimg.cn/20200103230605348.png" srcset="/img/loading.gif" alt="simple模式"></p>
-<blockquote>
-<p>消息发布者（Publish）将消息放入队列（默认交换机）。消息的消费者（Consumer）监听消息队列，如果队列中有消息，就消费掉，消息被拿走后，自动从队列中删除（隐患：消息可能没有被消费者正确处理，已经从队列中消失了，造成消息的丢失,这里可以设置成手动的 ack, 但如果设置成手动 ack，处理完后要及时发送 ack 消息给队列，否则会造成内存溢出）。</p>
-<p>应用场景：聊天（中间有一个过度的服务器；P端，C端）。</p>
-</blockquote>
+<h2 id="一-简单模式-simple"><a href="#一-简单模式-simple" class="headerlink" title="一.简单模式 (simple)"></a>一.简单模式 (simple)</h2><h3 id="1-要点"><a href="#1-要点" class="headerlink" title="1. 要点"></a>1. 要点</h3><p>一个生产者，一个消费者。 一对一。消息发布者（Publish）将消息放入队列（默认交换机）。消息的消费者（Consumer）监听消息队列，如果队列中有消息，就消费掉，消息被拿走后，自动从队列中删除</p>
+<p><strong>隐患：</strong>消息可能没有被消费者正确处理，已经从队列中消失了，造成消息的丢失,这里可以设置成手动的 ack, 但如果设置成手动 ack，处理完后要及时发送 ack 消息给队列，否则会造成内存溢出。</p>
+<p><img src="https://img-blog.csdnimg.cn/20200103230605348.png" srcset="/img/loading.gif" alt="simple模式"></p>
+<h3 id="2-应用场景"><a href="#2-应用场景" class="headerlink" title="2. 应用场景"></a>2. 应用场景</h3><p><strong>将发送的电子邮件放到消息队列，然后邮件服务在队列中获取邮件并发送给收件人</strong></p>
 <h3 id="3-代码演示"><a href="#3-代码演示" class="headerlink" title="3. 代码演示"></a>3. 代码演示</h3><h4 id="3-1-发布端（Publish）"><a href="#3-1-发布端（Publish）" class="headerlink" title="3.1 发布端（Publish）"></a>3.1 发布端（Publish）</h4><h5 id="RabbitMQ-配置类"><a href="#RabbitMQ-配置类" class="headerlink" title="RabbitMQ 配置类"></a>RabbitMQ 配置类</h5><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">/**</span>
 <span class="hljs-comment"> *  rabbitMQ配置类</span>
 <span class="hljs-comment"> */</span>
@@ -316,8 +312,8 @@
     &#125;
 
 &#125;</code></pre></div>
-<h5 id="消息接口"><a href="#消息接口" class="headerlink" title="消息接口"></a>消息接口</h5><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">/**</span>
-<span class="hljs-comment"> * 消息接口</span>
+<h5 id="消息推送接口"><a href="#消息推送接口" class="headerlink" title="消息推送接口"></a>消息推送接口</h5><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">/**</span>
+<span class="hljs-comment"> * 消息推送接口</span>
 <span class="hljs-comment"> */</span>
 <span class="hljs-meta">@RestController</span>
 <span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MessageController</span> </span>&#123;
@@ -353,15 +349,11 @@
 <p>Sender : hi, fanout msg </p>
 <p>队列queue1 接收的消息 is hi, fanout msg </p>
 </blockquote>
-<h2 id="二-work：工作模式-资源的竞争"><a href="#二-work：工作模式-资源的竞争" class="headerlink" title="二. work：工作模式 (资源的竞争)"></a>二. work：工作模式 (资源的竞争)</h2><h3 id="1-要点-1"><a href="#1-要点-1" class="headerlink" title="1. 要点"></a>1. 要点</h3><blockquote>
-<p>一个生产者，多个消费者，消息被多个消费者竞争接收。 一对多</p>
-</blockquote>
-<h3 id="2-原理-1"><a href="#2-原理-1" class="headerlink" title="2. 原理"></a>2. 原理</h3><p><img src="https://img-blog.csdnimg.cn/20200104104835781.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MDg3NzIwNA==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="工作模式"></p>
-<blockquote>
-<p>消息产生者将消息放入队列消费者可以有多个，消费者 1, 消费者 2, 同时监听同一个队列，消息被消费。C1 C2 共同争抢当前的消息队列内容，谁先拿到谁负责消费消息</p>
-<p>(隐患：高并发情况下，默认会产生某一个消息被多个消费者共同使用，可以设置一个开关 (syncronize, 与同步锁的性能不一样) 保证一条消息只能被一个消费者使用)。<br>应用场景： 红包；大项目中的资源调度 (任务分配系统不需知道哪一个任务执<br> 行系统在空闲，直接将任务扔到消息队列中，空闲的系统自动争抢)。</p>
-</blockquote>
-<h4 id="3-代码演示-1"><a href="#3-代码演示-1" class="headerlink" title="3. 代码演示"></a>3. 代码演示</h4><h4 id="3-1-发布端（Publish）-1"><a href="#3-1-发布端（Publish）-1" class="headerlink" title="3.1 发布端（Publish）"></a>3.1 发布端（Publish）</h4><h5 id="rabbitMQ配置类"><a href="#rabbitMQ配置类" class="headerlink" title="rabbitMQ配置类"></a>rabbitMQ配置类</h5><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">/**</span>
+<h2 id="二-工作模式-work"><a href="#二-工作模式-work" class="headerlink" title="二.工作模式 (work)"></a>二.工作模式 (work)</h2><h3 id="1-要点-1"><a href="#1-要点-1" class="headerlink" title="1. 要点"></a>1. 要点</h3><p>一个生产者，多个消费者，消息被多个消费者竞争接收。 一对多消息产生者将消息放入队列消费者可以有多个，消费者 1, 消费者 2, 同时监听同一个队列，消息被消费。C1 C2 共同争抢当前的消息队列内容，谁先拿到谁负责消费消息</p>
+<p><strong>隐患：</strong>高并发情况下，默认会产生某一个消息被多个消费者共同使用，可以设置一个开关 (syncronize, 与同步锁的性能不一样) 保证一条消息只能被一个消费者使用</p>
+<p><img src="https://img-blog.csdnimg.cn/20200104104835781.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MDg3NzIwNA==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="工作模式"></p>
+<h3 id="2-应用场景-1"><a href="#2-应用场景-1" class="headerlink" title="2. 应用场景"></a>2. 应用场景</h3><p>一个订单的处理需要 10s，有多个订单可以同时放到消息队列，然后让多个消费者同时处理，这样就是并行了，而不是单个消费者的串行情况</p>
+<h3 id="3-代码演示-1"><a href="#3-代码演示-1" class="headerlink" title="3. 代码演示"></a>3. 代码演示</h3><h4 id="3-1-发布端（Publish）-1"><a href="#3-1-发布端（Publish）-1" class="headerlink" title="3.1 发布端（Publish）"></a>3.1 发布端（Publish）</h4><h5 id="rabbitMQ配置类"><a href="#rabbitMQ配置类" class="headerlink" title="rabbitMQ配置类"></a>rabbitMQ配置类</h5><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">/**</span>
 <span class="hljs-comment"> *  rabbitMQ配置类</span>
 <span class="hljs-comment"> */</span>
 <span class="hljs-meta">@Configuration</span>
@@ -373,7 +365,7 @@
     &#125;
 
 &#125;
-<span class="hljs-comment">//https://blog.csdn.net/weixin_45393094/article/details/106160234</span></code></pre></div>
+</code></pre></div>
 <h5 id="消息生产者-1"><a href="#消息生产者-1" class="headerlink" title="消息生产者"></a>消息生产者</h5><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">/**</span>
 <span class="hljs-comment"> * 消息生产者</span>
 <span class="hljs-comment"> */</span>
@@ -391,8 +383,8 @@
     &#125;
 
 &#125;</code></pre></div>
-<h5 id="消息接口-1"><a href="#消息接口-1" class="headerlink" title="消息接口"></a>消息接口</h5><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">/**</span>
-<span class="hljs-comment"> * 消息接口</span>
+<h5 id="消息推送接口-1"><a href="#消息推送接口-1" class="headerlink" title="消息推送接口"></a>消息推送接口</h5><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">/**</span>
+<span class="hljs-comment"> * 消息推送接口</span>
 <span class="hljs-comment"> */</span>
 <span class="hljs-meta">@RestController</span>
 <span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MessageController</span> </span>&#123;
@@ -432,10 +424,13 @@
 <h2 id="三-publish-subscribe：发布订阅-共享资源"><a href="#三-publish-subscribe：发布订阅-共享资源" class="headerlink" title="三. publish/subscribe：发布订阅 (共享资源)"></a>三. publish/subscribe：发布订阅 (共享资源)</h2><h3 id="1-要点-2"><a href="#1-要点-2" class="headerlink" title="1. 要点"></a>1. 要点</h3><blockquote>
 <p>一个生产者，多个消费者，消息复制多份，每个消费者接收相同的消息。 </p>
 </blockquote>
-<h3 id="2-原理-2"><a href="#2-原理-2" class="headerlink" title="2. 原理"></a>2. 原理</h3><p><img src="https://img-blog.csdnimg.cn/20200104110859450.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MDg3NzIwNA==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="发布订阅模式"></p>
-<blockquote>
-<p>X 代表交换机 RabbitMQ 内部组件，erlang 消息产生者是代码完成，代码的执行效率不高，消息产生者将消息放入交换机，交换机发布订阅把消息发送到所有消息队列中，对应消息队列的消费者拿到 消息进行消费<br>相关场景：邮件群发，群聊天，广播 (广告)</p>
-</blockquote>
+<p><img src="https://img-blog.csdnimg.cn/20200104110859450.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80MDg3NzIwNA==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="发布订阅模式"></p>
+<h3 id="2-应用场景-2"><a href="#2-应用场景-2" class="headerlink" title="2.应用场景"></a>2.应用场景</h3><p><strong>更新商品库存后需要通知多个缓存和多个数据库，这里的结构应该是：</strong></p>
+<ul>
+<li>一个 fanout 类型交换机扇出两个个消息队列，分别为缓存消息队列、数据库消息队列</li>
+<li>一个缓存消息队列对应着多个缓存消费者</li>
+<li>一个数据库消息队列对应着多个数据库消费者</li>
+</ul>
 <h3 id="3-代码演示-2"><a href="#3-代码演示-2" class="headerlink" title="3. 代码演示"></a>3. 代码演示</h3><h4 id="3-1-发布端（Publish）-2"><a href="#3-1-发布端（Publish）-2" class="headerlink" title="3.1 发布端（Publish）"></a>3.1 发布端（Publish）</h4><h5 id="RabbitMQ-配置类-1"><a href="#RabbitMQ-配置类-1" class="headerlink" title="RabbitMQ 配置类"></a>RabbitMQ 配置类</h5><div class="hljs code-wrapper"><pre><code class="hljs csharp"><span class="hljs-comment">/**</span>
 <span class="hljs-comment"> *  rabbitMQ配置类</span>
 <span class="hljs-comment"> */</span>
@@ -485,8 +480,8 @@
     &#125;
 
 &#125;</code></pre></div>
-<h5 id="接口消息接口"><a href="#接口消息接口" class="headerlink" title="接口消息接口"></a>接口消息接口</h5><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">/**</span>
-<span class="hljs-comment"> * 消息接口</span>
+<h5 id="接口消息推送接口"><a href="#接口消息推送接口" class="headerlink" title="接口消息推送接口"></a>接口消息推送接口</h5><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">/**</span>
+<span class="hljs-comment"> * 消息推送接口</span>
 <span class="hljs-comment"> */</span>
 <span class="hljs-meta">@RestController</span>
 <span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MessageController</span> </span>&#123;
@@ -521,7 +516,191 @@
 &#125;</code></pre></div>
 <p>启动成功后，访问push接口 向rabbitmq发送消息：</p>
 <p><img src="https://i.loli.net/2021/01/17/6OQDhpvs43y2RTN.png" srcset="/img/loading.gif" alt="result2.png"></p>
-<p>持续更新中……..</p>
+<h2 id="四-路由模式（Routing）"><a href="#四-路由模式（Routing）" class="headerlink" title="四.路由模式（Routing）"></a>四.路由模式（Routing）</h2><h3 id="1-要点-3"><a href="#1-要点-3" class="headerlink" title="1.要点"></a>1.要点</h3><p>​        有选择地（Routing key）接收消息，发送消息到交换机并且要指定路由 key ，消费者将队列绑定到交换机时需要指定路由 key，仅消费指定路由 key 的消息</p>
+<p><img src="https://i.loli.net/2021/01/18/JSeC3wVNFcdxUsK.png" srcset="/img/loading.gif" alt="routing.png"></p>
+<h3 id="2-应用场景-3"><a href="#2-应用场景-3" class="headerlink" title="2.应用场景"></a>2.应用场景</h3><p>​        如在商品库存中增加了 1 台 iphone12，iphone12 促销活动消费者指定 routing key 为 iphone12，只有此促销活动会接收到消息，其它促销活动不关心也不会消费此 routing key 的消息</p>
+<h3 id="3-代码演示-3"><a href="#3-代码演示-3" class="headerlink" title="3.代码演示"></a>3.代码演示</h3><h4 id="3-1-发布端"><a href="#3-1-发布端" class="headerlink" title="3.1 发布端"></a>3.1 发布端</h4><h5 id="RabbitMQ配置类"><a href="#RabbitMQ配置类" class="headerlink" title="RabbitMQ配置类"></a>RabbitMQ配置类</h5><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">/**</span>
+<span class="hljs-comment"> * RabbitMQ配置类</span>
+<span class="hljs-comment"> */</span>
+<span class="hljs-meta">@Configuration</span>	
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RabbitMQConfig</span> </span>&#123;
+
+    <span class="hljs-meta">@Bean</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> Queue <span class="hljs-title">queue1</span><span class="hljs-params">()</span> </span>&#123;
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Queue(<span class="hljs-string">&quot;queue1&quot;</span>);
+    &#125;
+
+    <span class="hljs-meta">@Bean</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> Queue <span class="hljs-title">queue2</span><span class="hljs-params">()</span> </span>&#123;
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Queue(<span class="hljs-string">&quot;queue2&quot;</span>);
+    &#125;
+
+    <span class="hljs-meta">@Bean</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> DirectExchange <span class="hljs-title">directExchange</span><span class="hljs-params">()</span> </span>&#123;
+        <span class="hljs-comment">// 创建一个交换机</span>
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> DirectExchange(<span class="hljs-string">&quot;hello.exchange.direct&quot;</span>);
+    &#125;
+
+    <span class="hljs-meta">@Bean</span>
+    <span class="hljs-function">Binding <span class="hljs-title">bindingExchangeQueue1</span><span class="hljs-params">(Queue queue1, DirectExchange directExchange)</span> </span>&#123;
+        <span class="hljs-keyword">return</span> BindingBuilder.bind(queue1).to(directExchange).with(<span class="hljs-string">&quot;hello.queue.1&quot;</span>);
+    &#125;
+
+    <span class="hljs-meta">@Bean</span>
+    <span class="hljs-function">Binding <span class="hljs-title">bindingExchangeQueue2</span><span class="hljs-params">(Queue queue2, DirectExchange directExchange)</span> </span>&#123;
+        <span class="hljs-keyword">return</span> BindingBuilder.bind(queue2).to(directExchange).with(<span class="hljs-string">&quot;hello.queue.2&quot;</span>);
+    &#125;
+    
+&#125;
+</code></pre></div>
+<h5 id="消息生产者-2"><a href="#消息生产者-2" class="headerlink" title="消息生产者"></a>消息生产者</h5><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">/**</span>
+<span class="hljs-comment"> * 消息生产者</span>
+<span class="hljs-comment"> */</span>
+<span class="hljs-meta">@Slf4j</span>
+<span class="hljs-meta">@Component</span>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MessageProducer</span> </span>&#123;
+
+    <span class="hljs-meta">@Autowired</span>
+    <span class="hljs-keyword">private</span> RabbitTemplate rabbitTemplate;
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">send</span><span class="hljs-params">(String exchange, String routingKey, String msg)</span> </span>&#123;
+        log.info(<span class="hljs-string">&quot;Sender : &#123;&#125;&quot;</span>, msg);
+        rabbitTemplate.convertAndSend(exchange, routingKey, msg);
+    &#125;
+
+&#125;</code></pre></div>
+<h5 id="消息推送接口-2"><a href="#消息推送接口-2" class="headerlink" title="消息推送接口"></a>消息推送接口</h5><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">/**</span>
+<span class="hljs-comment"> * 消息推送接口</span>
+<span class="hljs-comment"> */</span>
+<span class="hljs-meta">@RestController</span>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MessageController</span> </span>&#123;
+
+    <span class="hljs-meta">@Autowired</span>
+    MessageProducer messageProducer;
+
+    <span class="hljs-meta">@GetMapping(&quot;/push&quot;)</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">sendMessage</span><span class="hljs-params">()</span> </span>&#123;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">10</span>; i++) &#123;
+            <span class="hljs-comment">//偶数往2里发，奇数往1里发</span>
+            String key = i % <span class="hljs-number">2</span> == <span class="hljs-number">0</span> ? <span class="hljs-string">&quot;hello.queue.2&quot;</span> : <span class="hljs-string">&quot;hello.queue.1&quot;</span>;
+            messageProducer.send(<span class="hljs-string">&quot;hello.exchange.direct&quot;</span>, key, key);
+        &#125;
+        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;ok&quot;</span>;
+    &#125;
+
+&#125;</code></pre></div>
+<h4 id="3-2-消费端"><a href="#3-2-消费端" class="headerlink" title="3.2 消费端"></a>3.2 消费端</h4><h5 id="消息消费者-3"><a href="#消息消费者-3" class="headerlink" title="消息消费者"></a>消息消费者</h5><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">/**</span>
+<span class="hljs-comment"> * 消息消费者</span>
+<span class="hljs-comment"> */</span>
+<span class="hljs-meta">@Component</span>
+<span class="hljs-meta">@Slf4j</span>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MessageConsumers</span> </span>&#123;
+
+    <span class="hljs-meta">@RabbitListener(queuesToDeclare = @Queue(&quot;queue1&quot;))</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">consumers1</span><span class="hljs-params">(String message)</span> </span>&#123;
+        log.info(<span class="hljs-string">&quot;队列queue1 接收的消息 is &#123;&#125;&quot;</span>, message);
+    &#125;
+
+    <span class="hljs-meta">@RabbitListener(queuesToDeclare = @Queue(&quot;queue2&quot;))</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">consumers2</span><span class="hljs-params">(String message)</span> </span>&#123;
+        log.info(<span class="hljs-string">&quot;队列queue2 接收的消息 is &#123;&#125;&quot;</span>, message);
+    &#125;
+
+&#125;</code></pre></div>
+<p>启动成功后，访问push接口 向rabbitmq发送消息：</p>
+<p><img src="https://i.loli.net/2021/01/18/JGFDrAOxs7XaeqS.png" srcset="/img/loading.gif" alt="result3.png"></p>
+<h2 id="五-主题模式（Topics）"><a href="#五-主题模式（Topics）" class="headerlink" title="五.主题模式（Topics）"></a>五.主题模式（Topics）</h2><h3 id="1-要点-4"><a href="#1-要点-4" class="headerlink" title="1.要点"></a>1.要点</h3><p><img src="https://i.loli.net/2021/01/18/jC5eb47GIqRdcHz.png" srcset="/img/loading.gif" alt="topic.png"></p>
+<h3 id="2-应用场景-4"><a href="#2-应用场景-4" class="headerlink" title="2.应用场景"></a>2.应用场景</h3><h3 id="3-代码演示-4"><a href="#3-代码演示-4" class="headerlink" title="3.代码演示"></a>3.代码演示</h3><h4 id="3-1发布端"><a href="#3-1发布端" class="headerlink" title="3.1发布端"></a>3.1发布端</h4><h5 id="RabbitMQ配置类-1"><a href="#RabbitMQ配置类-1" class="headerlink" title="RabbitMQ配置类"></a>RabbitMQ配置类</h5><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">/**</span>
+<span class="hljs-comment"> * RabbitMQ配置类</span>
+<span class="hljs-comment"> */</span>
+<span class="hljs-meta">@Configuration</span>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RabbitMQConfig</span> </span>&#123;
+
+    <span class="hljs-meta">@Bean</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> Queue <span class="hljs-title">queue1</span><span class="hljs-params">()</span> </span>&#123;
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Queue(<span class="hljs-string">&quot;queue1&quot;</span>);
+    &#125;
+
+    <span class="hljs-meta">@Bean</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> Queue <span class="hljs-title">queue2</span><span class="hljs-params">()</span> </span>&#123;
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Queue(<span class="hljs-string">&quot;queue2&quot;</span>);
+    &#125;
+
+    <span class="hljs-meta">@Bean</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> TopicExchange <span class="hljs-title">topicExchange</span><span class="hljs-params">()</span> </span>&#123;
+        <span class="hljs-comment">// 创建一个交换机</span>
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> TopicExchange(<span class="hljs-string">&quot;hello.exchange.topic&quot;</span>);
+    &#125;
+
+    <span class="hljs-meta">@Bean</span>
+    <span class="hljs-function">Binding <span class="hljs-title">bindingExchangeQueue1</span><span class="hljs-params">(Queue queue1, TopicExchange topicExchange)</span> </span>&#123;
+        <span class="hljs-comment">// 将交换机与队列绑定</span>
+        <span class="hljs-keyword">return</span> BindingBuilder.bind(queue1).to(topicExchange).with(<span class="hljs-string">&quot;hello.queue.1&quot;</span>);
+    &#125;
+
+    <span class="hljs-meta">@Bean</span>
+    <span class="hljs-function">Binding <span class="hljs-title">bindingExchangeQueue2</span><span class="hljs-params">(Queue queue2, TopicExchange topicExchange)</span> </span>&#123;
+        <span class="hljs-comment">// 将交换机与队列绑定</span>
+        <span class="hljs-keyword">return</span> BindingBuilder.bind(queue2).to(topicExchange).with(<span class="hljs-string">&quot;hello.queue.*&quot;</span>);
+    &#125;
+&#125;</code></pre></div>
+<h5 id="消息生产者-3"><a href="#消息生产者-3" class="headerlink" title="消息生产者"></a>消息生产者</h5><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">/**</span>
+<span class="hljs-comment"> * 消息生产者</span>
+<span class="hljs-comment"> */</span>
+<span class="hljs-meta">@Slf4j</span>
+<span class="hljs-meta">@Component</span>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MessageProducer</span> </span>&#123;
+
+    <span class="hljs-meta">@Autowired</span>
+    <span class="hljs-keyword">private</span> RabbitTemplate rabbitTemplate;
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">send</span><span class="hljs-params">(String exchange, String routingKey, String msg)</span> </span>&#123;
+        log.info(<span class="hljs-string">&quot;Sender : &#123;&#125;&quot;</span>, msg);
+        rabbitTemplate.convertAndSend(exchange, routingKey, msg);
+    &#125;
+
+&#125;</code></pre></div>
+<h5 id="消息推送接口-3"><a href="#消息推送接口-3" class="headerlink" title="消息推送接口"></a>消息推送接口</h5><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">/**</span>
+<span class="hljs-comment"> * 消息推送接口</span>
+<span class="hljs-comment"> */</span>
+<span class="hljs-meta">@RestController</span>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MessageController</span> </span>&#123;
+
+    <span class="hljs-meta">@Autowired</span>
+    MessageProducer messageProducer;
+
+    <span class="hljs-meta">@GetMapping(&quot;/push&quot;)</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">sendMessage</span><span class="hljs-params">()</span> </span>&#123;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">10</span>; i++) &#123;
+            <span class="hljs-comment">//偶数往2里发，奇数往1里发</span>
+            String key = i % <span class="hljs-number">2</span> == <span class="hljs-number">0</span> ? <span class="hljs-string">&quot;hello.queue.2&quot;</span> : <span class="hljs-string">&quot;hello.queue.1&quot;</span>;
+            messageProducer.send(<span class="hljs-string">&quot;hello.exchange.topic&quot;</span>, key, key);
+        &#125;
+        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;ok&quot;</span>;
+    &#125;
+
+&#125;</code></pre></div>
+<h4 id="3-2消费端"><a href="#3-2消费端" class="headerlink" title="3.2消费端"></a>3.2消费端</h4><h5 id="消息消费者-4"><a href="#消息消费者-4" class="headerlink" title="消息消费者"></a>消息消费者</h5><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">/**</span>
+<span class="hljs-comment"> * 消息消费者</span>
+<span class="hljs-comment"> */</span>
+<span class="hljs-meta">@Component</span>
+<span class="hljs-meta">@Slf4j</span>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MessageConsumers</span> </span>&#123;
+
+    <span class="hljs-meta">@RabbitListener(queuesToDeclare = @Queue(&quot;queue1&quot;))</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">consumers1</span><span class="hljs-params">(String message)</span> </span>&#123;
+        log.info(<span class="hljs-string">&quot;队列queue1 接收的消息 is &#123;&#125;&quot;</span>, message);
+    &#125;
+
+    <span class="hljs-meta">@RabbitListener(queuesToDeclare = @Queue(&quot;queue2&quot;))</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">consumers2</span><span class="hljs-params">(String message)</span> </span>&#123;
+        log.info(<span class="hljs-string">&quot;队列queue2 接收的消息 is &#123;&#125;&quot;</span>, message);
+    &#125;
+
+&#125;</code></pre></div>
+<p>启动成功后，访问push接口 向rabbitmq发送消息：</p>
+<p><img src="https://i.loli.net/2021/01/18/t586oDyCvkFBlmu.png" srcset="/img/loading.gif" alt="result5.png"></p>
+<h2 id="六"><a href="#六" class="headerlink" title="六."></a>六.</h2><p>持续更新中……..</p>
 
             </div>
             <hr>
