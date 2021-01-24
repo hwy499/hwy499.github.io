@@ -240,12 +240,12 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：几秒前
+                  本文最后更新于：21 分钟前
                 
               </p>
             
             <div class="markdown-body">
-              <h1 id="redis持久化"><a href="#redis持久化" class="headerlink" title="redis持久化"></a>redis持久化</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>redis的缓存是基于内存的缓存，当redis突然挂断的时候（不管是因为什么原因），其存放在内存中的应用就全部都丢失了，redis会重启，但是需要花费很大的劲去恢复redis，这个时候就体现到了redis持久化的意义了。对于一个企业级的redis架构来说，持久化更是不可减少的。企业级redis集群架构的特点<strong>海量数据、高并发、高可用</strong>持久化主要是做灾难恢复，数据恢复，但可以归类到高可用。如果你的redis挂了，然后redis就不可用，也谈不到高可用了，这时你要做的事情是让redis尽快变得可用，如果你没有持久化，重启redis后，也是不可用的，redis内是没有数据的，这个时候如果大量请求打过来，redis中没有数据，缓存未打中，发生<strong>缓存雪崩</strong>问题，所有请求，没有在redis命中，就会去数据库这种数据源头中去找，一下数据库承接高并发，然后就挂掉了，数据库挂掉，你都没法去找数据恢复到redis里面去，redis的数据从哪儿来？从数据库来。数据库挂掉后还会影响其他系统应用。发生更大的灾难。</p>
+              <h1 id="redis持久化"><a href="#redis持久化" class="headerlink" title="redis持久化"></a>redis持久化</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>redis的缓存是基于内存的缓存，当redis突然挂掉的时候（不管是因为什么原因），其存放在内存中的数据就全部都丢失了，redis会重启，但是需要花费很大的劲去恢复redis，这个时候就体现到了redis持久化的意义了。对于一个企业级的redis架构来说，持久化更是不可减少的。企业级redis集群架构的特点<strong>海量数据、高并发、高可用</strong>持久化主要是做灾难恢复，数据恢复，但可以归类到高可用。如果你的redis挂了，然后redis就不可用，也谈不到高可用了，这时你要做的事情是让redis尽快变得可用，如果你没有持久化，重启redis后，也是不可用的，redis内是没有数据的，这个时候如果大量请求打过来，redis中没有数据，缓存未打中，发生<strong>缓存雪崩</strong>问题，所有请求，没有在redis命中，就会去数据库这种数据源头中去找，一下数据库承接高并发，然后就挂掉了，数据库挂掉，你都没法去找数据恢复到redis里面去，redis的数据从哪儿来？从数据库来。数据库挂掉后还会影响其他系统应用。发生更大的灾难。</p>
 <h2 id="1、RDB和AOF两种持久化机制的介绍"><a href="#1、RDB和AOF两种持久化机制的介绍" class="headerlink" title="1、RDB和AOF两种持久化机制的介绍"></a>1、RDB和AOF两种持久化机制的介绍</h2><ul>
 <li>RDB持久化机制：对redis中的数据执行<strong>周期性的持久化</strong>。</li>
 <li>AOF机制：对每条写入命令作为日志，以append-only的模式写入一个日志文件中，在redis重启的时候，可以通过回放AOF日志中的写入指令来重新构建整个数据集</li>
