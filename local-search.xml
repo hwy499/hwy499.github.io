@@ -13,20 +13,18 @@
     
     <categories>
       
-      <category>中间件</category>
+      <category>框架</category>
       
-      <category>RabbitMQ</category>
+      <category>Netty</category>
       
     </categories>
     
     
     <tags>
       
-      <tag>中间件</tag>
+      <tag>框架</tag>
       
-      <tag>RabbitMQ</tag>
-      
-      <tag>高可用</tag>
+      <tag>Netty</tag>
       
     </tags>
     
@@ -57,18 +55,20 @@
     
     <categories>
       
-      <category>框架</category>
+      <category>中间件</category>
       
-      <category>Netty</category>
+      <category>RabbitMQ</category>
       
     </categories>
     
     
     <tags>
       
-      <tag>框架</tag>
+      <tag>中间件</tag>
       
-      <tag>Netty</tag>
+      <tag>RabbitMQ</tag>
+      
+      <tag>高可用</tag>
       
     </tags>
     
