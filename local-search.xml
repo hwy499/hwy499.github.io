@@ -17,19 +17,6 @@
   
   
   <entry>
-    <title>leetcode【两数之和】</title>
-    <link href="/2021/01/25/leetcode%E3%80%90%E4%B8%A4%E6%95%B0%E4%B9%8B%E5%92%8C%E3%80%91/"/>
-    <url>/2021/01/25/leetcode%E3%80%90%E4%B8%A4%E6%95%B0%E4%B9%8B%E5%92%8C%E3%80%91/</url>
-    
-    <content type="html"><![CDATA[<h2 id><a href="#" class="headerlink" title></a></h2><h2 id="两数之和"><a href="#两数之和" class="headerlink" title="两数之和"></a>两数之和</h2><p>给定一个整数数组 nums 和一个整数目标值 target，请你在该数组中找出 和为目标值 的那 两个 整数，并返回它们的数组下标。</p><p>你可以假设每种输入只会对应一个答案。但是，数组中同一个元素不能使用两遍。</p><p>你可以按任意顺序返回答案。</p><p>来源：力扣（LeetCode）<br>链接：<a href="https://leetcode-cn.com/problems/two-sum">https://leetcode-cn.com/problems/two-sum</a><br>著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。</p><div class="hljs code-wrapper"><pre><code class="hljs inform7">示例 1：输入：nums = <span class="hljs-comment">[2,7,11,15]</span>, target = 9输出：<span class="hljs-comment">[0,1]</span>解释：因为 nums<span class="hljs-comment">[0]</span> + nums<span class="hljs-comment">[1]</span> == 9 ，返回 <span class="hljs-comment">[0, 1]</span> 示例 2：输入：nums = <span class="hljs-comment">[3,2,4]</span>, target = 6输出：<span class="hljs-comment">[1,2]</span>示例 3：输入：nums = <span class="hljs-comment">[3,3]</span>, target = 6输出：<span class="hljs-comment">[0,1]</span></code></pre></div><h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>数组中同一个元素不能使用两遍的这个要求，就导致了我们不能用暴力搜索的方法去求解。这就意味着我们只能在O(N)的情况下解决掉这个问题，</p>]]></content>
-    
-    
-    
-  </entry>
-  
-  
-  
-  <entry>
     <title>RabbitMQ【高可用】</title>
     <link href="/2021/01/25/RabbitMQ%E3%80%90%E9%AB%98%E5%8F%AF%E7%94%A8%E3%80%91/"/>
     <url>/2021/01/25/RabbitMQ%E3%80%90%E9%AB%98%E5%8F%AF%E7%94%A8%E3%80%91/</url>
