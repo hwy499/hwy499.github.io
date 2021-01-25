@@ -184,8 +184,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2021-01-19 09:15" pubdate>
-        2021年1月19日 上午
+      <time datetime="2021-01-13 09:15" pubdate>
+        2021年1月13日 上午
       </time>
     </span>
   
@@ -196,7 +196,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      653 字
+      646 字
     </span>
   
 
@@ -240,7 +240,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：5 天前
+                  本文最后更新于：12 分钟前
                 
               </p>
             
@@ -259,8 +259,8 @@
 <p>系统运行了一段时间后，D系统不需要A系统推送数据了，同时又新增加了一个E系统需要A系统推送数据，如下图</p>
 <p><img src="https://i.loli.net/2021/01/19/4GzdOlYFSrvRHZx.png" srcset="/img/loading.gif" alt="mq_2.png"></p>
 <h4 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h4><p>如果其它系统改变或者新增系统，那么 A 系统都会改变，这样的话耦合度比较高，比较麻烦,在这个场景中，A 系统跟其它各种乱七八糟的系统严重耦合，A 系统产生一条比较关键的数据，很多系统都需要 A 系统将这个数据发送过来。A 系统要时时刻刻考虑 BCDE 四个系统如果挂了该咋办？要不要重发，要不要把消息存起来？。</p>
-<h4 id="如何解决问题"><a href="#如何解决问题" class="headerlink" title="如何解决问题"></a>如何解决问题</h4><p>答：使用 MQ，A 系统产生一条数据，发送到 MQ 里面去，哪个系统需要数据自己去 MQ 里面消费。如果新系统需要数据，直接从 MQ 里消费即可；如果某个系统不需要这条数据了，就取消对 MQ 消息的消费即可。这样下来，A 系统压根儿不需要去考虑要给谁发送数据，不需要维护这个代码，也不需要考虑人家是否调用成功、失败超时等情况。</p>
-<h4 id="消息队列解耦"><a href="#消息队列解耦" class="headerlink" title="消息队列解耦"></a>消息队列解耦</h4><p><img src="https://i.loli.net/2021/01/19/WhMGblrtjYzKdRU.png" srcset="/img/loading.gif" alt="mq_3.png"></p>
+<h3 id="消息队列解耦"><a href="#消息队列解耦" class="headerlink" title="消息队列解耦"></a>消息队列解耦</h3><p>使用 MQ，A 系统产生一条数据，发送到 MQ 里面去，哪个系统需要数据自己去 MQ 里面消费。如果新系统需要数据，直接从 MQ 里消费即可；如果某个系统不需要这条数据了，就取消对 MQ 消息的消费即可。这样下来，A 系统压根儿不需要去考虑要给谁发送数据，不需要维护这个代码，也不需要考虑人家是否调用成功、失败超时等情况。</p>
+<p><img src="https://i.loli.net/2021/01/19/WhMGblrtjYzKdRU.png" srcset="/img/loading.gif" alt="mq_3.png"></p>
 <h2 id="异步"><a href="#异步" class="headerlink" title="异步"></a>异步</h2><h3 id="场景-1"><a href="#场景-1" class="headerlink" title="场景"></a>场景</h3><blockquote>
 <p>用户注册后，需要发注册邮件和注册短信</p>
 </blockquote>
@@ -304,9 +304,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2021/01/24/redis%E3%80%90%E6%8C%81%E4%B9%85%E5%8C%96%E3%80%91/">
+                      <a href="/2021/01/15/%E5%A4%9A%E7%BA%BF%E7%A8%8B-%E5%88%9B%E5%BB%BA%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F/">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">redis【持久化】</span>
+                        <span class="hidden-mobile">多线程------创建多线程的三种方式</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -314,8 +314,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2021/01/16/%E6%B5%85%E6%9E%90volatile/">
-                        <span class="hidden-mobile">浅析volatile</span>
+                      <a href="/2021/01/11/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%E3%80%90Java%E3%80%91/">
+                        <span class="hidden-mobile">单例模式【Java】</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -385,6 +385,30 @@
      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
   </div>
   
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
 
   
 
@@ -439,6 +463,8 @@
   <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
 
 
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
 
 
 

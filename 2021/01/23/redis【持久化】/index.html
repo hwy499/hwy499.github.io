@@ -184,8 +184,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2021-01-24 17:31" pubdate>
-        2021年1月24日 下午
+      <time datetime="2021-01-23 17:31" pubdate>
+        2021年1月23日 下午
       </time>
     </span>
   
@@ -240,19 +240,21 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：7 小时前
+                  本文最后更新于：12 分钟前
                 
               </p>
             
             <div class="markdown-body">
-              <h1 id="redis持久化"><a href="#redis持久化" class="headerlink" title="redis持久化"></a>redis持久化</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>redis的缓存是基于内存的缓存，当redis突然挂掉的时候（不管是因为什么原因），其存放在内存中的数据就全部都丢失了，redis会重启，但是需要花费很大的劲去恢复redis，这个时候就体现到了redis持久化的意义了。对于一个企业级的redis架构来说，持久化更是不可减少的。企业级redis集群架构的特点<strong>海量数据、高并发、高可用</strong>持久化主要是做灾难恢复，数据恢复，但可以归类到高可用。如果你的redis挂了，然后redis就不可用，也谈不到高可用了，这时你要做的事情是让redis尽快变得可用，如果你没有持久化，重启redis后，也是不可用的，redis内是没有数据的，这个时候如果大量请求打过来，redis中没有数据，缓存未打中，发生<strong>缓存雪崩</strong>问题，所有请求，没有在redis命中，就会去数据库这种数据源头中去找，一下数据库承接高并发，然后就挂掉了，数据库挂掉，你都没法去找数据恢复到redis里面去，redis的数据从哪儿来？从数据库来。数据库挂掉后还会影响其他系统应用。发生更大的灾难。</p>
+              <h1 id="redis【持久化】"><a href="#redis【持久化】" class="headerlink" title="redis【持久化】"></a>redis【持久化】</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>​         redis的缓存是基于内存的缓存，当redis突然挂掉的时候（不管是因为什么原因），其存放在内存中的数据就全部都丢失了，redis重启后数据就全部都没有了，这个时候就体现到了redis持久化的意义了。对于一个企业级的redis架构来说，持久化更是不可减少的。企业级redis集群架构的特点<strong>海量数据、高并发、高可用</strong>，持久化主要是做灾难恢复，数据恢复，但可以归类到高可用。</p>
+<p><strong>没有做持久化的后果？</strong></p>
+<p>​        如果你的redis宕机了，因为没有做持久化redis重启redis后，redis内数据是空的，这个时候如果大量请求打过来，redis数据为空，这时就会发生<strong>缓存雪崩</strong>问题，所有请求，没有在redis中命中，这时就会去数据库这种数据源头中去查询数据，大量的sql查询导致数据库并发量激增，然后就挂掉了，数据库挂掉后，你都没法去找数据缓存到redis里面去，redis的数据从哪儿来？从数据库来。数据库挂掉后还会影响其他系统应用。发生更大的灾难。</p>
 <h2 id="1、RDB和AOF两种持久化机制的介绍"><a href="#1、RDB和AOF两种持久化机制的介绍" class="headerlink" title="1、RDB和AOF两种持久化机制的介绍"></a>1、RDB和AOF两种持久化机制的介绍</h2><ul>
 <li>RDB持久化机制：对redis中的数据执行<strong>周期性的持久化</strong>。</li>
 <li>AOF机制：对每条写入命令作为日志，以append-only的模式写入一个日志文件中，在redis重启的时候，可以通过回放AOF日志中的写入指令来重新构建整个数据集</li>
 </ul>
 <p>如果我们想要redis仅仅作为纯内存的缓存来用，那么可以禁止RDB和AOF所有的持久化机制。通过RDB或AOF，都可以将redis内存中的数据给持久化到磁盘上面来，然后可以将这些数据备份到别的地方去，比如说阿里云，云服务，如果redis挂了，服务器上的内存和磁盘上的数据都丢了，可以从云服务上拷贝回来之前的数据，放到指定的目录中，然后重新启动redis，redis就会自动根据持久化数据文件中的数据，去恢复内存中的数据，继续对外提供服务，需要注意的是：如果<strong>同时使用</strong>RDB和AOF两种持久化机制，那么在<strong>redis重启</strong>的时候，会使用<strong>AOF来重新构建数据</strong>，因为<strong>AOF中的数据更加完整</strong></p>
-<h2 id="2、redis使用RDB"><a href="#2、redis使用RDB" class="headerlink" title="2、redis使用RDB"></a>2、redis使用RDB</h2><p>redis默认开启RDB策略</p>
-<h3 id="redis-config"><a href="#redis-config" class="headerlink" title="redis.config"></a>redis.config</h3><div class="hljs code-wrapper"><pre><code class="hljs properties"><span class="hljs-comment">################################ SNAPSHOTTING  ################################</span>
+<h2 id="2、redis使用RDB"><a href="#2、redis使用RDB" class="headerlink" title="2、redis使用RDB"></a>2、redis使用RDB</h2><h3 id="默认开启RDB策略"><a href="#默认开启RDB策略" class="headerlink" title="默认开启RDB策略"></a>默认开启RDB策略</h3><p><code>redis.config</code> 中RDB相关配置</p>
+<div class="hljs code-wrapper"><pre><code class="hljs properties"><span class="hljs-comment">################################ SNAPSHOTTING  ################################</span>
 <span class="hljs-comment">#</span>
 <span class="hljs-comment"># Save the DB on disk:</span>
 <span class="hljs-comment">#</span>
@@ -277,11 +279,11 @@
 <span class="hljs-attr">save</span> <span class="hljs-string">900 1</span>
 <span class="hljs-attr">save</span> <span class="hljs-string">300 10</span>
 <span class="hljs-attr">save</span> <span class="hljs-string">60 10000</span></code></pre></div>
-<p>说明：每隔60s，如果有超过10000个key发生了变更，就会生成一个新的dump.rdb文件，就是当前redis内存中完整的数据快照，这个操作也被称之为snapshotting，快照。也可以手动调用save或者bgsave命令，同步或异步执行rdb快照生成，save可以设置多个，就是多个snapshotting检查点，每到一个检查点，就会去check一下，是否有指定的key数量发生了变更，如果有，就生成一个新的dump.rdb文件，会覆盖之前的dump.rdb文件。</p>
-<p>注意：在执行<code>redis-cli shutdow</code>命令时，其实是一种安全退出的模式，redis在退出的时候会将内存中的数据立即生成一份完整的rdb快照。要想测试发生故障的需要<code>ps -ef|grep redis</code> 查看redis进程号pid，然后<code>kill -9 pid</code> 。这样就能测试RDB了。</p>
+<p><code>save 60 10000</code> 的说明：每隔60s，如果有超过10000个key发生了变更，就会生成一个新的dump.rdb文件，就是当前redis内存中完整的数据快照，这个操作也被称之为snapshotting-快照。也可以手动调用save或者bgsave命令，同步或异步执行rdb快照生成，save可以设置多个，就是多个snapshotting检查点，每到一个检查点，就会去check一下，是否有指定的key数量发生了变更，如果有，就生成一个新的dump.rdb文件，会覆盖之前的dump.rdb文件。</p>
+<p><strong>注意：</strong>在执行<code>redis-cli shutdow</code>命令时，其实是一种安全退出的模式，redis在退出的时候会将内存中的数据立即生成一份完整的rdb快照。要想测试发生故障的需要<code>ps -ef|grep redis</code> 查看redis进程号pid，然后<code>kill -9 pid</code> 。这样就能测试RDB了。</p>
 <h3 id="RDB持久化机制的工作流程"><a href="#RDB持久化机制的工作流程" class="headerlink" title="RDB持久化机制的工作流程"></a>RDB持久化机制的工作流程</h3><p>（1）redis根据配置自己尝试去生成rdb快照文件<br>（2）fork一个子进程出来<br>（3）子进程尝试将数据dump到临时的rdb快照文件中<br>（4）完成rdb快照文件的生成之后，就替换之前的旧的快照文件</p>
 <h2 id="3、redis-使用AOF"><a href="#3、redis-使用AOF" class="headerlink" title="3、redis 使用AOF"></a>3、redis 使用AOF</h2><p>AOF持久化：默认是关闭的，默认开启RDB机制。</p>
-<h3 id="开启AOF持久化机制"><a href="#开启AOF持久化机制" class="headerlink" title="开启AOF持久化机制"></a>开启AOF持久化机制</h3><p>redis.config</p>
+<h3 id="开启AOF持久化机制"><a href="#开启AOF持久化机制" class="headerlink" title="开启AOF持久化机制"></a>开启AOF持久化机制</h3><p><code>redis.config</code></p>
 <div class="hljs code-wrapper"><pre><code class="hljs properties"><span class="hljs-comment">############################# APPEND ONLY MODE ###############################</span>
 <span class="hljs-comment"># By default Redis asynchronously dumps the dataset on disk. This mode is</span>
 <span class="hljs-comment"># good enough in many applications, but an issue with the Redis process or</span>
@@ -306,9 +308,9 @@
 <span class="hljs-attr">appendonly</span> <span class="hljs-string">yes </span></code></pre></div>
 <p>打开AOF持久化机制之后，redis每次接收到一条写命令，就会写入日志文件中，再写入日志文件之前，先写入os cache的，然后每隔一定时间再fsync一下，将数据刷入日志文件。RDB和AOF同时开启，恢复数据时采用AOF机制。</p>
 <h3 id="redis在进行fsync时有三种策略可以选择"><a href="#redis在进行fsync时有三种策略可以选择" class="headerlink" title="redis在进行fsync时有三种策略可以选择"></a>redis在进行fsync时有三种策略可以选择</h3><ul>
-<li><strong>always</strong>  每次写入一条数据，立即将这个数据对应的写日志fsync到磁盘上去，性能非常非常差，吞吐量很低; 确保说redis里的数据一条都不丢，那就只能这样了</li>
+<li><strong>always</strong>  每次写入一条数据，立即将这个数据对应的写日志 fsync 到磁盘上去，性能非常非常差，吞吐量很低; 确保说redis里的数据一条都不丢，那就只能这样了</li>
 <li><strong>everysec</strong> 每秒将os cache中的数据fsync到磁盘，这个最常用的，生产环境一般都这么配置，性能很高，QPS还是可以上万。</li>
-<li><strong>no</strong> 仅仅redis负责将数据写入os cache就撒手不管了，然后后面os自己会时不时有自己的策略将数据刷入磁盘，不可控了</li>
+<li><strong>no</strong> 仅仅redis负责将数据写入os cache就撒手不管了，然后后面 os 自己会时不时有自己的策略将数据刷入磁盘，不可控了</li>
 </ul>
 <div class="hljs code-wrapper"><pre><code class="hljs properties"><span class="hljs-comment"># The fsync() call tells the Operating System to actually write data on disk</span>
 <span class="hljs-comment"># instead of waiting for more data in the output buffer. Some OS will really flush</span>
@@ -336,20 +338,21 @@
 <span class="hljs-comment"># appendfsync always </span>
 <span class="hljs-attr">appendfsync</span> <span class="hljs-string">everysec</span>
 <span class="hljs-comment"># appendfsync no</span></code></pre></div>
-<h3 id="AOF-Rewrite"><a href="#AOF-Rewrite" class="headerlink" title="AOF Rewrite"></a>AOF Rewrite</h3><p>redis中的数据其实有限的，很多数据可能会自动过期，可能会被用户删除，可能会被redis用缓存清除的算法清理掉，redis中的数据会不断淘汰掉旧的，就一部分常用的数据会被自动保留在redis内存中，所以可能很多之前的已经被清理掉的数据，对应的写日志还停留在AOF中，AOF日志文件就一个，会不断的膨胀，到很大很大，所以AOF会自动在后台每隔一定时间做rewrite操作，比如日志里已经存放了针对100w数据的写日志了; redis内存只剩下10万; 基于内存中当前的10万数据构建一套最新的日志，到AOF中; 覆盖之前的老日志; 确保AOF日志文件不会过大，保持跟redis内存数据量一致。</p>
-<p>需要注意的是：<strong>redis 2.4</strong>之前，还需要手动，开发一些脚本，crontab，通过BGREWRITEAOF命令去执行AOF rewrite，但是redis 2.4之后，会自动进行rewrite操作。</p>
-<p>在redis.conf中，可以配置rewrite策略，这个一般不用配置。</p>
+<h3 id="AOF-Rewrite"><a href="#AOF-Rewrite" class="headerlink" title="AOF Rewrite"></a>AOF Rewrite</h3><p>redis中的数据其实有限的，很多数据可能会自动过期，可能会被用户删除，可能会被redis用缓存清除的算法清理掉，redis中的数据会不断淘汰掉旧的，就一部分常用的数据会被自动保留在redis内存中，所以可能很多之前的已经被清理掉的数据，对应的写日志还停留在AOF中，AOF日志文件只有一个，会不断的膨胀，到很大很大。</p>
+<p>所以AOF会自动在后台每隔一定时间做rewrite操作，比如日志里已经存放了针对100w数据的写日志了; redis此时内存只剩下10万; 基于内存中当前的10万数据构建一套最新的日志并写入到AOF中，覆盖之前的老日志;。确保AOF日志文件不会过大，保持跟redis内存数据量一致。</p>
+<p><strong>需要注意的是</strong>：<strong>redis 2.4</strong>之前，还需要手动，开发一些脚本，crontab，通过BGREWRITEAOF命令去执行AOF rewrite，但是redis 2.4之后，会自动进行rewrite操作。</p>
+<p>在redis.config中，可以配置rewrite策略，这个一般不用配置。</p>
 <p><strong>rewrite过程</strong></p>
 <p>（1）redis fork一个子进程<br>（2）子进程基于当前内存中的数据，构建日志，开始往一个新的临时的AOF文件中写入日志<br>（3）redis主进程，接收到client新的写操作之后，在内存中写入日志，同时新的日志也继续写入旧的AOF文件<br>（4）子进程写完新的日志文件之后，redis主进程将内存中的新日志再次追加到新的AOF文件中<br>（5）用新的日志文件替换掉旧的日志文件</p>
 <h3 id="AOF破损文件的修复"><a href="#AOF破损文件的修复" class="headerlink" title="AOF破损文件的修复"></a>AOF破损文件的修复</h3><p>如果redis在append数据到AOF文件时，机器宕机了，可能会导致AOF文件破损，用<code>redis-check-aof --fix filename  </code>命令来修复破损的AOF文件。</p>
-<h2 id="4、AOF和RDB同时工作"><a href="#4、AOF和RDB同时工作" class="headerlink" title="4、AOF和RDB同时工作"></a>4、AOF和RDB同时工作</h2><p>（1）如果RDB在执行snapshotting操作，那么redis不会执行AOF rewrite; 如果redis再执行AOF rewrite，那么就不会执行RDB snapshotting。<br>（2）如果RDB在执行snapshotting，此时用户执行BGREWRITEAOF命令，那么等RDB快照生成之后，才会去执行AOF rewrite。<br>（3）同时有RDB snapshot文件和AOF日志文件，那么redis重启的时候，会优先使用AOF进行数据恢复，因为其中的日志更完整。</p>
+<h2 id="4、AOF和RDB同时工作"><a href="#4、AOF和RDB同时工作" class="headerlink" title="4、AOF和RDB同时工作"></a>4、AOF和RDB同时工作</h2><p>（1）如果RDB在执行snapshotting操作，那么redis不会执行AOF rewrite; 如果redis在执行AOF rewrite，那么就不会执行RDB snapshotting。<br>（2）如果RDB在执行snapshotting，此时用户执行BGREWRITEAOF命令，那么等RDB快照生成之后，才会去执行 AOF rewrite。<br>（3）同时有RDB snapshot文件和AOF日志文件，那么redis重启的时候，会优先使用AOF进行数据恢复，因为其中的日志更完整。</p>
 <h2 id="5、RDB持久化机制的优缺点"><a href="#5、RDB持久化机制的优缺点" class="headerlink" title="5、RDB持久化机制的优缺点"></a>5、RDB持久化机制的优缺点</h2><h3 id="RDB持久化机制的优点"><a href="#RDB持久化机制的优点" class="headerlink" title="RDB持久化机制的优点"></a>RDB持久化机制的优点</h3><p>（1）RDB会生成多个数据文件，每个数据文件都代表了某一个时刻中redis的数据，这种多个数据文件的方式，非常适合做冷备，可以将这种完整的数据文件发送到一些远程的安全存储上去，以预定好的备份策略来定期备份redis中的数据</p>
-<p>（2）RDB对redis对外提供的读写服务，影响非常小，可以让redis保持高性能，因为redis主进程只需要fork一个子进程，让子进程执行磁盘IO操作来进行RDB持久化即可</p>
-<p>（3）相对于AOF持久化机制来说，直接基于RDB数据文件来重启和恢复redis进程，更加快速</p>
+<p>（2）RDB对redis对外提供的读写服务，对redis影响非常小，可以让redis保持高性能，因为redis主进程只需要fork一个子进程，让子进程执行磁盘IO操作来进行RDB持久化即可。</p>
+<p>（3）相对于AOF持久化机制来说，直接基于RDB数据文件来重启和恢复redis进程，更加快速。</p>
 <h3 id="RDB持久化机制的缺点"><a href="#RDB持久化机制的缺点" class="headerlink" title="RDB持久化机制的缺点"></a>RDB持久化机制的缺点</h3><p>（1）如果想要在redis故障时，尽可能少的丢失数据，那么RDB没有AOF好。一般来说，RDB数据快照文件，都是每隔5分钟，或者更长时间生成一次，这个时候一旦redis进程宕机，那么会丢失最近5分钟的数据。</p>
-<p>（2）RDB每次在fork子进程来执行RDB快照数据文件生成的时候，如果数据文件特别大，可能会导致对客户端提供的服务暂停数毫秒，或者甚至数秒</p>
-<h2 id="6、AOF持久化机制的优缺点"><a href="#6、AOF持久化机制的优缺点" class="headerlink" title="6、AOF持久化机制的优缺点"></a>6、AOF持久化机制的优缺点</h2><h3 id="AOF持久化机制的优点"><a href="#AOF持久化机制的优点" class="headerlink" title="AOF持久化机制的优点"></a>AOF持久化机制的优点</h3><p>（1）AOF可以更好的保护数据不丢失，一般AOF会每隔1秒，通过一个后台线程执行一次fsync操作，最多丢失1秒钟的数据</p>
-<p>（2）AOF日志文件以append-only模式写入，所以没有任何磁盘寻址的开销，写入性能非常高，而且文件不容易破损，即使文件尾部破损，也很容易修复</p>
+<p>（2）RDB每次在fork子进程来执行RDB快照数据文件生成的时候，如果数据文件特别大，可能会导致对客户端提供的服务暂停数毫秒，或者甚至数秒。</p>
+<h2 id="6、AOF持久化机制的优缺点"><a href="#6、AOF持久化机制的优缺点" class="headerlink" title="6、AOF持久化机制的优缺点"></a>6、AOF持久化机制的优缺点</h2><h3 id="AOF持久化机制的优点"><a href="#AOF持久化机制的优点" class="headerlink" title="AOF持久化机制的优点"></a>AOF持久化机制的优点</h3><p>（1）AOF可以更好的保护数据不丢失，一般AOF会每隔1秒，通过一个后台线程执行一次fsync操作，最多丢失1秒钟的数据。</p>
+<p>（2）AOF日志文件以append-only模式写入，所以没有任何磁盘寻址的开销，写入性能非常高，而且文件不容易破损，即使文件尾部破损，也很容易修复。</p>
 <p>（3）AOF日志文件即使过大的时候，出现后台重写操作，也不会影响客户端的读写。因为在rewrite log的时候，会对其中的指导进行压缩，创建出一份需要恢复数据的最小日志出来。再创建新日志文件的时候，老的日志文件还是照常写入。当新的merge后的日志文件ready的时候，再交换新老日志文件即可。</p>
 <p>（4）AOF日志文件的命令通过非常可读的方式进行记录，这个特性非常适合做灾难性的误删除的紧急恢复。比如某人不小心用flushall命令清空了所有数据，只要这个时候后台rewrite还没有发生，那么就可以立即拷贝AOF文件，将最后一条flushall命令给删了，然后再将该AOF文件放回去，就可以通过恢复机制，自动恢复所有数据</p>
 <h3 id="AOF持久化机制的缺点"><a href="#AOF持久化机制的缺点" class="headerlink" title="AOF持久化机制的缺点"></a>AOF持久化机制的缺点</h3><p>（1）对于同一份数据来说，AOF日志文件通常比RDB数据快照文件更大。</p>
@@ -366,7 +369,7 @@
 <h3 id="2、企业级的数据备份方案"><a href="#2、企业级的数据备份方案" class="headerlink" title="2、企业级的数据备份方案"></a>2、企业级的数据备份方案</h3><p>RDB非常适合做冷备，每次生成之后，就不会再有修改了</p>
 <h4 id="数据备份方案"><a href="#数据备份方案" class="headerlink" title="数据备份方案"></a>数据备份方案</h4><p>（1）写crontab定时调度脚本去做数据备份<br>（2）每小时都copy一份rdb的备份，到一个目录中去，仅仅保留最近48小时的备份<br>（3）每天都保留一份当日的rdb的备份，到一个目录中去，仅仅保留最近1个月的备份<br>（4）每次copy备份的时候，都把太旧的备份给删了<br>（5）每天晚上将当前服务器上所有的数据备份，发送一份到远程的云服务上去</p>
 <h4 id="定时任务实现"><a href="#定时任务实现" class="headerlink" title="定时任务实现"></a>定时任务实现</h4><p>每小时copy一次备份，删除48小时前的数据</p>
-<p>redis_rab_copy_hourly.sh</p>
+<p><code>redis_rab_copy_hourly.sh</code></p>
 <div class="hljs code-wrapper"><pre><code class="hljs bash"><span class="hljs-meta">#!/bin/sh </span>
 cur_date=`date +%Y%m%d%k`
 rm -rf /usr/<span class="hljs-built_in">local</span>/redis/snapshotting/<span class="hljs-variable">$cur_date</span>
@@ -448,8 +451,8 @@ rm -rf /usr/<span class="hljs-built_in">local</span>/redis/snapshotting/<span cl
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2021/01/19/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E3%80%90%E8%A7%A3%E8%80%A6%E3%80%81%E5%BC%82%E6%AD%A5%E3%80%81%E5%89%8A%E5%B3%B0%E3%80%91/">
-                        <span class="hidden-mobile">消息队列【解耦、异步、削峰】</span>
+                      <a href="/2021/01/19/RabbitMq%E5%AD%A6%E4%B9%A0/">
+                        <span class="hidden-mobile">RabbitMq学习</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -519,6 +522,30 @@ rm -rf /usr/<span class="hljs-built_in">local</span>/redis/snapshotting/<span cl
      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
   </div>
   
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
 
   
 
@@ -573,6 +600,8 @@ rm -rf /usr/<span class="hljs-built_in">local</span>/redis/snapshotting/<span cl
   <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
 
 
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
 
 
 

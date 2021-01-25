@@ -193,6 +193,64 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
+        <a href="/2021/01/25/RabbitMQ%E3%80%90%E9%AB%98%E5%8F%AF%E7%94%A8%E3%80%91/">RabbitMQ【高可用】</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/01/25/RabbitMQ%E3%80%90%E9%AB%98%E5%8F%AF%E7%94%A8%E3%80%91/">
+          
+          
+            
+          
+          RabbitMQ 的高可用性
+ RabbitMQ 有三种模式：单机模式、普通集群模式、镜像集群模式。
+
+单机模式单机模式，就是 Demo 级别的，一般就是你本地启动了玩玩儿的，没人生产用单机模式。谈不到高可用。
+普通集群模式（无高可用性）普通集群模式，意思就是在多台机器上启动多个 RabbitMQ 实例，每个机器启动一个，生产者创建的queue只会放在一个RabbitMQ的实例中，其余的实例会同步
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-01-25 13:28" pubdate>
+              2021-01-25
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/">中间件</a>
+            
+              <a href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/RabbitMQ/">RabbitMQ</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/">中间件</a>
+            
+              <a href="/tags/RabbitMQ/">RabbitMQ</a>
+            
+              <a href="/tags/%E9%AB%98%E5%8F%AF%E7%94%A8/">高可用</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
         <a href="/2021/01/24/redis%E3%80%90%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E3%80%91/">redis【主从复制】</a>
       </h1>
 
@@ -250,16 +308,16 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2021/01/24/redis%E3%80%90%E6%8C%81%E4%B9%85%E5%8C%96%E3%80%91/">redis【持久化】</a>
+        <a href="/2021/01/23/redis%E3%80%90%E6%8C%81%E4%B9%85%E5%8C%96%E3%80%91/">redis【持久化】</a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2021/01/24/redis%E3%80%90%E6%8C%81%E4%B9%85%E5%8C%96%E3%80%91/">
+        <a href="/2021/01/23/redis%E3%80%90%E6%8C%81%E4%B9%85%E5%8C%96%E3%80%91/">
           
           
             
           
-          redis持久化前言redis的缓存是基于内存的缓存，当redis突然挂掉的时候（不管是因为什么原因），其存放在内存中的数据就全部都丢失了，redis会重启，但是需要花费很大的劲去恢复redis，这个时候就体现到了redis持久化的意义了。对于一个企业级的redis架构来说，持久化更是不可减少的。企业级redis集群架构的特点海量数据、高并发、高可用持久化主要是做灾难恢复，数据恢复，但可以归类到高
+          redis【持久化】前言​         redis的缓存是基于内存的缓存，当redis突然挂掉的时候（不管是因为什么原因），其存放在内存中的数据就全部都丢失了，redis重启后数据就全部都没有了，这个时候就体现到了redis持久化的意义了。对于一个企业级的redis架构来说，持久化更是不可减少的。企业级redis集群架构的特点海量数据、高并发、高可用，持久化主要是做灾难恢复，数据恢复，但可以归
         </a>
       </p>
 
@@ -267,8 +325,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2021-01-24 17:31" pubdate>
-              2021-01-24
+            <time datetime="2021-01-23 17:31" pubdate>
+              2021-01-23
             </time>
           </div>
         
@@ -306,22 +364,20 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2021/01/19/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E3%80%90%E8%A7%A3%E8%80%A6%E3%80%81%E5%BC%82%E6%AD%A5%E3%80%81%E5%89%8A%E5%B3%B0%E3%80%91/">消息队列【解耦、异步、削峰】</a>
+        <a href="/2021/01/19/RabbitMq%E5%AD%A6%E4%B9%A0/">RabbitMq学习</a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2021/01/19/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E3%80%90%E8%A7%A3%E8%80%A6%E3%80%81%E5%BC%82%E6%AD%A5%E3%80%81%E5%89%8A%E5%B3%B0%E3%80%91/">
+        <a href="/2021/01/19/RabbitMq%E5%AD%A6%E4%B9%A0/">
           
           
             
           
-          消息队列作用【解耦、异步、削峰】
-学习消息队列的笔记
+          Rabbit MQ 学习【7种工作模式】准备工作1.首先安装Rabbit MQ
+ 教程网址 https://blog.csdn.net/qq_47588845/article/details/107986373
 
-消息队列
-
-MQ 全称为 Message Queue, 消息队列（MQ）是一种应用程序对应用程序的通信方法。应用程序通过读写出入队列的消息（针对应用程序的数据）来通信，而无需专用连接来链接它们。
-消息传递指的是程序之间通过在消息中发送数据进行通信，而不是通过直接调用彼此来通信，直接调用通常是用于诸如远程过程调用的技术。排队指的是应用程序通过队
+2.创建一个springboot项目3. 导入依赖&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/g
         </a>
       </p>
 
@@ -329,7 +385,7 @@ MQ 全称为 Message Queue, 消息队列（MQ）是一种应用程序对应用�
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2021-01-19 09:15" pubdate>
+            <time datetime="2021-01-19 23:22" pubdate>
               2021-01-19
             </time>
           </div>
@@ -340,7 +396,7 @@ MQ 全称为 Message Queue, 消息队列（MQ）是一种应用程序对应用�
             
               <a href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/">中间件</a>
             
-              <a href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/">消息队列</a>
+              <a href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/">消息中间件</a>
             
           </div>
         
@@ -350,7 +406,11 @@ MQ 全称为 Message Queue, 消息队列（MQ）是一种应用程序对应用�
             
               <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/">中间件</a>
             
-              <a href="/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/">消息队列</a>
+              <a href="/tags/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/">消息中间件</a>
+            
+              <a href="/tags/Message-Queue/">Message Queue</a>
+            
+              <a href="/tags/Rabbit-MQ/">Rabbit MQ</a>
             
           </div>
         
@@ -481,20 +541,22 @@ MQ 全称为 Message Queue, 消息队列（MQ）是一种应用程序对应用�
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2021/01/13/RabbitMq%E5%AD%A6%E4%B9%A0/">RabbitMq学习</a>
+        <a href="/2021/01/13/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E3%80%90%E8%A7%A3%E8%80%A6%E3%80%81%E5%BC%82%E6%AD%A5%E3%80%81%E5%89%8A%E5%B3%B0%E3%80%91/">消息队列【解耦、异步、削峰】</a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2021/01/13/RabbitMq%E5%AD%A6%E4%B9%A0/">
+        <a href="/2021/01/13/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E3%80%90%E8%A7%A3%E8%80%A6%E3%80%81%E5%BC%82%E6%AD%A5%E3%80%81%E5%89%8A%E5%B3%B0%E3%80%91/">
           
           
             
           
-          Rabbit MQ 学习【7种工作模式】准备工作1.首先安装Rabbit MQ
- 教程网址 https://blog.csdn.net/qq_47588845/article/details/107986373
+          消息队列作用【解耦、异步、削峰】
+学习消息队列的笔记
 
-2.创建一个springboot项目3. 导入依赖&lt;dependency&gt;
-    &lt;groupId&gt;org.springframework.boot&lt;/g
+消息队列
+
+MQ 全称为 Message Queue, 消息队列（MQ）是一种应用程序对应用程序的通信方法。应用程序通过读写出入队列的消息（针对应用程序的数据）来通信，而无需专用连接来链接它们。
+消息传递指的是程序之间通过在消息中发送数据进行通信，而不是通过直接调用彼此来通信，直接调用通常是用于诸如远程过程调用的技术。排队指的是应用程序通过队
         </a>
       </p>
 
@@ -502,7 +564,7 @@ MQ 全称为 Message Queue, 消息队列（MQ）是一种应用程序对应用�
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2021-01-13 23:22" pubdate>
+            <time datetime="2021-01-13 09:15" pubdate>
               2021-01-13
             </time>
           </div>
@@ -513,7 +575,7 @@ MQ 全称为 Message Queue, 消息队列（MQ）是一种应用程序对应用�
             
               <a href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/">中间件</a>
             
-              <a href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/">消息中间件</a>
+              <a href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/">消息队列</a>
             
           </div>
         
@@ -523,11 +585,7 @@ MQ 全称为 Message Queue, 消息队列（MQ）是一种应用程序对应用�
             
               <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/">中间件</a>
             
-              <a href="/tags/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/">消息中间件</a>
-            
-              <a href="/tags/Message-Queue/">Message Queue</a>
-            
-              <a href="/tags/Rabbit-MQ/">Rabbit MQ</a>
+              <a href="/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/">消息队列</a>
             
           </div>
         
@@ -541,11 +599,11 @@ MQ 全称为 Message Queue, 消息队列（MQ）是一种应用程序对应用�
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2021/01/11/%E3%80%90Java%E3%80%91%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/">【Java】单例模式</a>
+        <a href="/2021/01/11/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%E3%80%90Java%E3%80%91/">单例模式【Java】</a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2021/01/11/%E3%80%90Java%E3%80%91%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/">
+        <a href="/2021/01/11/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F%E3%80%90Java%E3%80%91/">
           
           
             
@@ -704,67 +762,6 @@ KMP 算法是 D.E.Knuth、J,H,Morris 和 V.R.Pratt 三位神人共同提出的�
     </article>
   </div>
 
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2021/01/08/%E9%80%89%E6%8B%A9%E6%8E%92%E5%BA%8F/">选择排序</a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2021/01/08/%E9%80%89%E6%8B%A9%E6%8E%92%E5%BA%8F/">
-          
-          
-            
-          
-          选择排序基本思想首先在未排序序列中找到最小（大）元素，存放到排序序列的起始位置。再从剩余未排序元素中继续寻找最小（大）元素，然后放到已排序序列的末尾。重复第二步，直到所有元素均排序完毕。
-动图演示
-代码实现static void selectSort(int[] src) &#123;
-    int len = src.length;
-    // 比较 len - 1 词
-    for (i
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2021-01-08 09:54" pubdate>
-              2021-01-08
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a>
-            
-              <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E7%AE%97%E6%B3%95/">算法</a>
-            
-              <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E7%AE%97%E6%B3%95/%E6%8E%92%E5%BA%8F/">排序</a>
-            
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E7%AE%97%E6%B3%95/">算法</a>
-            
-              <a href="/tags/%E6%8E%92%E5%BA%8F/">排序</a>
-            
-              <a href="/tags/%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F/">冒泡排序</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
 
 
   <nav aria-label="navigation">
@@ -826,6 +823,30 @@ KMP 算法是 D.E.Knuth、J,H,Morris 和 V.R.Pratt 三位神人共同提出的�
      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
   </div>
   
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
 
   
 
@@ -874,6 +895,8 @@ KMP 算法是 D.E.Knuth、J,H,Morris 和 V.R.Pratt 三位神人共同提出的�
   <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
 
 
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
 
 
 

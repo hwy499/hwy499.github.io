@@ -17,7 +17,7 @@
   <meta name="description" content="good good study,day day up">
   <meta name="author" content="何文垚">
   <meta name="keywords" content="">
-  <title>KMP算法 - hwyblog</title>
+  <title>RabbitMQ【高可用】 - hwyblog</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
 
@@ -174,7 +174,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="KMP算法">
+            <span class="h2" id="subtitle" title="RabbitMQ【高可用】">
               
             </span>
 
@@ -184,8 +184,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2021-01-09 12:44" pubdate>
-        2021年1月9日 下午
+      <time datetime="2021-01-25 13:28" pubdate>
+        2021年1月25日 下午
       </time>
     </span>
   
@@ -196,7 +196,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      550 字
+      940 字
     </span>
   
 
@@ -206,7 +206,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      6
+      9
        分钟
     </span>
   
@@ -236,63 +236,32 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">KMP算法</h1>
+            <h1 style="display: none">RabbitMQ【高可用】</h1>
             
               <p class="note note-info">
                 
-                  本文最后更新于：16 天前
+                  本文最后更新于：12 分钟前
                 
               </p>
             
             <div class="markdown-body">
-              <h1 id="KMP-算法"><a href="#KMP-算法" class="headerlink" title="KMP 算法"></a>KMP 算法</h1><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>KMP 算法要解决的问题就是在字符串（也叫主串）中的模式（pattern）定位问题。说简单点就是我们平时常说的关键字搜索。模式串就是关键字，如果它在一个主串中出现，就返回它的具体位置，否则返回 - 1（常用手段）。</p>
-<p>KMP 算法是 D.E.Knuth、J,H,Morris 和 V.R.Pratt 三位神人共同提出的，称之为 Knuth-Morria-Pratt 算法，简称 KMP 算法。该算法相对于 Brute-Force（暴力）算法有比较大的改进，主要是消除了主串指针的回溯，从而使算法效率有了某种程度的提高。</p>
-<h3 id="kMP解决的问题"><a href="#kMP解决的问题" class="headerlink" title="kMP解决的问题"></a>kMP解决的问题</h3><p>现在有一个字符串为源字符串S,现在给你个目标字符串T，问T是否在S中存在。(下图中：上面的为S，下面的为T)</p>
-<p><img src="https://i.loli.net/2021/01/09/qkFvCIet4xJjQgn.png" srcset="/img/loading.gif" alt="kmp1.png"></p>
-<h3 id="暴力解决法"><a href="#暴力解决法" class="headerlink" title="暴力解决法"></a>暴力解决法</h3><h4 id="解决思路"><a href="#解决思路" class="headerlink" title="解决思路"></a>解决思路</h4><p><strong>遍历两个字符串</strong></p>
-<ul>
-<li>首先，定义两个指针i，j初始化为0</li>
-</ul>
-<p><img src="https://i.loli.net/2021/01/09/yB9nEYl2mROLqPS.png" srcset="/img/loading.gif" alt="kmp2.png"></p>
-<ul>
-<li>如果i 指向的字符和 j 指向的字符一致，i和j向后移动。</li>
-</ul>
-<p><img src="https://i.loli.net/2021/01/09/cREG9gWDKoX3HPn.png" srcset="/img/loading.gif" alt="kmp3.png"></p>
-<ul>
-<li>不相等，那就把 i 指针移回第 1 位（假设下标从 0 开始），j 移动到模式串的第 0 位：</li>
-</ul>
-<p><img src="https://i.loli.net/2021/01/09/MK4zQx1tJOmVX5h.png" srcset="/img/loading.gif" alt="kmp4.png"></p>
-<h4 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h4><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">matching</span><span class="hljs-params">(String src, String pattern)</span> </span>&#123;
-    <span class="hljs-keyword">int</span> len1 = src.length();
-    <span class="hljs-keyword">int</span> len2 = pattern.length();
-    <span class="hljs-comment">// 主串的长度小于模式串的长度时直接返回-1，说明不存在</span>
-    <span class="hljs-keyword">if</span> (len1 &lt; len2) &#123;
-        <span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>;
-    &#125;
-    <span class="hljs-comment">// 主串中剩下未匹配的字符的大小&gt;=模式串的长度才继续进行</span>
-    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; len1 - i &gt;= len2; i++) &#123;
-        <span class="hljs-keyword">int</span> temp = i;
-        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> j = <span class="hljs-number">0</span>; j &lt; pattern.length(); j++) &#123;
-            <span class="hljs-comment">// 对照第2步</span>
-            <span class="hljs-keyword">if</span> (src.charAt(temp++) == pattern.charAt(j)) &#123;
-                <span class="hljs-comment">// pattern 数组遍历到结尾说明找到匹配的</span>
-                <span class="hljs-keyword">if</span> (j == pattern.length() - <span class="hljs-number">1</span>) &#123;
-                    <span class="hljs-comment">// i - len2 是模式串在源串中的起始位置</span>
-                    <span class="hljs-keyword">return</span> i;
-                &#125;
-                <span class="hljs-keyword">continue</span>;
-            &#125;
-            <span class="hljs-comment">// 不等就跳出循环 对标第三步</span>
-            <span class="hljs-keyword">break</span>;
-        &#125;
-    &#125;
-    <span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>;
-&#125;</code></pre></div>
-<h4 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h4><p><img src="https://i.loli.net/2021/01/10/p3cQJqNFy4AEWHZ.gif" srcset="/img/loading.gif" alt="kmp5.gif"></p>
-<blockquote>
-<p>如上图，在暴力求解时，每当发现字符不匹配时，主串i需要回溯，模式串的j也要回溯，这极大的影响了搜索效率。</p>
+              <h1 id="RabbitMQ-的高可用性"><a href="#RabbitMQ-的高可用性" class="headerlink" title="RabbitMQ 的高可用性"></a>RabbitMQ 的高可用性</h1><blockquote>
+<p> RabbitMQ 有三种模式：单机模式、普通集群模式、镜像集群模式。</p>
 </blockquote>
-<h3 id="KMP求解法"><a href="#KMP求解法" class="headerlink" title="KMP求解法"></a>KMP求解法</h3><h4 id="KMP是如何消除指针回溯问题的"><a href="#KMP是如何消除指针回溯问题的" class="headerlink" title="KMP是如何消除指针回溯问题的"></a>KMP是如何消除指针回溯问题的</h4><p>未完待续。。。。</p>
+<h2 id="单机模式"><a href="#单机模式" class="headerlink" title="单机模式"></a>单机模式</h2><p>单机模式，就是 Demo 级别的，一般就是你本地启动了玩玩儿的，没人生产用单机模式。谈不到高可用。</p>
+<h2 id="普通集群模式（无高可用性）"><a href="#普通集群模式（无高可用性）" class="headerlink" title="普通集群模式（无高可用性）"></a>普通集群模式（无高可用性）</h2><p>普通集群模式，意思就是在多台机器上启动多个 RabbitMQ 实例，每个机器启动一个，生产者创建的queue只会放在一个RabbitMQ的实例中，其余的实例会同步queue的元数据(元数据可以认为是 queue 的一些配置信息，通过元数据，可以找到 queue 所在实例)，在消费者进行消费的时候，连接到另一个实例上时，这个实例会通过同步的元数据找到queue所在的实例，然后请求数据。</p>
+<p><img src="https://i.loli.net/2021/01/25/lFR4BHY8fn95hUE.png" srcset="/img/loading.gif" alt="jiqun01.png"></p>
+<p>这种方式很麻烦，也不怎么好。因为这中集群方式，导致消费者要么每次随机连接一个实例然后拉取数据，要么固定连接那个 <strong>queue</strong> 所在实例消费数据，前者有<strong>数据拉取的开销</strong>，后者会有<strong>单实例性能瓶颈</strong>。这种集群模式还会有一个<strong>严重的后果</strong>就是如果那个存放 queue 的RabbitMQ实例<strong>宕机</strong>了，会导致接下来其他RabbitMQ实例就无法从那个实例拉取，如果你<strong>开启了消息持久化</strong>，让 RabbitMQ 落地存储消息的话，<strong>消息不一定会丢</strong>，得等这个实例恢复了，然后才可以继续从这个 queue 拉取数据,如果<strong>没开消息持久化</strong>，queue的数据还会丢失。</p>
+<p>这种集群其余节点<strong>高度依赖</strong>queue所在的RabbitMQ节点，这样就<strong>没有什么所谓的高可用性</strong>，<strong>这方案倒是提高吞吐量的</strong>，就是说让集群中多个节点来服务某个 queue 的读写操作。</p>
+<h2 id="镜像集群模式（高可用性）"><a href="#镜像集群模式（高可用性）" class="headerlink" title="镜像集群模式（高可用性）"></a>镜像集群模式（高可用性）</h2><p>这种模式，才是所谓的 RabbitMQ 的高可用模式。跟普通集群模式不一样的是，在镜像集群模式下，你创建的 queue，无论元数据还是 queue 里的消息都会<strong>存在于多个实例上</strong>，就是说，每个 RabbitMQ 节点都有这个 queue 的一个<strong>完整镜像</strong>，包含 queue 的全部数据的意思。然后每次你写消息到 queue 的时候，都会自动把<strong>消息同步</strong>到多个实例的 queue 上。</p>
+<p><img src="https://gitee.com/shishan100/Java-Interview-Advanced/raw/master/images/mq-8.png" srcset="/img/loading.gif" alt="mq-8"></p>
+<h3 id="如何开启这个镜像集群模式呢？"><a href="#如何开启这个镜像集群模式呢？" class="headerlink" title="如何开启这个镜像集群模式呢？"></a>如何开启这个镜像集群模式呢？</h3><p>其实很简单，RabbitMQ 有很好的管理控制台，就是在后台新增一个策略，这个策略是<strong>镜像集群模式的策略</strong>，指定的时候是可以要求数据同步到所有节点的，也可以要求同步到指定数量的节点，再次创建 queue 的时候，应用这个策略，就会自动将数据同步到其他的节点上去了。</p>
+<h3 id="镜像集群模式优缺点"><a href="#镜像集群模式优缺点" class="headerlink" title="镜像集群模式优缺点"></a>镜像集群模式优缺点</h3><p>优点：你任何一个机器宕机了，没事儿，其它机器（节点）还包含了这个 queue 的完整数据，别的 consumer 都可以到其它节点上去消费数据。</p>
+<p>缺点：</p>
+<ul>
+<li>第一，这个性能开销也太大了吧，消息需要同步到所有机器上，导致网络带宽压力和消耗很重！</li>
+<li>第二，这么玩儿，不是分布式的，就<strong>没有扩展性可言</strong>了，如果某个 queue 负载很重，你加机器，新增的机器也包含了这个 queue 的所有数据，并<strong>没有办法线性扩展</strong>你的 queue。你想，如果这个 queue 的数据量很大，大到这个机器上的容量无法容纳了，此时该怎么办呢？</li>
+</ul>
 
             </div>
             <hr>
@@ -302,11 +271,9 @@
                   <div class="post-meta mr-3">
                     <i class="iconfont icon-category"></i>
                     
-                      <a class="hover-with-bg" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a>
+                      <a class="hover-with-bg" href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/">中间件</a>
                     
-                      <a class="hover-with-bg" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E7%AE%97%E6%B3%95/">算法</a>
-                    
-                      <a class="hover-with-bg" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E7%AE%97%E6%B3%95/%E5%AD%97%E7%AC%A6%E4%B8%B2/">字符串</a>
+                      <a class="hover-with-bg" href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/RabbitMQ/">RabbitMQ</a>
                     
                   </div>
                 
@@ -314,11 +281,11 @@
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/tags/%E7%AE%97%E6%B3%95/">算法</a>
+                      <a class="hover-with-bg" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/">中间件</a>
                     
-                      <a class="hover-with-bg" href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/">字符串</a>
+                      <a class="hover-with-bg" href="/tags/RabbitMQ/">RabbitMQ</a>
                     
-                      <a class="hover-with-bg" href="/tags/KMP/">KMP</a>
+                      <a class="hover-with-bg" href="/tags/%E9%AB%98%E5%8F%AF%E7%94%A8/">高可用</a>
                     
                   </div>
                 
@@ -331,18 +298,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2021/01/11/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">设计模式-1</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2021/01/08/%E9%80%89%E6%8B%A9%E6%8E%92%E5%BA%8F/">
-                        <span class="hidden-mobile">选择排序</span>
+                      <a href="/2021/01/24/redis%E3%80%90%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E3%80%91/">
+                        <span class="hidden-mobile">redis【主从复制】</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
