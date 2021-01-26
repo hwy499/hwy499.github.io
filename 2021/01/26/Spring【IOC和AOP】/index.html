@@ -17,7 +17,7 @@
   <meta name="description" content="good good study,day day up">
   <meta name="author" content="何文垚">
   <meta name="keywords" content="">
-  <title>快速排序 - hwyblog</title>
+  <title>Spring【IOC和AOP】 - hwyblog</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
 
@@ -162,7 +162,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="快速排序">
+            <span class="h2" id="subtitle" title="Spring【IOC和AOP】">
               
             </span>
 
@@ -172,8 +172,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2021-01-08 09:50" pubdate>
-        2021年1月8日 上午
+      <time datetime="2021-01-26 09:44" pubdate>
+        2021年1月26日 上午
       </time>
     </span>
   
@@ -184,7 +184,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      303 字
+      647 字
     </span>
   
 
@@ -194,7 +194,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      4
+      6
        分钟
     </span>
   
@@ -224,52 +224,21 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">快速排序</h1>
+            <h1 style="display: none">Spring【IOC和AOP】</h1>
             
               <p class="note note-info">
                 
-                  本文最后更新于：18 天前
+                  本文最后更新于：4 小时前
                 
               </p>
             
             <div class="markdown-body">
-              <h3 id="快速排序"><a href="#快速排序" class="headerlink" title="快速排序"></a>快速排序</h3><h4 id="基本思想"><a href="#基本思想" class="headerlink" title="基本思想"></a>基本思想</h4><p>从数列中挑出一个元素，称为 “基准”（pivot）;<br>重新排序数列，所有元素比基准值小的摆放在基准前面，所有元素比基准值大的摆在基准的后面（相同的数可以到任一边）。在这个分区退出之后，该基准就处于数列的中间位置。这个称为分区（partition）操作；<br>递归地（recursive）把小于基准值元素的子数列和大于基准值元素的子数列排序；</p>
-<h4 id="动图演示"><a href="#动图演示" class="headerlink" title="动图演示"></a>动图演示</h4><p><img src="https://i.loli.net/2021/01/08/ipdOu3qA8lxTf2M.gif" srcset="/img/loading.gif" alt="quickSort.gif"></p>
-<h4 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h4><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">quickSort</span><span class="hljs-params">(<span class="hljs-keyword">int</span>[] arr)</span> </span>&#123;
-    <span class="hljs-keyword">if</span> (arr == <span class="hljs-keyword">null</span> || arr.length &lt; <span class="hljs-number">2</span>) &#123;
-        <span class="hljs-keyword">return</span>;
-    &#125;
-    quickProcess(arr, <span class="hljs-number">0</span>, arr.length - <span class="hljs-number">1</span>);
-&#125;
-<span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">quickProcess</span><span class="hljs-params">(<span class="hljs-keyword">int</span> arr[], <span class="hljs-keyword">int</span> left, <span class="hljs-keyword">int</span> right)</span> </span>&#123;
-    <span class="hljs-keyword">if</span> (left &lt; right) &#123;
-        swap(arr, left + ((<span class="hljs-keyword">int</span>) Math.random() * (right - left + <span class="hljs-number">1</span>)), right);
-        <span class="hljs-keyword">int</span>[] p = partation(arr, left, right);
-        quickProcess(arr, left, p[<span class="hljs-number">0</span>] - <span class="hljs-number">1</span>);
-        quickProcess(arr, p[<span class="hljs-number">1</span>] + <span class="hljs-number">1</span>, right);
-    &#125;
-&#125;
-<span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span>[] partation(<span class="hljs-keyword">int</span>[] arr, <span class="hljs-keyword">int</span> left, <span class="hljs-keyword">int</span> right) &#123;
-    <span class="hljs-keyword">int</span> less = left - <span class="hljs-number">1</span>;
-    <span class="hljs-keyword">int</span> more = right;
-    <span class="hljs-keyword">int</span> base = arr[right];
-    <span class="hljs-keyword">while</span> (left &lt; more) &#123;
-        <span class="hljs-keyword">if</span> (arr[left] &lt; base) &#123;
-            swap(arr, ++less, left++);
-        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (arr[left] &gt; base) &#123;
-            swap(arr, --more, left);
-        &#125; <span class="hljs-keyword">else</span> &#123;
-            left++;
-        &#125;
-    &#125;
-    swap(arr, more, right);
-    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[]&#123;less + <span class="hljs-number">1</span>, more&#125;;
-&#125;
-<span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">swap</span><span class="hljs-params">(<span class="hljs-keyword">int</span>[] arr, <span class="hljs-keyword">int</span> index1, <span class="hljs-keyword">int</span> index2)</span> </span>&#123;
-    <span class="hljs-keyword">int</span> temp = arr[index1];
-    arr[index1] = arr[index2];
-    arr[index2] = temp;
-&#125;</code></pre></div>
+              <h1 id="Spring【IOC和AOP】"><a href="#Spring【IOC和AOP】" class="headerlink" title="Spring【IOC和AOP】"></a>Spring【IOC和AOP】</h1><h2 id="IOC"><a href="#IOC" class="headerlink" title="IOC"></a>IOC</h2><p>IOC（Inversion Of Controll，控制反转）是<strong>一种设计思想</strong>，就是将原本在程序中手动创建对象的控制权，交由给 Spring 框架来管理。IOC 在其他语言中也有应用，并非 Spring 特有。IOC 容器是 Spring 用来实现 IOC 思想的载体，IOC 容器实际上就是一个 Map (key, value)，Map 中存放的是各种对象。</p>
+<p>将对象之间的相互依赖关系交给 IOC 容器来管理，并由 IOC 容器完成对象的注入。这样可以很大程度上简化应用的开发，把应用从复杂的依赖关系中解放出来。IOC 容器就像是一个工厂一样，当我们需要创建一个对象的时候，只需要配置好配置文件 / 注解即可，完全不用考虑对象是如何被创建出来的。在实际项目中一个 Service 类可能由几百甚至上千个类作为它的底层，假如我们需要实例化这个 Service，可能要每次都搞清楚这个 Service 所有底层类的构造函数，这可能会把人逼疯。如果利用 IOC 的话，你只需要配置好，然后在需要的地方引用就行了，大大增加了项目的可维护性且降低了开发难度。</p>
+<h2 id="AOP"><a href="#AOP" class="headerlink" title="AOP"></a>AOP</h2><p>AOP（Aspect-Oriented Programming，面向切面编程）<strong>能够将那些与业务无关，却为业务模块所共同调用的逻辑或责任（例如事务处理、日志管理、权限控制等）封装起来</strong>，便于减少系统的重复代码，降低模块间的耦合度，并有利于未来的<strong>可扩展性和可维护性。</strong></p>
+<p>Spring AOP 是基于动态代理的，如果要代理的对象实现了某个接口，那么 Spring AOP 就会使用 JDK 动态代理去创建代理对象；而对于没有实现接口的对象，就无法使用 JDK 动态代理，转而使用 CGlib 动态代理生成一个被代理对象的子类来作为代理。</p>
+<p><img src="https://img2018.cnblogs.com/blog/842514/201906/842514-20190611212955176-1474324049.png" srcset="/img/loading.gif" alt="img"></p>
+<p>当然也可以使用 AspectJ，Spring AOP 中已经集成了 AspectJ，AspectJ 应该算得上是 Java 生态系统中最完整的 AOP 框架了。使用 AOP 之后我们可以把一些通用功能抽象出来，在需要用到的地方直接使用即可，这样可以大大简化代码量。我们需要增加新功能也方便，提高了系统的扩展性。日志功能、事务管理和权限管理等场景都用到了 AOP。</p>
 
             </div>
             <hr>
@@ -279,11 +248,9 @@
                   <div class="post-meta mr-3">
                     <i class="iconfont icon-category"></i>
                     
-                      <a class="hover-with-bg" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a>
+                      <a class="hover-with-bg" href="/categories/%E6%A1%86%E6%9E%B6/">框架</a>
                     
-                      <a class="hover-with-bg" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E7%AE%97%E6%B3%95/">算法</a>
-                    
-                      <a class="hover-with-bg" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E7%AE%97%E6%B3%95/%E6%8E%92%E5%BA%8F/">排序</a>
+                      <a class="hover-with-bg" href="/categories/%E6%A1%86%E6%9E%B6/Spring/">Spring</a>
                     
                   </div>
                 
@@ -291,11 +258,13 @@
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/tags/%E7%AE%97%E6%B3%95/">算法</a>
+                      <a class="hover-with-bg" href="/tags/%E6%A1%86%E6%9E%B6/">框架</a>
                     
-                      <a class="hover-with-bg" href="/tags/%E6%8E%92%E5%BA%8F/">排序</a>
+                      <a class="hover-with-bg" href="/tags/IOC/">IOC</a>
                     
-                      <a class="hover-with-bg" href="/tags/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/">快速排序</a>
+                      <a class="hover-with-bg" href="/tags/Spring/">Spring</a>
+                    
+                      <a class="hover-with-bg" href="/tags/AOP/">AOP</a>
                     
                   </div>
                 
@@ -308,9 +277,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2021/01/08/%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F/">
+                      <a href="/2021/01/26/Spring%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E3%80%90IOC%E5%AE%B9%E5%99%A8%E3%80%91/">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">冒泡排序</span>
+                        <span class="hidden-mobile">Spring源码分析【IOC容器】</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -318,8 +287,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2021/01/06/HashMap%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/">
-                        <span class="hidden-mobile">HashMap源码解析</span>
+                      <a href="/2021/01/25/Netty%E3%80%90%E5%85%A5%E9%97%A8%E3%80%91/">
+                        <span class="hidden-mobile">Netty【入门】</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
