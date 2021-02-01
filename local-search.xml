@@ -4,11 +4,71 @@
   
   
   <entry>
+    <title>【JVM学习】-垃圾回收算法</title>
+    <link href="/2021/02/01/%E3%80%90JVM%E5%AD%A6%E4%B9%A0%E3%80%91-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E7%AE%97%E6%B3%95/"/>
+    <url>/2021/02/01/%E3%80%90JVM%E5%AD%A6%E4%B9%A0%E3%80%91-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E7%AE%97%E6%B3%95/</url>
+    
+    <content type="html"><![CDATA[<h1 id="垃圾回收算法"><a href="#垃圾回收算法" class="headerlink" title="垃圾回收算法"></a>垃圾回收算法</h1><h2 id="标记清除算法（-Mark-Sweep）"><a href="#标记清除算法（-Mark-Sweep）" class="headerlink" title="标记清除算法（ Mark-Sweep）"></a>标记清除算法（ Mark-Sweep）</h2><blockquote><p> 最基础的垃圾回收算法，分为两个阶段，标注和清除。标记阶段标记出所有需要回收的对象，清除阶段 回收被标记的对象所占用的空间。如图 </p></blockquote><p><img src="https://i.loli.net/2021/02/01/Phqaz2mZcF5pfvx.png" alt="标记清除法.png"></p><p>从图中我们就可以发现，该算法最大的问题是内存碎片化严重，这会导致后续可能发生大对象不能找到可利用空 间的问题。</p><h2 id="复制算法（copying）"><a href="#复制算法（copying）" class="headerlink" title="复制算法（copying）"></a>复制算法（copying）</h2><blockquote><p>为了解决 Mark-Sweep 算法内存碎片化的缺陷而被提出的算法。按内存容量将内存划分为等大小的两 块。每次只使用其中一块，当这一块内存满后将尚存活的对象复制到另一块上去，把已使用的内存清 掉，如图</p></blockquote><p><img src="https://i.loli.net/2021/02/01/yjGk2NxMpL75vt3.png" alt="复制.png"></p><p>这种算法虽然实现简单，内存效率高，不易产生碎片，但是最大的问题是可用内存被压缩到了原本的一 半。且存活对象增多的话， Copying 算法的效率会大大降低。</p><h2 id="标记复制算法-Mark-Compact"><a href="#标记复制算法-Mark-Compact" class="headerlink" title="标记复制算法(Mark-Compact)"></a>标记复制算法(Mark-Compact)</h2><blockquote><p>结合了以上两个算法，为了避免缺陷而提出。标记阶段和 Mark-Sweep 算法相同， 标记后不是清理对 象，而是将存活对象移向内存的一端。然后清除端边界外的对象。如图：</p></blockquote><p><img src="https://i.loli.net/2021/02/01/ywM7PkdFxVegGrt.png" alt="标记整理法.png"></p><h2 id="分代收集算法"><a href="#分代收集算法" class="headerlink" title="分代收集算法"></a>分代收集算法</h2><p>分代收集法是目前大部分 JVM 所采用的方法，其核心思想是根据对象存活的不同生命周期将内存划分为 不同的域，一般情况下将 GC 堆划分为老生代(Tenured/Old Generation)和新生代 (YoungGeneration)。老生代的特点是每次垃圾回收时只有少量对象需要被回收，新生代的特点是每次垃圾回收时都有大量垃圾需要被回收，因此可以根据不同区域选择不同的算法。</p><p>单纯从 JVM 的功能考虑，并不需要新生代，完全可以针对整个堆进行操作。新生代存在的唯一理由是优化垃圾回收 (GC) 的性能。更具体说，把堆划分为新生代和老年代有 2 个好处：简化了新对象的分配 (只在新生代分配内存), 可以更有效的清除不再需要的对象 (即死对象)(新生代和老年代使用不同的 GC 算法)</p><p>通过广泛研究面向对象实现的应用，发现一个共同特点：很多对象的生存时间都很短。同时研究发现，新生对象很少引用生存时间长的对象。结合这 2 个特点，很明显 GC 会频繁访问新生对象，例如在堆中一个单独的区域，称之为新生代。在新生代中，GC 可以快速标记回收” 死对象”，而不需要扫描整个 Heap 中的存活一段时间的” 老对象”。</p><p>SUN/Oracle 的 HotSpot JVM 又把新生代进一步划分为 3 个区域：一个相对大点的区域，称为” 伊甸园区 (Eden)”；两个相对小点的区域称为”From 幸存区 (survivor)” 和”To 幸存区 (survivor)”。按照规定，新对象会首先分配在 Eden 中 (如果新对象过大，会直接分配在老年代中)。在 GC 中，Eden 中的对象会被移动到 survivor 中，直至对象满足一定的年纪 (定义为熬过 GC 的次数), 会被移动到老年代。</p><h3 id="新生代与复制算法"><a href="#新生代与复制算法" class="headerlink" title="新生代与复制算法"></a>新生代与复制算法</h3><p>基于大多数新生对象都会在 GC 中被收回的假设。在 GC 前 To 幸存区 (survivor) 保持清空，对象保存在 Eden 和 From 幸存区 (survivor) 中，GC 运行时，Eden 中的幸存对象被复制到 To 幸存区 (survivor)。针对 From 幸存区 (survivor) 中的幸存对象，会考虑对象年龄，如果年龄没达到阀值 (tenuring threshold)，对象会被复制到 To 幸存区 (survivor)。如果达到阀值对象被复制到老年代。复制阶段完成后，Eden 和 From 幸存区中只保存死对象，可以视为清空。如果在复制过程中 To 幸存区被填满了，剩余的对象会被复制到老年代中。最后 From 幸存区和 To 幸存区会调换下名字，在下次 GC 时，To 幸存区会成为 From 幸存区。如下图：</p><p><img src="https://i.loli.net/2021/02/01/TcKz4fGmUVkvbR6.png" alt="young.png"></p><h3 id="老年代与标记复制算法"><a href="#老年代与标记复制算法" class="headerlink" title="老年代与标记复制算法"></a>老年代与标记复制算法</h3><p>老年代因为每次只回收少量对象，因而采用 Mark-Compact 算法。 </p>]]></content>
+    
+    
+    <categories>
+      
+      <category>Java</category>
+      
+      <category>JVM</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>JVM</tag>
+      
+      <tag>垃圾回收算法</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>【面试题】JVM专题</title>
+    <link href="/2021/02/01/%E3%80%90%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91JVM%E4%B8%93%E9%A2%98/"/>
+    <url>/2021/02/01/%E3%80%90%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91JVM%E4%B8%93%E9%A2%98/</url>
+    
+    <content type="html"><![CDATA[<h2 id="描述一下-JVM-加载-class-文件的原理机制"><a href="#描述一下-JVM-加载-class-文件的原理机制" class="headerlink" title="描述一下 JVM 加载 class 文件的原理机制"></a>描述一下 JVM 加载 class 文件的原理机制</h2><p>​         JVM 中类的装载是由类加载器（ClassLoader）和它的子类来实现的，Java 中的类加载器是一个重要的 Java 运行时系统组件，它负责在运行时查找和装入类文件中的类。</p><p>​        由于 Java 的跨平台性，经过编译的 Java 源程序并不是一个可执行程序，而是一个或多个类文件。当 Java 程序需要使用某个类时，JVM 会确保这个类已经被加载、连接（验证、准备和解析）和初始化。类 的加载是指把类的.class 文件中的数据读入到内存中，通常是创建一个字节数组读入.class 文件，然后 产生与所加载类对应 的 Class 对象。 加载完成后，Class 对象还不完整（<strong>只是将Class描述信息加载进内存，并未针对每个Class分配内存</strong>），所以此时的类还不可用。当类被加载后就进入连接阶段，这一阶段 包括验证、准备（为静态变量分配内存并设置默认的初始值）和解析（将符号引用替换为直接引用）三 个步骤。最后 JVM 对 类进行初始化，包括：</p><ol><li><p>如果类存在直接的父类并且这个类还没有被初始化，那么就先初始化父类；</p></li><li><p>如果类中存在初始化语句，就依次执行这些初始化语句。 类的加载是由类加载器完成的，类加载器包括：根加载器（BootStrap）、扩展加载器（Extension）、 系统加载器（System）和用户自定义类加载器（java.lang.ClassLoader 的子类）。</p></li></ol><p>​         从 Java 2（JDK 1.2）开始，类加载过程采取了父亲委托机制（PDM）。PDM 更好的保证了 Java 平台 的安全性，在该机制中，JVM 自带的 Bootstrap 是根加载器，其他的加载器都有且仅有一个父类加载器。类的加载首先请求父类加载器加载，父类加载器无能为力时才由其子类加载器自行加载。JVM 不会 向 Java 程序提供对 Bootstrap 的引用。下面是关于几个类 加载器的说明：</p><ol><li>Bootstrap：一般用本地代码实现，负责加载 JVM 基础核心类库（rt.jar）；</li><li>Extension：从 java.ext.dirs 系统属性所指定的目录中加载类库，它的父加载器是 Bootstrap； </li><li>System：又叫应用类加载器，其父类是 Extension。它是应用最广泛的类加载器。它从环境变量 classpath 或者系统属性 ，java.class.path 所指定的目录中记载类，是用户自定义加载器的默认父加 载器。</li></ol>]]></content>
+    
+    
+    <categories>
+      
+      <category>面试</category>
+      
+      <category>JVM专题</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>算法</tag>
+      
+      <tag>面试题</tag>
+      
+      <tag>JVM专题</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>【面试题】海量数据处理问题</title>
     <link href="/2021/01/31/%E3%80%90%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E9%97%AE%E9%A2%98/"/>
     <url>/2021/01/31/%E3%80%90%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E9%97%AE%E9%A2%98/</url>
     
-    <content type="html"><![CDATA[<h2 id="海量数据中位数"><a href="#海量数据中位数" class="headerlink" title="海量数据中位数"></a>海量数据中位数</h2><p><strong>问题:</strong>   在一个文件中有 10G 个整数，乱序排列，要求找出中位数。只写出思路即可。（文件内存储的是32位无符号整数，占4个字节）</p><h3 id="内存无限制"><a href="#内存无限制" class="headerlink" title="内存无限制"></a>内存无限制</h3><blockquote><p>大顶堆：每个结点的值都<strong>大于</strong>或<strong>等于</strong>其左右孩子结点的值</p><p>可以维护一个<strong>最大堆</strong>。堆的大小由文件中整数的<strong>个数N决定</strong>，<strong>堆大小为N/2(向上取整)**，然后读取文件，每次读取到一个数字，将其放进</strong>最大堆<strong>，文件读完后</strong>最大堆的根节点**即为中位数。</p></blockquote><h4 id="解法："><a href="#解法：" class="headerlink" title="解法："></a>解法：</h4><ol><li><p>计算10G大小的文件中有多少个整数，<code>10*2^30B/4B=10*2^28 </code> 一共有<code>10*2^28</code>个数字</p></li><li><p>全量读取文件，将读到的数字放入堆中。</p></li><li><p>读完文件，返回大顶堆的根节点的存储的数。</p></li></ol><h3 id="内存有限制"><a href="#内存有限制" class="headerlink" title="内存有限制"></a>内存有限制</h3><blockquote><p>基于桶排序的思想解决。</p></blockquote><h4 id="解法"><a href="#解法" class="headerlink" title="解法"></a>解法</h4><ol><li><p>读一遍10G个整数，把整数映射到256M个区段中，用一个64位无符号整数给每个相应区段记数。<br>说明：整数范围是0 - 2^32 - 1，一共有4G种取值，映射到256M个区段，则每个区段有16（4G/256M = 16）种值，每16个值算一段， 0～15是第1段，16～31是第2段，……2^32-16 ～2^32-1是第256M段。一个64位无符号整数最大值是0～8G-1，这里先不考虑溢出的情况。总共占用内存256M×8B=2GB。</p></li><li><p>从前到后对每一段的计数累加，当累加的和超过5G时停止，找出这个区段（即累加停止时达到的区段，也是中位数所在的区段）的数值范围，设为[a，a+15]，同时记录累加到前一个区段的总数，设为m。然后，释放除这个区段占用的内存。</p></li><li><p>再读一遍10G个整数，把在[a，a+15]内的每个值计数，即有16个计数。</p></li><li><p>对新的计数依次累加，每次的和设为n，当m+n的值超过5G时停止，此时的这个计数所对应的数就是中位数。</p></li></ol>]]></content>
+    <content type="html"><![CDATA[<h2 id="海量数据中位数"><a href="#海量数据中位数" class="headerlink" title="海量数据中位数"></a>海量数据中位数</h2><p><strong>问题:</strong>   在一个文件中有 10G 个整数，乱序排列，要求找出中位数。只写出思路即可。（文件内存储的是32位无符号整数，占4个字节）</p><h3 id="内存无限制"><a href="#内存无限制" class="headerlink" title="内存无限制"></a>内存无限制</h3><blockquote><p><strong>小顶堆</strong>：每个结点的值都<strong>大于</strong>或<strong>等于</strong>其左右孩子结点的值</p><p>可以维护一个<strong>小顶堆</strong>。堆的大小由文件中整数的<strong>个数N决定</strong>，<strong>堆大小为N/2(向上取整)**，然后读取文件，每次读取到一个数字，将其放进</strong>最大堆<strong>，文件读完后</strong>小顶堆的根节点**即为中位数。</p></blockquote><h4 id="解法"><a href="#解法" class="headerlink" title="解法"></a>解法</h4><ol><li><p>计算10G大小的文件中有多少个整数，<code>10*2^30B/4B=10*2^28 </code> 一共有<code>10*2^28</code>个数字</p></li><li><p>全量读取文件，将读到的数字放入堆中。</p></li><li><p>读完文件，返回大顶堆的根节点的存储的数。</p></li></ol><h3 id="内存有限制"><a href="#内存有限制" class="headerlink" title="内存有限制"></a>内存有限制</h3><blockquote><p>基于桶排序的思想解决。将10G大小的文件，根据</p></blockquote><h4 id="解法-1"><a href="#解法-1" class="headerlink" title="解法"></a>解法</h4><ol><li><p>读一遍10G个整数，把整数映射到256M个区段中，用一个64位无符号整数给每个相应区段记数。<br>说明：整数范围是0 - 2^32 - 1，一共有4G种取值，映射到256M个区段，则每个区段有16（4G/256M = 16）种值，每16个值算一段， 0～15是第1段，16～31是第2段，……2^32-16 ～2^32-1是第256M段。一个64位无符号整数最大值是0～8G-1，这里先不考虑溢出的情况。总共占用内存256M×8B=2GB。</p></li><li><p>从前到后对每一段的计数累加，当累加的和超过5G时停止，找出这个区段（即累加停止时达到的区段，也是中位数所在的区段）的数值范围，设为[a，a+15]，同时记录累加到前一个区段的总数，设为m。然后，释放除这个区段占用的内存。</p></li><li><p>再读一遍10G个整数，把在[a，a+15]内的每个值计数，即有16个计数。</p></li><li><p>对新的计数依次累加，每次的和设为n，当m+n的值超过5G时停止，此时的这个计数所对应的数就是中位数。</p></li></ol>]]></content>
     
     
     <categories>
@@ -70,11 +130,11 @@
     
     <tags>
       
+      <tag>源码</tag>
+      
       <tag>框架</tag>
       
       <tag>IOC</tag>
-      
-      <tag>源码</tag>
       
       <tag>Spring</tag>
       

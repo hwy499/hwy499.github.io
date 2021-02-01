@@ -184,7 +184,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      541 字
+      550 字
     </span>
   
 
@@ -236,17 +236,17 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：几秒前
+                  本文最后更新于：1 小时前
                 
               </p>
             
             <div class="markdown-body">
               <h2 id="海量数据中位数"><a href="#海量数据中位数" class="headerlink" title="海量数据中位数"></a>海量数据中位数</h2><p><strong>问题:</strong>   在一个文件中有 10G 个整数，乱序排列，要求找出中位数。只写出思路即可。（文件内存储的是32位无符号整数，占4个字节）</p>
 <h3 id="内存无限制"><a href="#内存无限制" class="headerlink" title="内存无限制"></a>内存无限制</h3><blockquote>
-<p>大顶堆：每个结点的值都<strong>大于</strong>或<strong>等于</strong>其左右孩子结点的值</p>
-<p>可以维护一个<strong>最大堆</strong>。堆的大小由文件中整数的<strong>个数N决定</strong>，<strong>堆大小为N/2(向上取整)**，然后读取文件，每次读取到一个数字，将其放进</strong>最大堆<strong>，文件读完后</strong>最大堆的根节点**即为中位数。</p>
+<p><strong>小顶堆</strong>：每个结点的值都<strong>大于</strong>或<strong>等于</strong>其左右孩子结点的值</p>
+<p>可以维护一个<strong>小顶堆</strong>。堆的大小由文件中整数的<strong>个数N决定</strong>，<strong>堆大小为N/2(向上取整)**，然后读取文件，每次读取到一个数字，将其放进</strong>最大堆<strong>，文件读完后</strong>小顶堆的根节点**即为中位数。</p>
 </blockquote>
-<h4 id="解法："><a href="#解法：" class="headerlink" title="解法："></a>解法：</h4><ol>
+<h4 id="解法"><a href="#解法" class="headerlink" title="解法"></a>解法</h4><ol>
 <li><p>计算10G大小的文件中有多少个整数，<code>10*2^30B/4B=10*2^28 </code> 一共有<code>10*2^28</code>个数字</p>
 </li>
 <li><p>全量读取文件，将读到的数字放入堆中。</p>
@@ -255,9 +255,9 @@
 </li>
 </ol>
 <h3 id="内存有限制"><a href="#内存有限制" class="headerlink" title="内存有限制"></a>内存有限制</h3><blockquote>
-<p>基于桶排序的思想解决。</p>
+<p>基于桶排序的思想解决。将10G大小的文件，根据</p>
 </blockquote>
-<h4 id="解法"><a href="#解法" class="headerlink" title="解法"></a>解法</h4><ol>
+<h4 id="解法-1"><a href="#解法-1" class="headerlink" title="解法"></a>解法</h4><ol>
 <li><p>读一遍10G个整数，把整数映射到256M个区段中，用一个64位无符号整数给每个相应区段记数。<br>说明：整数范围是0 - 2^32 - 1，一共有4G种取值，映射到256M个区段，则每个区段有16（4G/256M = 16）种值，每16个值算一段， 0～15是第1段，16～31是第2段，……2^32-16 ～2^32-1是第256M段。一个64位无符号整数最大值是0～8G-1，这里先不考虑溢出的情况。总共占用内存256M×8B=2GB。</p>
 </li>
 <li><p>从前到后对每一段的计数累加，当累加的和超过5G时停止，找出这个区段（即累加停止时达到的区段，也是中位数所在的区段）的数值范围，设为[a，a+15]，同时记录累加到前一个区段的总数，设为m。然后，释放除这个区段占用的内存。</p>
@@ -304,6 +304,12 @@
                 <div class="post-prevnext">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2021/02/01/%E3%80%90%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91JVM%E4%B8%93%E9%A2%98/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">【面试题】JVM专题</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
