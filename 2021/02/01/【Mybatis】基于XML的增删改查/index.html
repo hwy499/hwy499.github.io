@@ -236,7 +236,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：1 小时前
+                  本文最后更新于：3 小时前
                 
               </p>
             
@@ -284,8 +284,8 @@
 <span class="hljs-meta">log4j.appender.LOGFILE.layout.ConversionPattern</span>=<span class="hljs-string">%d&#123;ISO8601&#125; %-6r [%15.15t] %-5p %30.30c %x - %m\n</span></code></pre></div>
 <h4 id="4-在src-main-resources下创建mydbconfig-properties-文件，内容如下"><a href="#4-在src-main-resources下创建mydbconfig-properties-文件，内容如下" class="headerlink" title="4. 在src/main/resources下创建mydbconfig.properties 文件，内容如下"></a>4. 在src/main/resources下创建mydbconfig.properties 文件，内容如下</h4><div class="hljs code-wrapper"><pre><code class="hljs properties"><span class="hljs-meta">db.driver</span>=<span class="hljs-string">com.mysql.jdbc.Driver</span>
 <span class="hljs-meta">db.url</span>=<span class="hljs-string">jdbc:mysql://localhost:3306/你的数据库名</span>
-<span class="hljs-meta">db.username</span>=<span class="hljs-string">root</span>
-<span class="hljs-meta">db.password</span>=<span class="hljs-string">root</span></code></pre></div>
+<span class="hljs-meta">db.username</span>=<span class="hljs-string">username</span>
+<span class="hljs-meta">db.password</span>=<span class="hljs-string">password</span></code></pre></div>
 <h4 id="5-在src-main-java-下的com-beans包创建实体类-UserBean"><a href="#5-在src-main-java-下的com-beans包创建实体类-UserBean" class="headerlink" title="5. 在src/main/java/下的com.beans包创建实体类 UserBean"></a>5. 在src/main/java/下的com.beans包创建实体类 UserBean</h4><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UserBean</span> </span>&#123;
 	<span class="hljs-keyword">private</span> Integer id;
 	<span class="hljs-keyword">private</span> String name;
@@ -304,7 +304,7 @@
 <span class="hljs-tag">&lt;<span class="hljs-name">mapper</span> <span class="hljs-attr">namespace</span>=<span class="hljs-string">&quot;com.mapper.UserMapper&quot;</span>&gt;</span>
 	
 <span class="hljs-tag">&lt;/<span class="hljs-name">mapper</span>&gt;</span></code></pre></div>
-<h4 id="8-在src-main-resources下创建mydbconfig-propertiesmybatis-config-xml配置如下"><a href="#8-在src-main-resources下创建mydbconfig-propertiesmybatis-config-xml配置如下" class="headerlink" title="8. 在src/main/resources下创建mydbconfig.propertiesmybatis-config.xml配置如下"></a>8. 在src/main/resources下创建mydbconfig.propertiesmybatis-config.xml配置如下</h4><div class="hljs code-wrapper"><pre><code class="hljs xml"><span class="hljs-meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<h4 id="8-在src-main-resources下创建mybatis-config-xml配置如下"><a href="#8-在src-main-resources下创建mybatis-config-xml配置如下" class="headerlink" title="8. 在src/main/resources下创建mybatis-config.xml配置如下"></a>8. 在src/main/resources下创建mybatis-config.xml配置如下</h4><div class="hljs code-wrapper"><pre><code class="hljs xml"><span class="hljs-meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
 <span class="hljs-meta">&lt;!DOCTYPE <span class="hljs-meta-keyword">configuration</span>  </span>
 <span class="hljs-meta">  <span class="hljs-meta-keyword">PUBLIC</span> <span class="hljs-meta-string">&quot;-//mybatis.org//DTD Config 3.0//EN&quot;</span>  </span>
 <span class="hljs-meta">  <span class="hljs-meta-string">&quot;http://mybatis.org/dtd/mybatis-3-config.dtd&quot;</span>&gt;</span>
@@ -540,6 +540,12 @@
                 <div class="post-prevnext">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2021/02/02/%E3%80%90nginx%E5%AD%A6%E4%B9%A0%E3%80%91%E7%AC%AC%E4%B8%80%E7%AB%A0/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">【nginx学习】第一章</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
