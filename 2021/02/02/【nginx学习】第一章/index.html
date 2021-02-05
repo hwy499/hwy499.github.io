@@ -184,7 +184,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      574 字
+      760 字
     </span>
   
 
@@ -194,7 +194,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      6
+      9
        分钟
     </span>
   
@@ -236,7 +236,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2 分钟前
+                  本文最后更新于：几秒前
                 
               </p>
             
@@ -320,6 +320,36 @@ nginx -s reopen</code></pre></div>
 </tbody></table>
 <p>nginx 的配置系统由一个主配置文件和其他一些辅助的配置文件构成。这些配置文件均是纯文本文件，全部位于 nginx 安装目录下的 conf 目录下。</p>
 <p><img src="https://i.loli.net/2021/02/05/VfnJPcg9ukpsSqi.png" srcset="/img/loading.gif" alt="nginx03.png"></p>
+<h3 id="配置文件结构"><a href="#配置文件结构" class="headerlink" title="配置文件结构"></a>配置文件结构</h3><p> 在 nginx 的配置文件中，大概分为几个区域：<code>events &#123;&#125;</code>、<code>http &#123;&#125;</code>、和没有被 <code>&#123;&#125;</code>包裹的区域。而 <code>http &#123;&#125;</code> 中还有 <code>server &#123;&#125;</code>，以及 <code>server &#123;&#125;</code> 中的 <code>location &#123;&#125;</code>。结构如下：</p>
+<div class="hljs code-wrapper"><pre><code class="hljs undefined">...
+worker_processes  1;
+
+events &#123;
+    worker_connections  1024;
+&#125;
+
+http &#123;
+    ...
+
+    server &#123;
+        ...
+
+        location &#123;
+            ...
+        &#125;
+    &#125;
+
+    server &#123;
+        ...
+    &#125;
+&#125;</code></pre></div>
+<ul>
+<li>没有被 <code>&#123;&#125;</code> 包裹的部分为全局配置，如 <code>worker_processes 1;</code> 设置工作进程（子进程）数为 1</li>
+<li><code>events &#123;&#125;</code> 为 nginx 连接配置的模块，如 <code>worker_connections 1024;</code> 设置每一个子进程最大允许连接 1024 个连接</li>
+<li><code>http &#123;&#125;</code> 为 nginx http 核心配置模块</li>
+<li><code>server &#123;&#125;</code> 为虚拟主机配置模块，包括监听端口、监听域名等</li>
+<li><code>location &#123;&#125;</code> URI 匹配</li>
+</ul>
 
             </div>
             <hr>
