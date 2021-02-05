@@ -184,7 +184,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.6k 字
+      1.5k 字
     </span>
   
 
@@ -194,7 +194,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      20
+      19
        分钟
     </span>
   
@@ -236,7 +236,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：几秒前
+                  本文最后更新于：1 分钟前
                 
               </p>
             
@@ -250,6 +250,10 @@
 <p>我下载的是windows版本。</p>
 <p>下载完毕后，解压在任意目录</p>
 <p><img src="https://i.loli.net/2021/02/02/9ZvnMKdk2JxqzSY.png" srcset="/img/loading.gif" alt="nginx01.png"></p>
+<h2 id="nginx启动"><a href="#nginx启动" class="headerlink" title="nginx启动"></a>nginx启动</h2><p><strong>方法一</strong>：双击nginx.exe</p>
+<p><strong>方法二</strong>：在此目录打开cmd，运行<code>start nginx</code></p>
+<p>启动后：访问<code>localhost:80</code>出现如下页面</p>
+<p><img src="https://i.loli.net/2021/02/02/nIY5UboOQsgljr7.png" srcset="/img/loading.gif" alt="nginx02.png"></p>
 <h2 id="nginx相关命令"><a href="#nginx相关命令" class="headerlink" title="nginx相关命令"></a>nginx相关命令</h2><div class="hljs code-wrapper"><pre><code class="hljs bash"><span class="hljs-comment"># 查看帮助信息</span>
 nginx -h
 <span class="hljs-comment"># 查看nginx版本</span>
@@ -268,57 +272,9 @@ nginx -t -c filename
 nginx -s reopen</code></pre></div>
 
 
-<h2 id="nginx启动"><a href="#nginx启动" class="headerlink" title="nginx启动"></a>nginx启动</h2><p><strong>方法一</strong>：双击nginx.exe</p>
-<p><strong>方法二</strong>：在此目录打开cmd，运行<code>start nginx</code></p>
-<p>启动后：访问<code>localhost:80</code>出现如下页面</p>
-<p><img src="https://i.loli.net/2021/02/02/nIY5UboOQsgljr7.png" srcset="/img/loading.gif" alt="nginx02.png"></p>
-<h2 id="nginx-配置文件"><a href="#nginx-配置文件" class="headerlink" title="nginx 配置文件"></a>nginx 配置文件</h2><h3 id="常用正则"><a href="#常用正则" class="headerlink" title="常用正则"></a>常用正则</h3><table>
-<thead>
-<tr>
-<th>正则</th>
-<th>说明</th>
-<th>正则</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>.</code></td>
-<td>匹配除换行符以外的任意字符</td>
-<td><code>$</code></td>
-<td>匹配字符串的结束</td>
-</tr>
-<tr>
-<td><code>?</code></td>
-<td>重复 0 次或 1 次</td>
-<td><code>&#123;n&#125;</code></td>
-<td>重复 n 次</td>
-</tr>
-<tr>
-<td><code>+</code></td>
-<td>重复 1 次或更多次</td>
-<td><code>&#123;n,&#125;</code></td>
-<td>重复 n 次或更多次</td>
-</tr>
-<tr>
-<td><code>*</code></td>
-<td>重复 0 次或更多次</td>
-<td><code>[c]</code></td>
-<td>匹配单个字符 c</td>
-</tr>
-<tr>
-<td><code>\d</code></td>
-<td>匹配数字</td>
-<td><code>[a-z]</code></td>
-<td>匹配 a-z 小写字母的任意一个</td>
-</tr>
-<tr>
-<td><code>^</code></td>
-<td>匹配字符串的开始</td>
-<td>-</td>
-<td>-</td>
-</tr>
-</tbody></table>
-<h3 id="配置文件结构"><a href="#配置文件结构" class="headerlink" title="配置文件结构"></a>配置文件结构</h3><p> 在 nginx 的配置文件中，大概分为几个区域：<code>events &#123;&#125;</code>、<code>http &#123;&#125;</code>、和没有被 <code>&#123;&#125;</code>包裹的区域。而 <code>http &#123;&#125;</code> 中还有 <code>server &#123;&#125;</code>，以及 <code>server &#123;&#125;</code> 中的 <code>location &#123;&#125;</code>。结构如下：</p>
+
+
+<h2 id="nginx-配置文件"><a href="#nginx-配置文件" class="headerlink" title="nginx 配置文件"></a>nginx 配置文件</h2><h3 id="配置文件结构"><a href="#配置文件结构" class="headerlink" title="配置文件结构"></a>配置文件结构</h3><p> 在 nginx 的配置文件中，大概分为几个区域：<code>events &#123;&#125;</code>、<code>http &#123;&#125;</code>、和没有被 <code>&#123;&#125;</code>包裹的区域。而 <code>http &#123;&#125;</code> 中还有 <code>server &#123;&#125;</code>，以及 <code>server &#123;&#125;</code> 中的 <code>location &#123;&#125;</code>。结构如下：</p>
 <div class="hljs code-wrapper"><pre><code class="hljs undefined">...
 worker_processes  1;
 
