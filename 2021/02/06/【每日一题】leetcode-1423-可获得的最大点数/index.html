@@ -17,7 +17,7 @@
   <meta name="description" content="good good study,day day up">
   <meta name="author" content="何文垚">
   <meta name="keywords" content="">
-  <title>Netty【HelloWorld】 - hwyblog</title>
+  <title>【每日一题】leetcode-1423-可获得的最大点数 - hwyblog</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
 
@@ -162,7 +162,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="Netty【HelloWorld】">
+            <span class="h2" id="subtitle" title="【每日一题】leetcode-1423-可获得的最大点数">
               
             </span>
 
@@ -172,8 +172,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2021-01-26 19:30" pubdate>
-        2021年1月26日 晚上
+      <time datetime="2021-02-06 20:28" pubdate>
+        2021年2月6日 晚上
       </time>
     </span>
   
@@ -184,7 +184,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      0 字
+      752 字
     </span>
   
 
@@ -194,7 +194,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      1
+      9
        分钟
     </span>
   
@@ -232,21 +232,103 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Netty【HelloWorld】</h1>
+            <h1 style="display: none">【每日一题】leetcode-1423-可获得的最大点数</h1>
             
               <p class="note note-info">
                 
-                  本文最后更新于：11 天前
+                  本文最后更新于：14 分钟前
                 
               </p>
             
             <div class="markdown-body">
-              
+              <h1 id="leetcode-1423-可获得的最大点数"><a href="#leetcode-1423-可获得的最大点数" class="headerlink" title="leetcode-1423-可获得的最大点数"></a>leetcode-1423-可获得的最大点数</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>几张卡牌 排成一行，每张卡牌都有一个对应的点数。点数由整数数组 cardPoints 给出。</p>
+<p>每次行动，你可以从行的开头或者末尾拿一张卡牌，最终你必须正好拿 k 张卡牌。</p>
+<p>你的点数就是你拿到手中的所有卡牌的点数之和。</p>
+<p>给你一个整数数组 cardPoints 和整数 k，请你返回可以获得的最大点数。</p>
+<p>示例 1：</p>
+<blockquote>
+<p> 输入：cardPoints = [1,2,3,4,5,6,1], k = 3<br>输出：12<br>解释：第一次行动，不管拿哪张牌，你的点数总是 1 。但是，先拿最右边的卡牌将会最大化你的可获得点数。最优策略是拿右边的三张牌，最终点数为 1 + 6 + 5 = 12 。</p>
+</blockquote>
+<p>示例 2：</p>
+<blockquote>
+<p>输入：cardPoints = [2,2,2], k = 2<br>输出：4<br>解释：无论你拿起哪两张卡牌，可获得的点数总是 4 。</p>
+</blockquote>
+<p>示例 3：</p>
+<blockquote>
+<p>输入：cardPoints = [9,7,7,9,7,7,9], k = 7<br>输出：55<br>解释：你必须拿起所有卡牌，可以获得的点数为所有卡牌的点数之和。</p>
+</blockquote>
+<p>示例 4：</p>
+<blockquote>
+<p>输入：cardPoints = [1,1000,1], k = 1<br>输出：1<br>解释：你无法拿到中间那张卡牌，所以可以获得的最大点数为 1 。 </p>
+</blockquote>
+<p>示例 5：</p>
+<blockquote>
+<p>输入：cardPoints = [1,79,80,1,1,1,200,1], k = 3<br>输出：202</p>
+</blockquote>
+<p>提示：</p>
+<ul>
+<li>1 &lt;= cardPoints.length &lt;= 10^5</li>
+<li>1 &lt;= cardPoints[i] &lt;= 10^4</li>
+<li>1 &lt;= k &lt;= cardPoints.length</li>
+</ul>
+<p>来源：力扣（LeetCode）<br>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/maximum-points-you-can-obtain-from-cards">https://leetcode-cn.com/problems/maximum-points-you-can-obtain-from-cards</a><br>著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。</p>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>根据要求，我们只可以在开头或结尾拿走一张牌，一共拿k张卡牌（<strong>要保证k张卡牌的和最大</strong>），当我们拿走k张卡牌时，会剩下n-k张卡牌，并且这<strong>n-k张卡牌是连续</strong>的，n张卡牌的点数总和是一定的，如果我们保证剩下的n-k张卡牌点数和是最小的，那么我们拿走的k张卡牌的点数和一定是最大的。</p>
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> </span>&#123;
+       <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">maxScore</span><span class="hljs-params">(<span class="hljs-keyword">int</span>[] cardPoints, <span class="hljs-keyword">int</span> k)</span> </span>&#123;
+        <span class="hljs-comment">// 滑动窗口大小</span>
+        <span class="hljs-keyword">int</span> windowSize = cardPoints.length - k;
+        <span class="hljs-comment">// 所有卡牌点数总和</span>
+        <span class="hljs-keyword">int</span> totalSum = <span class="hljs-number">0</span>;
+        <span class="hljs-comment">// 窗口卡牌点数最小和</span>
+        <span class="hljs-keyword">int</span> windowMinSum = <span class="hljs-number">0</span>;
+        <span class="hljs-comment">// 计算出第一个窗口内卡牌的点数和</span>
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; windowSize; i++) &#123;
+            <span class="hljs-comment">// 窗口内卡牌点数进行累加</span>
+            windowMinSum += cardPoints[i];
+            <span class="hljs-comment">// 累计和</span>
+            totalSum += cardPoints[i];
+        &#125;
+        <span class="hljs-comment">// 用于临时存储窗口内卡牌的的和</span>
+        <span class="hljs-keyword">int</span> temp = windowMinSum;
+        <span class="hljs-comment">//将窗口向右移动，得到每一个窗口内卡牌的点数和，得出最小的窗口和</span>
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = windowSize; i &lt; cardPoints.length; i++) &#123;
+            <span class="hljs-comment">// 继续统计和</span>
+            totalSum += cardPoints[i];
+            <span class="hljs-comment">// 计算 i - windowSize 到 i 的窗口内卡牌点数和</span>
+            temp = temp + cardPoints[i] - cardPoints[i - windowSize];
+            <span class="hljs-comment">// 两者取最小</span>
+            windowMinSum = Math.min(windowMinSum, temp);
+        &#125;
+        <span class="hljs-comment">// 所有卡牌点数 - 窗口最小和</span>
+        <span class="hljs-keyword">return</span> totalSum - windowMinSum;
+    &#125;
+&#125;</code></pre></div>
+
             </div>
             <hr>
             <div>
               <div class="post-metas mb-3">
                 
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/">每日一题</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/leetcode/">leetcode</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E7%AE%97%E6%B3%95/">算法</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3/">滑动窗口</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/">每日一题</a>
+                    
+                  </div>
                 
               </div>
               
@@ -257,18 +339,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2021/01/31/%E3%80%90%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E9%97%AE%E9%A2%98/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">【面试题】海量数据处理问题</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2021/01/26/Spring%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E3%80%90IOC%E5%AE%B9%E5%99%A8%E3%80%91/">
-                        <span class="hidden-mobile">Spring源码分析【IOC容器】</span>
+                      <a href="/2021/02/05/%E3%80%90%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98%E3%80%91leetcode-547-%E7%9C%81%E4%BB%BD%E6%95%B0%E9%87%8F/">
+                        <span class="hidden-mobile">【每日一题】leetcode-547-省份数量</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
