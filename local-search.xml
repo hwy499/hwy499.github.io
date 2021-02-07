@@ -4,6 +4,35 @@
   
   
   <entry>
+    <title>【每日一题】leetcode-121-买卖股票的最佳时机</title>
+    <link href="/2021/02/07/%E3%80%90%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98%E3%80%91leetcode-121-%E4%B9%B0%E5%8D%96%E8%82%A1%E7%A5%A8%E7%9A%84%E6%9C%80%E4%BD%B3%E6%97%B6%E6%9C%BA/"/>
+    <url>/2021/02/07/%E3%80%90%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98%E3%80%91leetcode-121-%E4%B9%B0%E5%8D%96%E8%82%A1%E7%A5%A8%E7%9A%84%E6%9C%80%E4%BD%B3%E6%97%B6%E6%9C%BA/</url>
+    
+    <content type="html"><![CDATA[<h1 id="【每日一题】leetcode-121-买卖股票的最佳时机"><a href="#【每日一题】leetcode-121-买卖股票的最佳时机" class="headerlink" title="【每日一题】leetcode-121-买卖股票的最佳时机"></a>【每日一题】leetcode-121-买卖股票的最佳时机</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个数组 prices ，它的第 i 个元素 prices[i] 表示一支给定股票第 i 天的价格。</p><p>你只能选择 某一天 买入这只股票，并选择在 未来的某一个不同的日子 卖出该股票。设计一个算法来计算你所能获取的最大利润。</p><p>返回你可以从这笔交易中获取的最大利润。如果你不能获取任何利润，返回 0 。</p><p>示例 1：</p><blockquote><p>输入：[7,1,5,3,6,4]<br>输出：5<br>解释：在第 2 天（股票价格 = 1）的时候买入，在第 5 天（股票价格 = 6）的时候卖出，最大利润 = 6-1 = 5 。<br>     注意利润不能是 7-1 = 6, 因为卖出价格需要大于买入价格；同时，你不能在买入前卖出股票。</p></blockquote><p>示例 2：</p><blockquote><p>输入：prices = [7,6,4,3,1]<br>输出：0<br>解释：在这种情况下, 没有交易完成, 所以最大利润为 0。</p></blockquote><p>提示：</p><ul><li>1 &lt;= prices.length &lt;= 105</li><li>0 &lt;= prices[i] &lt;= 104</li></ul><p>来源：力扣（LeetCode）<br>链接：<a href="https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock">https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock</a><br>著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。</p><h2 id="我的想法"><a href="#我的想法" class="headerlink" title="我的想法"></a>我的想法</h2><p>对于这个问题来说，我们可以尝试在每一天都卖出股票，然后求每一天的能够获取的最大利润，最后求出这一段时间内最大的利润即可。</p><p>那么如何求得每一天能够获得最大的利润呢？假如我们想要在今天卖出，并且要得到最大利润，我们就需要获悉从开始卖股票到今天之前买入股票的最低价格。</p><h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> </span>&#123;    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">maxProfit</span><span class="hljs-params">(<span class="hljs-keyword">int</span>[] prices)</span> </span>&#123;        <span class="hljs-comment">// 初始化一个最大值</span>        <span class="hljs-keyword">int</span> minPrice = Integer.MAX_VALUE;        <span class="hljs-comment">// 存储最大利润</span>        <span class="hljs-keyword">int</span> maxProfit = <span class="hljs-number">0</span>;        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; prices.length; i++) &#123;            <span class="hljs-comment">// 如果今天的价格是历史价格最低，就买入</span>            <span class="hljs-keyword">if</span> (prices[i] &lt; minPrice) &#123;                <span class="hljs-comment">// 更新买入价格</span>                minPrice = prices[i];                <span class="hljs-keyword">continue</span>;            &#125;            <span class="hljs-comment">// 如果今天的价格不是历史价格最低，就尝试卖出</span>            maxProfit = Math.max(prices[i] - minPrice, maxProfit);        &#125;        <span class="hljs-keyword">return</span> maxProfit;    &#125;&#125;</code></pre></div>]]></content>
+    
+    
+    <categories>
+      
+      <category>每日一题</category>
+      
+      <category>leetcode</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>每日一题</tag>
+      
+      <tag>股票问题</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>【每日一题】leetcode-665-非递减数列</title>
     <link href="/2021/02/07/%E3%80%90%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98%E3%80%91leetcode-665-%E9%9D%9E%E9%80%92%E5%87%8F%E6%95%B0%E5%88%97/"/>
     <url>/2021/02/07/%E3%80%90%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98%E3%80%91leetcode-665-%E9%9D%9E%E9%80%92%E5%87%8F%E6%95%B0%E5%88%97/</url>
