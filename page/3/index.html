@@ -181,63 +181,6 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2021/01/24/redis%E3%80%90%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E3%80%91/">redis【主从复制】</a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2021/01/24/redis%E3%80%90%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E3%80%91/">
-          
-          
-            
-          
-          redis【主从复制】前言
-如果redis要支撑超过10万+的并发，那应该怎么做？
-单机的redis几乎不太可能说QPS超过10万+，除非一些特殊情况，比如你的机器性能特别好，配置特别高，物理机，维护做的特别好，而且你的整体的操作不是太复杂。一般来说redis单机在几万上下。
-如果想要超过10w+的并发，就要读写分离了。一般来说，对缓存一般都是用来支撑读高并发的，写的请求是比较少的，可能写请求也就
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2021-01-24 19:08" pubdate>
-              2021-01-24
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/">中间件</a>
-            
-              <a href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/redis/">redis</a>
-            
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/">中间件</a>
-            
-              <a href="/tags/redis/">redis</a>
-            
-              <a href="/tags/%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB/">读写分离</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
         <a href="/2021/01/23/redis%E3%80%90%E6%8C%81%E4%B9%85%E5%8C%96%E3%80%91/">redis【持久化】</a>
       </h1>
 
@@ -713,6 +656,65 @@ KMP 算法是 D.E.Knuth、J,H,Morris 和 V.R.Pratt 三位神人共同提出的�
     int len = src.length;
     // 比较 len - 1 词
     for (i
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-01-08 09:54" pubdate>
+              2021-01-08
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a>
+            
+              <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E7%AE%97%E6%B3%95/">算法</a>
+            
+              <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E7%AE%97%E6%B3%95/%E6%8E%92%E5%BA%8F/">排序</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E7%AE%97%E6%B3%95/">算法</a>
+            
+              <a href="/tags/%E6%8E%92%E5%BA%8F/">排序</a>
+            
+              <a href="/tags/%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F/">冒泡排序</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/01/08/%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F/">冒泡排序</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/01/08/%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F/">
+          
+          
+            
+          
+          冒泡排序基本思想比较相邻的元素。如果第一个比第二个大，就交换他们两个。对每一对相邻元素作同样的工作，从开始第一对到结尾的最后一对。这步做完后，最后的元素会是最大的数。在剩下的n-1个元素中重复此操作，持续每次对越来越少的元素重复上面的步骤，直到没有任何一对数字需要比较。至此排序完成
+动图演示
+代码实现static void bubbleSort(int[] src) &#123;
+    for 
         </a>
       </p>
 
