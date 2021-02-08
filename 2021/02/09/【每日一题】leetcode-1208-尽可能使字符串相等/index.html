@@ -17,7 +17,7 @@
   <meta name="description" content="good good study,day day up">
   <meta name="author" content="何文垚">
   <meta name="keywords" content="">
-  <title>【每日一题】leetcode-978-最长湍流子数组 - hwyblog</title>
+  <title>【每日一题】leetcode-1208-尽可能使字符串相等 - hwyblog</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
 
@@ -162,7 +162,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="【每日一题】leetcode-978-最长湍流子数组">
+            <span class="h2" id="subtitle" title="【每日一题】leetcode-1208-尽可能使字符串相等">
               
             </span>
 
@@ -172,8 +172,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2021-02-08 23:12" pubdate>
-        2021年2月8日 晚上
+      <time datetime="2021-02-09 00:16" pubdate>
+        2021年2月9日 凌晨
       </time>
     </span>
   
@@ -184,7 +184,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      595 字
+      584 字
     </span>
   
 
@@ -194,7 +194,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      8
+      7
        分钟
     </span>
   
@@ -232,93 +232,78 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">【每日一题】leetcode-978-最长湍流子数组</h1>
+            <h1 style="display: none">【每日一题】leetcode-1208-尽可能使字符串相等</h1>
             
               <p class="note note-info">
                 
-                  本文最后更新于：1 小时前
+                  本文最后更新于：1 分钟前
                 
               </p>
             
             <div class="markdown-body">
-              <h1 id="leetcode-978-最长湍流子数组"><a href="#leetcode-978-最长湍流子数组" class="headerlink" title="leetcode-978-最长湍流子数组"></a>leetcode-978-最长湍流子数组</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>当 A 的子数组 A[i], A[i+1], …, A[j] 满足下列条件时，我们称其为湍流子数组：</p>
-<ul>
-<li>若 i &lt;= k &lt; j，当 k 为奇数时， A[k] &gt; A[k+1]，且当 k 为偶数时，A[k] &lt; A[k+1]；</li>
-<li>或 若 i &lt;= k &lt; j，当 k 为偶数时，A[k] &gt; A[k+1] ，且当 k 为奇数时， A[k] &lt; A[k+1]。</li>
-</ul>
-<p>也就是说，如果比较符号在子数组中的每个相邻元素对之间翻转，则该子数组是湍流子数组。</p>
-<p>返回 A 的最大湍流子数组的长度。</p>
+              <h1 id="leetcode-1208-尽可能使字符串相等"><a href="#leetcode-1208-尽可能使字符串相等" class="headerlink" title="leetcode-1208-尽可能使字符串相等"></a>leetcode-1208-尽可能使字符串相等</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你两个长度相同的字符串，s 和 t。</p>
+<p>将 s 中的第 i 个字符变到 t 中的第 i 个字符需要 |s[i] - t[i]| 的开销（开销可能为 0），也就是两个字符的 ASCII 码值的差的绝对值。</p>
+<p>用于变更字符串的最大预算是 maxCost。在转化字符串时，总开销应当小于等于该预算，这也意味着字符串的转化可能是不完全的。</p>
+<p>如果你可以将 s 的子字符串转化为它在 t 中对应的子字符串，则返回可以转化的最大长度。</p>
+<p>如果 s 中没有子字符串可以转化成 t 中对应的子字符串，则返回 0。</p>
 <p>示例 1：</p>
 <blockquote>
-<p>输入：[9,4,2,10,7,8,8,1,9]<br>输出：5<br>解释：(A[1] &gt; A[2] &lt; A[3] &gt; A[4] &lt; A[5])</p>
+<p>输入：s = “abcd”, t = “bcdf”, cost = 3<br>输出：3<br>解释：s 中的 “abc” 可以变为 “bcd”。开销为 3，所以最大长度为 3。</p>
 </blockquote>
 <p>示例 2：</p>
 <blockquote>
-<p>输入：[4,8,12,16]<br>输出：2</p>
+<p>输入：s = “abcd”, t = “cdef”, cost = 3<br>输出：1<br>解释：s 中的任一字符要想变成 t 中对应的字符，其开销都是 2。因此，最大长度为 1。</p>
 </blockquote>
 <p>示例 3：</p>
 <blockquote>
-<p>输入：[100]<br>输出：1</p>
+<p>输入：s = “abcd”, t = “acde”, cost = 0<br>输出：1<br>解释：你无法作出任何改动，所以最大长度为 1。</p>
 </blockquote>
 <p>提示：</p>
 <ul>
-<li>1 &lt;= A.length &lt;= 40000</li>
-<li>0 &lt;= A[i] &lt;= 10^9</li>
+<li>1 &lt;= s.length, t.length &lt;= 10^5</li>
+<li>0 &lt;= maxCost &lt;= 10^6</li>
+<li>s 和 t 都只含小写英文字母。</li>
 </ul>
-<p>来源：力扣（LeetCode）<br>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/longest-turbulent-subarray">https://leetcode-cn.com/problems/longest-turbulent-subarray</a><br>著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。</p>
-<h2 id="我的想法"><a href="#我的想法" class="headerlink" title="我的想法"></a>我的想法</h2><p>模拟法，根据题目中的描述去写代码。</p>
-<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> </span>&#123;
-    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">maxTurbulenceSize</span><span class="hljs-params">(<span class="hljs-keyword">int</span>[] arr)</span> </span>&#123;
-        <span class="hljs-comment">// 声明变量res1用来储存满足条件1产生的湍流子数组的长度</span>
-        <span class="hljs-keyword">int</span> res1 = <span class="hljs-number">1</span>;
-        <span class="hljs-comment">// 声明变量res2用来储存满足条件2产生的湍流子数组的长度</span>
-        <span class="hljs-keyword">int</span> res2 = <span class="hljs-number">1</span>;
-        <span class="hljs-comment">// 声明变量res用来储存遍历过程中的最大湍流子数组的长度</span>
-        <span class="hljs-keyword">int</span> res = <span class="hljs-number">1</span>;
-        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> k = <span class="hljs-number">0</span>; k &lt; arr.length - <span class="hljs-number">1</span>; k++) &#123;
-            <span class="hljs-comment">// k为偶数时</span>
-            <span class="hljs-keyword">if</span> (k % <span class="hljs-number">2</span> == <span class="hljs-number">0</span>) &#123;
-                <span class="hljs-comment">// 满足条件1时 res1加1 否则就置为1</span>
-                <span class="hljs-keyword">if</span> (arr[k] &lt; arr[k + <span class="hljs-number">1</span>]) &#123;
-                    res1 += <span class="hljs-number">1</span>;
-                &#125; <span class="hljs-keyword">else</span> &#123;
-                    res1 = <span class="hljs-number">1</span>;
-                &#125;
-				<span class="hljs-comment">// 满足条件2时 res2加1 否则就置为1</span>
-                <span class="hljs-keyword">if</span> (arr[k] &gt; arr[k + <span class="hljs-number">1</span>]) &#123;
-                    res2 += <span class="hljs-number">1</span>;
-                &#125; <span class="hljs-keyword">else</span> &#123;
-                    res2 = <span class="hljs-number">1</span>;
-                &#125;
+<p>来源：力扣（LeetCode）<br>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/get-equal-substrings-within-budget">https://leetcode-cn.com/problems/get-equal-substrings-within-budget</a><br>著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。</p>
+<h2 id="我的想法"><a href="#我的想法" class="headerlink" title="我的想法"></a>我的想法</h2><p>利用双指针的思想，一个指针在字串头，一个指针在字串尾。</p>
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-keyword">package</span> V1_20200207;
+
+<span class="hljs-keyword">import</span> java.util.Arrays;
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> </span>&#123;
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">equalSubstring</span><span class="hljs-params">(String s, String t, <span class="hljs-keyword">int</span> maxCost)</span> </span>&#123;
+        <span class="hljs-keyword">int</span> res = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">char</span>[] temp1 = s.toCharArray();
+        <span class="hljs-keyword">char</span>[] temp2 = t.toCharArray();
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> start = <span class="hljs-number">0</span>, end = <span class="hljs-number">0</span>; end &lt; temp1.length; ) &#123;
+            <span class="hljs-comment">// 计算本次开销</span>
+            <span class="hljs-keyword">int</span> cost = Math.abs(temp1[end] - temp2[end]);
+            <span class="hljs-comment">// 如果预算还够的话</span>
+            <span class="hljs-keyword">if</span> (maxCost - cost &gt;= <span class="hljs-number">0</span>) &#123;
+                <span class="hljs-comment">// 将本次开销减去</span>
+                maxCost = maxCost - cost;
+                <span class="hljs-comment">// res 保持最大值</span>
+                res = Math.max(res, end - start + <span class="hljs-number">1</span>);
+                <span class="hljs-comment">// 向后走</span>
+                end++;
+                <span class="hljs-keyword">continue</span>;
             &#125;
-            <span class="hljs-comment">// k为奇数时</span>
-            <span class="hljs-keyword">if</span> (k % <span class="hljs-number">2</span> == <span class="hljs-number">1</span>) &#123;
-                <span class="hljs-comment">// 满足条件1时 res1加1 否则就置为1</span>
-                <span class="hljs-keyword">if</span> (arr[k] &gt; arr[k + <span class="hljs-number">1</span>]) &#123;
-                    res1 += <span class="hljs-number">1</span>;
-                &#125; <span class="hljs-keyword">else</span> &#123;
-                    res1 = <span class="hljs-number">1</span>;
-                &#125;
-                <span class="hljs-comment">// 满足条件2时 res2加1 否则就置为1</span>
-                <span class="hljs-keyword">if</span> (arr[k] &lt; arr[k + <span class="hljs-number">1</span>]) &#123;
-                    res2 += <span class="hljs-number">1</span>;
-                &#125; <span class="hljs-keyword">else</span> &#123;
-                    res2 = <span class="hljs-number">1</span>;
-                &#125;
-            &#125;
-            <span class="hljs-comment">// 保证res为最大值</span>
-            res = Math.max(res, res1);
-            res = Math.max(res, res2);
+            <span class="hljs-comment">// 将start的开销补回来，因为之后不会计算start位置的开销了</span>
+            maxCost = maxCost + Math.abs(temp1[start] - temp2[start]);
+            start++;
         &#125;
         <span class="hljs-keyword">return</span> res;
     &#125;
 
     <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;
         Solution solution = <span class="hljs-keyword">new</span> Solution();
-        <span class="hljs-keyword">int</span>[] arr = <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[]&#123;<span class="hljs-number">9</span>, <span class="hljs-number">4</span>, <span class="hljs-number">2</span>, <span class="hljs-number">10</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">8</span>, <span class="hljs-number">1</span>, <span class="hljs-number">9</span>&#125;;
-        System.out.println(solution.maxTurbulenceSize(arr));
+
+        System.out.println(solution.equalSubstring(<span class="hljs-string">&quot;abcd&quot;</span>, <span class="hljs-string">&quot;bcdf&quot;</span>, <span class="hljs-number">3</span>));
     &#125;
 &#125;</code></pre></div>
+
+
 
             </div>
             <hr>
@@ -340,7 +325,7 @@
                     
                       <a class="hover-with-bg" href="/tags/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/">每日一题</a>
                     
-                      <a class="hover-with-bg" href="/tags/%E6%A8%A1%E6%8B%9F/">模拟</a>
+                      <a class="hover-with-bg" href="/tags/%E5%8F%8C%E6%8C%87%E9%92%88/">双指针</a>
                     
                   </div>
                 
@@ -353,18 +338,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2021/02/09/%E3%80%90%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98%E3%80%91leetcode-1208-%E5%B0%BD%E5%8F%AF%E8%83%BD%E4%BD%BF%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9B%B8%E7%AD%89/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">【每日一题】leetcode-1208-尽可能使字符串相等</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2021/02/07/%E3%80%90%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E3%80%91%E5%89%8D%E7%BC%80%E6%A0%91/">
-                        <span class="hidden-mobile">【数据结构】前缀树</span>
+                      <a href="/2021/02/08/%E3%80%90%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98%E3%80%91leetcode-978-%E6%9C%80%E9%95%BF%E6%B9%8D%E6%B5%81%E5%AD%90%E6%95%B0%E7%BB%84/">
+                        <span class="hidden-mobile">【每日一题】leetcode-978-最长湍流子数组</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

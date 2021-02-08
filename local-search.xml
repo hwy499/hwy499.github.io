@@ -4,6 +4,35 @@
   
   
   <entry>
+    <title>【每日一题】leetcode-1208-尽可能使字符串相等</title>
+    <link href="/2021/02/09/%E3%80%90%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98%E3%80%91leetcode-1208-%E5%B0%BD%E5%8F%AF%E8%83%BD%E4%BD%BF%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9B%B8%E7%AD%89/"/>
+    <url>/2021/02/09/%E3%80%90%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98%E3%80%91leetcode-1208-%E5%B0%BD%E5%8F%AF%E8%83%BD%E4%BD%BF%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9B%B8%E7%AD%89/</url>
+    
+    <content type="html"><![CDATA[<h1 id="leetcode-1208-尽可能使字符串相等"><a href="#leetcode-1208-尽可能使字符串相等" class="headerlink" title="leetcode-1208-尽可能使字符串相等"></a>leetcode-1208-尽可能使字符串相等</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你两个长度相同的字符串，s 和 t。</p><p>将 s 中的第 i 个字符变到 t 中的第 i 个字符需要 |s[i] - t[i]| 的开销（开销可能为 0），也就是两个字符的 ASCII 码值的差的绝对值。</p><p>用于变更字符串的最大预算是 maxCost。在转化字符串时，总开销应当小于等于该预算，这也意味着字符串的转化可能是不完全的。</p><p>如果你可以将 s 的子字符串转化为它在 t 中对应的子字符串，则返回可以转化的最大长度。</p><p>如果 s 中没有子字符串可以转化成 t 中对应的子字符串，则返回 0。</p><p>示例 1：</p><blockquote><p>输入：s = “abcd”, t = “bcdf”, cost = 3<br>输出：3<br>解释：s 中的 “abc” 可以变为 “bcd”。开销为 3，所以最大长度为 3。</p></blockquote><p>示例 2：</p><blockquote><p>输入：s = “abcd”, t = “cdef”, cost = 3<br>输出：1<br>解释：s 中的任一字符要想变成 t 中对应的字符，其开销都是 2。因此，最大长度为 1。</p></blockquote><p>示例 3：</p><blockquote><p>输入：s = “abcd”, t = “acde”, cost = 0<br>输出：1<br>解释：你无法作出任何改动，所以最大长度为 1。</p></blockquote><p>提示：</p><ul><li>1 &lt;= s.length, t.length &lt;= 10^5</li><li>0 &lt;= maxCost &lt;= 10^6</li><li>s 和 t 都只含小写英文字母。</li></ul><p>来源：力扣（LeetCode）<br>链接：<a href="https://leetcode-cn.com/problems/get-equal-substrings-within-budget">https://leetcode-cn.com/problems/get-equal-substrings-within-budget</a><br>著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。</p><h2 id="我的想法"><a href="#我的想法" class="headerlink" title="我的想法"></a>我的想法</h2><p>利用双指针的思想，一个指针在字串头，一个指针在字串尾。</p><h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-keyword">package</span> V1_20200207;<span class="hljs-keyword">import</span> java.util.Arrays;<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> </span>&#123;    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">equalSubstring</span><span class="hljs-params">(String s, String t, <span class="hljs-keyword">int</span> maxCost)</span> </span>&#123;        <span class="hljs-keyword">int</span> res = <span class="hljs-number">0</span>;        <span class="hljs-keyword">char</span>[] temp1 = s.toCharArray();        <span class="hljs-keyword">char</span>[] temp2 = t.toCharArray();        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> start = <span class="hljs-number">0</span>, end = <span class="hljs-number">0</span>; end &lt; temp1.length; ) &#123;            <span class="hljs-comment">// 计算本次开销</span>            <span class="hljs-keyword">int</span> cost = Math.abs(temp1[end] - temp2[end]);            <span class="hljs-comment">// 如果预算还够的话</span>            <span class="hljs-keyword">if</span> (maxCost - cost &gt;= <span class="hljs-number">0</span>) &#123;                <span class="hljs-comment">// 将本次开销减去</span>                maxCost = maxCost - cost;                <span class="hljs-comment">// res 保持最大值</span>                res = Math.max(res, end - start + <span class="hljs-number">1</span>);                <span class="hljs-comment">// 向后走</span>                end++;                <span class="hljs-keyword">continue</span>;            &#125;            <span class="hljs-comment">// 将start的开销补回来，因为之后不会计算start位置的开销了</span>            maxCost = maxCost + Math.abs(temp1[start] - temp2[start]);            start++;        &#125;        <span class="hljs-keyword">return</span> res;    &#125;    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;        Solution solution = <span class="hljs-keyword">new</span> Solution();        System.out.println(solution.equalSubstring(<span class="hljs-string">&quot;abcd&quot;</span>, <span class="hljs-string">&quot;bcdf&quot;</span>, <span class="hljs-number">3</span>));    &#125;&#125;</code></pre></div>]]></content>
+    
+    
+    <categories>
+      
+      <category>每日一题</category>
+      
+      <category>leetcode</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>每日一题</tag>
+      
+      <tag>双指针</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>【每日一题】leetcode-978-最长湍流子数组</title>
     <link href="/2021/02/08/%E3%80%90%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98%E3%80%91leetcode-978-%E6%9C%80%E9%95%BF%E6%B9%8D%E6%B5%81%E5%AD%90%E6%95%B0%E7%BB%84/"/>
     <url>/2021/02/08/%E3%80%90%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98%E3%80%91leetcode-978-%E6%9C%80%E9%95%BF%E6%B9%8D%E6%B5%81%E5%AD%90%E6%95%B0%E7%BB%84/</url>
