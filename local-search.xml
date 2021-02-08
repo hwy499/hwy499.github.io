@@ -4,6 +4,60 @@
   
   
   <entry>
+    <title>【每日一题】leetcode-978-最长湍流子数组</title>
+    <link href="/2021/02/08/%E3%80%90%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98%E3%80%91leetcode-978-%E6%9C%80%E9%95%BF%E6%B9%8D%E6%B5%81%E5%AD%90%E6%95%B0%E7%BB%84/"/>
+    <url>/2021/02/08/%E3%80%90%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98%E3%80%91leetcode-978-%E6%9C%80%E9%95%BF%E6%B9%8D%E6%B5%81%E5%AD%90%E6%95%B0%E7%BB%84/</url>
+    
+    <content type="html"><![CDATA[<h1 id="leetcode-978-最长湍流子数组"><a href="#leetcode-978-最长湍流子数组" class="headerlink" title="leetcode-978-最长湍流子数组"></a>leetcode-978-最长湍流子数组</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>当 A 的子数组 A[i], A[i+1], …, A[j] 满足下列条件时，我们称其为湍流子数组：</p><ul><li>若 i &lt;= k &lt; j，当 k 为奇数时， A[k] &gt; A[k+1]，且当 k 为偶数时，A[k] &lt; A[k+1]；</li><li>或 若 i &lt;= k &lt; j，当 k 为偶数时，A[k] &gt; A[k+1] ，且当 k 为奇数时， A[k] &lt; A[k+1]。</li></ul><p>也就是说，如果比较符号在子数组中的每个相邻元素对之间翻转，则该子数组是湍流子数组。</p><p>返回 A 的最大湍流子数组的长度。</p><p>示例 1：</p><blockquote><p>输入：[9,4,2,10,7,8,8,1,9]<br>输出：5<br>解释：(A[1] &gt; A[2] &lt; A[3] &gt; A[4] &lt; A[5])</p></blockquote><p>示例 2：</p><blockquote><p>输入：[4,8,12,16]<br>输出：2</p></blockquote><p>示例 3：</p><blockquote><p>输入：[100]<br>输出：1</p></blockquote><p>提示：</p><ul><li>1 &lt;= A.length &lt;= 40000</li><li>0 &lt;= A[i] &lt;= 10^9</li></ul><p>来源：力扣（LeetCode）<br>链接：<a href="https://leetcode-cn.com/problems/longest-turbulent-subarray">https://leetcode-cn.com/problems/longest-turbulent-subarray</a><br>著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。</p><h2 id="我的想法"><a href="#我的想法" class="headerlink" title="我的想法"></a>我的想法</h2><p>模拟法，根据题目中的描述去写代码。</p><h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> </span>&#123;    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">maxTurbulenceSize</span><span class="hljs-params">(<span class="hljs-keyword">int</span>[] arr)</span> </span>&#123;        <span class="hljs-comment">// 声明变量res1用来储存满足条件1产生的湍流子数组的长度</span>        <span class="hljs-keyword">int</span> res1 = <span class="hljs-number">1</span>;        <span class="hljs-comment">// 声明变量res2用来储存满足条件2产生的湍流子数组的长度</span>        <span class="hljs-keyword">int</span> res2 = <span class="hljs-number">1</span>;        <span class="hljs-comment">// 声明变量res用来储存遍历过程中的最大湍流子数组的长度</span>        <span class="hljs-keyword">int</span> res = <span class="hljs-number">1</span>;        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> k = <span class="hljs-number">0</span>; k &lt; arr.length - <span class="hljs-number">1</span>; k++) &#123;            <span class="hljs-comment">// k为偶数时</span>            <span class="hljs-keyword">if</span> (k % <span class="hljs-number">2</span> == <span class="hljs-number">0</span>) &#123;                <span class="hljs-comment">// 满足条件1时 res1加1 否则就置为1</span>                <span class="hljs-keyword">if</span> (arr[k] &lt; arr[k + <span class="hljs-number">1</span>]) &#123;                    res1 += <span class="hljs-number">1</span>;                &#125; <span class="hljs-keyword">else</span> &#123;                    res1 = <span class="hljs-number">1</span>;                &#125;<span class="hljs-comment">// 满足条件2时 res2加1 否则就置为1</span>                <span class="hljs-keyword">if</span> (arr[k] &gt; arr[k + <span class="hljs-number">1</span>]) &#123;                    res2 += <span class="hljs-number">1</span>;                &#125; <span class="hljs-keyword">else</span> &#123;                    res2 = <span class="hljs-number">1</span>;                &#125;            &#125;            <span class="hljs-comment">// k为奇数时</span>            <span class="hljs-keyword">if</span> (k % <span class="hljs-number">2</span> == <span class="hljs-number">1</span>) &#123;                <span class="hljs-comment">// 满足条件1时 res1加1 否则就置为1</span>                <span class="hljs-keyword">if</span> (arr[k] &gt; arr[k + <span class="hljs-number">1</span>]) &#123;                    res1 += <span class="hljs-number">1</span>;                &#125; <span class="hljs-keyword">else</span> &#123;                    res1 = <span class="hljs-number">1</span>;                &#125;                <span class="hljs-comment">// 满足条件2时 res2加1 否则就置为1</span>                <span class="hljs-keyword">if</span> (arr[k] &lt; arr[k + <span class="hljs-number">1</span>]) &#123;                    res2 += <span class="hljs-number">1</span>;                &#125; <span class="hljs-keyword">else</span> &#123;                    res2 = <span class="hljs-number">1</span>;                &#125;            &#125;            <span class="hljs-comment">// 保证res为最大值</span>            res = Math.max(res, res1);            res = Math.max(res, res2);        &#125;        <span class="hljs-keyword">return</span> res;    &#125;    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;        Solution solution = <span class="hljs-keyword">new</span> Solution();        <span class="hljs-keyword">int</span>[] arr = <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[]&#123;<span class="hljs-number">9</span>, <span class="hljs-number">4</span>, <span class="hljs-number">2</span>, <span class="hljs-number">10</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">8</span>, <span class="hljs-number">1</span>, <span class="hljs-number">9</span>&#125;;        System.out.println(solution.maxTurbulenceSize(arr));    &#125;&#125;</code></pre></div>]]></content>
+    
+    
+    <categories>
+      
+      <category>每日一题</category>
+      
+      <category>leetcode</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>每日一题</tag>
+      
+      <tag>模拟</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>【数据结构】前缀树</title>
+    <link href="/2021/02/07/%E3%80%90%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E3%80%91%E5%89%8D%E7%BC%80%E6%A0%91/"/>
+    <url>/2021/02/07/%E3%80%90%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E3%80%91%E5%89%8D%E7%BC%80%E6%A0%91/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>目录</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>标签</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>【nginx学习】第三章-反向代理实战</title>
     <link href="/2021/02/07/%E3%80%90nginx%E5%AD%A6%E4%B9%A0%E3%80%91%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%AE%9E%E6%88%98/"/>
     <url>/2021/02/07/%E3%80%90nginx%E5%AD%A6%E4%B9%A0%E3%80%91%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%AE%9E%E6%88%98/</url>
@@ -530,19 +584,6 @@
       <tag>Netty</tag>
       
     </tags>
-    
-  </entry>
-  
-  
-  
-  <entry>
-    <title>数据结构【前缀树】</title>
-    <link href="/2021/01/25/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E3%80%90%E5%89%8D%E7%BC%80%E6%A0%91%E3%80%91/"/>
-    <url>/2021/01/25/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E3%80%90%E5%89%8D%E7%BC%80%E6%A0%91%E3%80%91/</url>
-    
-    <content type="html"><![CDATA[]]></content>
-    
-    
     
   </entry>
   
