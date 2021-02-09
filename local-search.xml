@@ -4,6 +4,35 @@
   
   
   <entry>
+    <title>【每日一题】leetcode-84-柱状图中最大的矩形</title>
+    <link href="/2021/02/09/%E3%80%90%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98%E3%80%91leetcode-84-%E6%9F%B1%E7%8A%B6%E5%9B%BE%E4%B8%AD%E6%9C%80%E5%A4%A7%E7%9A%84%E7%9F%A9%E5%BD%A2/"/>
+    <url>/2021/02/09/%E3%80%90%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98%E3%80%91leetcode-84-%E6%9F%B1%E7%8A%B6%E5%9B%BE%E4%B8%AD%E6%9C%80%E5%A4%A7%E7%9A%84%E7%9F%A9%E5%BD%A2/</url>
+    
+    <content type="html"><![CDATA[<h1 id="leetcode-84-柱状图中最大的矩形"><a href="#leetcode-84-柱状图中最大的矩形" class="headerlink" title="leetcode-84-柱状图中最大的矩形"></a>leetcode-84-柱状图中最大的矩形</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定 n 个非负整数，用来表示柱状图中各个柱子的高度。每个柱子彼此相邻，且宽度为 1 。</p><p>求在该柱状图中，能够勾勒出来的矩形的最大面积。</p><p><img src="https://assets.leetcode-cn.com/aliyun-lc-upload/uploads/2018/10/12/histogram.png" alt="img"></p><p>以上是柱状图的示例，其中每个柱子的宽度为 1，给定的高度为 [2,1,5,6,2,3]。</p><p><img src="https://assets.leetcode-cn.com/aliyun-lc-upload/uploads/2018/10/12/histogram_area.png" alt="img"></p><p>图中阴影部分为所能勾勒出的最大矩形面积，其面积为 10 个单位。</p><p>示例:</p><blockquote><p>输入: [2,1,5,6,2,3]<br>输出: 10</p></blockquote><p>来源：力扣（LeetCode）<br>链接：<a href="https://leetcode-cn.com/problems/largest-rectangle-in-histogram">https://leetcode-cn.com/problems/largest-rectangle-in-histogram</a><br>著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。</p><h2 id="我的想法"><a href="#我的想法" class="headerlink" title="我的想法"></a>我的想法</h2><p><img src="https://assets.leetcode-cn.com/aliyun-lc-upload/uploads/2018/10/12/histogram_area.png" alt="img"></p><p>看图中可以发现，一个柱子能够形成的面积是由它两边比它小的柱子决定的。我们最关键的就是找到两边比它小的柱子，从而计算出阴影的宽。</p><h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><h3 id="暴力求解法（时间超限）"><a href="#暴力求解法（时间超限）" class="headerlink" title="暴力求解法（时间超限）"></a>暴力求解法（时间超限）</h3><p>每遍历一个柱子的时候，都要向两边寻找第一个比它小的柱子，并由此计算出面积。由每一个柱子能够形成的最大面积得出面积最大值。</p><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> </span>&#123;   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">largestRectangleArea</span><span class="hljs-params">(<span class="hljs-keyword">int</span>[] heights)</span> </span>&#123;        <span class="hljs-keyword">int</span> res = <span class="hljs-number">0</span>;        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; heights.length; i++) &#123;            <span class="hljs-keyword">int</span> len = roundCenter(i, heights);            <span class="hljs-keyword">if</span> (heights[i] != <span class="hljs-number">0</span>) &#123;                res = Math.max(len * heights[i], res);            &#125;        &#125;        <span class="hljs-keyword">return</span> res;    &#125;      <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> <span class="hljs-title">roundCenter</span><span class="hljs-params">(<span class="hljs-keyword">int</span> i, <span class="hljs-keyword">int</span>[] arr)</span> </span>&#123;        <span class="hljs-keyword">int</span> res = <span class="hljs-number">0</span>;        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> j = i - <span class="hljs-number">1</span>; j &gt;= <span class="hljs-number">0</span>; j--) &#123;            <span class="hljs-keyword">if</span> (arr[j] &gt;= arr[i]) &#123;                res++;                <span class="hljs-keyword">continue</span>;            &#125;            <span class="hljs-keyword">break</span>;        &#125;        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> j = i + <span class="hljs-number">1</span>; j &lt; arr.length; j++) &#123;            <span class="hljs-keyword">if</span> (arr[j] &gt;= arr[i]) &#123;                res++;                <span class="hljs-keyword">continue</span>;            &#125;            <span class="hljs-keyword">break</span>;        &#125;        <span class="hljs-keyword">return</span> res + <span class="hljs-number">1</span>;    &#125;&#125;</code></pre></div><h3 id="空间换时间"><a href="#空间换时间" class="headerlink" title="空间换时间"></a>空间换时间</h3><p>我们需要维护两个数组left，right，数组规定如下：</p><ul><li><p>left,right 长度于heights数组长度相等</p></li><li><p>left[i] 存放 heights数组中第i个元素左边第一个比它的下标 （ i== 0 时存放 -1）</p></li><li><p>right[i] 存放 heights数组中第i个元素右边第一个比它小的下标 （ 右边没有元素时，right[i] =  heights数组长度）</p></li></ul><p>然后我们遍历heights数组，每一个柱子所能够形成的最大面积=(right[i] - left[i] - 1) * heights[i]，求出所有柱子中最大的面积</p><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> </span>&#123;    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">largestRectangleArea</span><span class="hljs-params">(<span class="hljs-keyword">int</span>[] heights)</span> </span>&#123;        <span class="hljs-keyword">int</span> len = heights.length;        <span class="hljs-comment">// 维护左边第一个小的元素下标</span>        <span class="hljs-keyword">int</span>[] left = <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[len];        <span class="hljs-comment">// 辅助栈</span>        Stack&lt;Integer&gt; leftStack = <span class="hljs-keyword">new</span> Stack&lt;Integer&gt;();        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>, j = len - <span class="hljs-number">1</span>; i &lt; len; ++i) &#123;            <span class="hljs-comment">// 获取左边第一个小的索引</span>            <span class="hljs-keyword">while</span> (!leftStack.isEmpty() &amp;&amp; heights[leftStack.peek()] &gt;= heights[i]) &#123;                leftStack.pop();            &#125;            left[i] = (leftStack.isEmpty() ? -<span class="hljs-number">1</span> : leftStack.peek());            leftStack.push(i);        &#125;                leftStack.clear();        <span class="hljs-comment">// 维护右边第一个小的元素下标</span>        <span class="hljs-keyword">int</span>[] right = <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[len];        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = len - <span class="hljs-number">1</span>; i &gt;= <span class="hljs-number">0</span>; i--) &#123;            <span class="hljs-comment">// 获取右边第一个小的索引</span>            <span class="hljs-keyword">while</span> (!leftStack.isEmpty() &amp;&amp; heights[leftStack.peek()] &gt;= heights[i]) &#123;                leftStack.pop();            &#125;            right[i] = (leftStack.isEmpty() ? len : leftStack.peek());            leftStack.push(i);        &#125;        <span class="hljs-keyword">int</span> ans = <span class="hljs-number">0</span>;        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; len; ++i) &#123;            ans = Math.max(ans, (right[i] - left[i] - <span class="hljs-number">1</span>) * heights[i]);        &#125;        <span class="hljs-keyword">return</span> ans;    &#125;    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;        Solution solution = <span class="hljs-keyword">new</span> Solution();        System.out.println(solution.largestRectangleArea(<span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[]&#123;<span class="hljs-number">0</span>, <span class="hljs-number">9</span>&#125;));    &#125;&#125;</code></pre></div>]]></content>
+    
+    
+    <categories>
+      
+      <category>每日一题</category>
+      
+      <category>leetcode</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>每日一题</tag>
+      
+      <tag>单调栈</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>【每日一题】leetcode-1208-尽可能使字符串相等</title>
     <link href="/2021/02/09/%E3%80%90%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98%E3%80%91leetcode-1208-%E5%B0%BD%E5%8F%AF%E8%83%BD%E4%BD%BF%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9B%B8%E7%AD%89/"/>
     <url>/2021/02/09/%E3%80%90%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98%E3%80%91leetcode-1208-%E5%B0%BD%E5%8F%AF%E8%83%BD%E4%BD%BF%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9B%B8%E7%AD%89/</url>
@@ -542,11 +571,11 @@
     
     <tags>
       
+      <tag>源码</tag>
+      
       <tag>框架</tag>
       
       <tag>IOC</tag>
-      
-      <tag>源码</tag>
       
       <tag>Spring</tag>
       
