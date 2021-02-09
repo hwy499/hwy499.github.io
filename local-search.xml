@@ -100,14 +100,16 @@
     
     <categories>
       
-      <category>目录</category>
+      <category>数据结构</category>
       
     </categories>
     
     
     <tags>
       
-      <tag>标签</tag>
+      <tag>前缀树</tag>
+      
+      <tag>数据结构</tag>
       
     </tags>
     
@@ -125,14 +127,20 @@
     
     <categories>
       
-      <category>目录</category>
+      <category>服务器</category>
+      
+      <category>Nginx</category>
       
     </categories>
     
     
     <tags>
       
-      <tag>标签</tag>
+      <tag>Nginx</tag>
+      
+      <tag>服务器</tag>
+      
+      <tag>反向代理</tag>
       
     </tags>
     
