@@ -181,6 +181,68 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
+        <a href="/2021/01/31/%E3%80%90%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E9%97%AE%E9%A2%98/">【面试题】海量数据处理问题</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/01/31/%E3%80%90%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E9%97%AE%E9%A2%98/">
+          
+          
+            
+          
+          海量数据中位数问题:   在一个文件中有 10G 个整数，乱序排列，要求找出中位数。只写出思路即可。（文件内存储的是32位无符号整数，占4个字节）
+内存无限制
+小顶堆：每个结点的值都大于或等于其左右孩子结点的值
+可以维护一个小顶堆。堆的大小由文件中整数的个数N决定，堆大小为N/2(向上取整)**，然后读取文件，每次读取到一个数字，将其放进最大堆，文件读完后小顶堆的根节点**即为中位数。
+
+解法
+计
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-01-31 23:15" pubdate>
+              2021-01-31
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/%E9%9D%A2%E8%AF%95/">面试</a>
+            
+              <a href="/categories/%E9%9D%A2%E8%AF%95/%E7%AE%97%E6%B3%95/">算法</a>
+            
+              <a href="/categories/%E9%9D%A2%E8%AF%95/%E7%AE%97%E6%B3%95/%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE/">海量数据</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E7%AE%97%E6%B3%95/">算法</a>
+            
+              <a href="/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a>
+            
+              <a href="/tags/%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE/">海量数据</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
         <a href="/2021/01/26/Netty%E3%80%90HelloWorld%E3%80%91/">Netty【HelloWorld】</a>
       </h1>
 
@@ -255,11 +317,11 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/%E6%BA%90%E7%A0%81/">源码</a>
-            
               <a href="/tags/%E6%A1%86%E6%9E%B6/">框架</a>
             
               <a href="/tags/IOC/">IOC</a>
+            
+              <a href="/tags/%E6%BA%90%E7%A0%81/">源码</a>
             
               <a href="/tags/Spring/">Spring</a>
             
@@ -671,69 +733,11 @@ Netty is an asynchronous event-driven network application framework for rapid de
     </article>
   </div>
 
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2021/01/15/%E5%A4%9A%E7%BA%BF%E7%A8%8B-%E5%88%9B%E5%BB%BA%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F/">多线程------创建多线程的三种方式</a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2021/01/15/%E5%A4%9A%E7%BA%BF%E7%A8%8B-%E5%88%9B%E5%BB%BA%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F/">
-          
-          
-            
-          
-          多线程——创建多线程的三种方式创建一个继承于java.lang.Thread的类public class MyThread1 extends Thread&#123;
-	// 在run方法中实现此线程需要实现的功能
-	@Override
-	public void run() &#123;
-		System.out.println(&quot;线程名字：&quot;+Thread.currentTh
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2021-01-15 22:20" pubdate>
-              2021-01-15
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a>
-            
-              <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a>
-            
-              <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/%E5%A4%9A%E7%BA%BF%E7%A8%8B/">多线程</a>
-            
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/java/">java</a>
-            
-              <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/">多线程</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
 
 
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
-      <a class="extend prev" rel="prev" href="/page/2/"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/4/"><i class="iconfont icon-arrowright"></i></a>
+      <a class="extend prev" rel="prev" href="/page/2/"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/4/"><i class="iconfont icon-arrowright"></i></a>
     </span>
   </nav>
   
