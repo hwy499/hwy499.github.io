@@ -13,14 +13,14 @@
     
     <categories>
       
-      <category>目录</category>
+      <category>数据结构</category>
       
     </categories>
     
     
     <tags>
       
-      <tag>标签</tag>
+      <tag>并查集</tag>
       
     </tags>
     
@@ -689,11 +689,11 @@
     
     <tags>
       
+      <tag>源码</tag>
+      
       <tag>框架</tag>
       
       <tag>IOC</tag>
-      
-      <tag>源码</tag>
       
       <tag>Spring</tag>
       
