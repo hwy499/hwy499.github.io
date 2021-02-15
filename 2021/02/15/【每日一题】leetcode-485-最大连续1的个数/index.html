@@ -184,7 +184,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      314 字
+      284 字
     </span>
   
 
@@ -194,7 +194,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      4
+      3
        分钟
     </span>
   
@@ -236,7 +236,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：几秒前
+                  本文最后更新于：4 小时前
                 
               </p>
             
@@ -255,19 +255,7 @@
 <p>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/max-consecutive-ones/">https://leetcode-cn.com/problems/max-consecutive-ones/</a></p>
 <p>著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。</p>
 <h2 id="我的想法"><a href="#我的想法" class="headerlink" title="我的想法"></a>我的想法</h2><p>初始化两个变量ans,temp。遍历整个数组，遇到为1的元素temp就加一，然后遇到为0的ans = Max(temp,ans)，然后temp = 0。遍历结束后，ans即为所求。</p>
-<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-keyword">import</span> org.omg.PortableInterceptor.INACTIVE;
-<span class="hljs-keyword">import</span> util.ArrayUtil;
-<span class="hljs-keyword">import</span> 交错<span class="hljs-number">01</span>串.Main;
-
-<span class="hljs-keyword">import</span> java.util.*;
-
-<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">TreeNode</span> </span>&#123;
-    <span class="hljs-keyword">int</span> val = <span class="hljs-number">0</span>;
-    TreeNode left = <span class="hljs-keyword">null</span>;
-    TreeNode right = <span class="hljs-keyword">null</span>;
-&#125;
-
-<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> </span>&#123;
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> </span>&#123;
     	
     <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">findMaxConsecutiveOnes</span><span class="hljs-params">(<span class="hljs-keyword">int</span>[] nums)</span> </span>&#123;
         <span class="hljs-keyword">int</span> ans = <span class="hljs-number">0</span>;
