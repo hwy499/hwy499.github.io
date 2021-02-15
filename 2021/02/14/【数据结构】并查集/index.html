@@ -184,7 +184,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      2.2k 字
+      2.3k 字
     </span>
   
 
@@ -194,7 +194,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      29
+      30
        分钟
     </span>
   
@@ -327,7 +327,7 @@
     <span class="hljs-keyword">if</span> (x != y) &#123;
         <span class="hljs-comment">// 将 x 所在集合合并到 y 所在集合</span>
         par[x] = par[y];
-        <span class="hljs-comment">// 集合数量减一</span>
+        <span class="hljs-comment">// 每当发生合并时，就要将集合数量减一</span>
         setNum--;
     &#125;
 &#125;
@@ -409,7 +409,7 @@
         <span class="hljs-keyword">if</span> (x != y) &#123;
             <span class="hljs-comment">// 将 x 所在集合合并到 y 所在集合</span>
             par[x] = par[y];
-            <span class="hljs-comment">// 集合数量减一</span>
+            <span class="hljs-comment">// 每当发生合并时，就要将集合数量减一</span>
             setNum--;
         &#125;
     &#125;
@@ -493,10 +493,24 @@
             height[x]++;
         &#125;
     &#125;
+    <span class="hljs-comment">// 每当发生合并时，就要将集合数量减一</span>
     setNum --;
 &#125;</code></pre></div>
 <p>到此合并函数的优化已经完毕。</p>
-<h3 id="查找函数的优化"><a href="#查找函数的优化" class="headerlink" title="查找函数的优化"></a>查找函数的优化</h3><p>在上面的函数中寻找一个节点x的根节点时，如果par[x] != x ,这时我们需要做如下操作</p>
+<h3 id="查找函数的优化"><a href="#查找函数的优化" class="headerlink" title="查找函数的优化"></a>查找函数的优化</h3><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">/**</span>
+<span class="hljs-comment"> * 寻找x所在的集合</span>
+<span class="hljs-comment"> *</span>
+<span class="hljs-comment"> * <span class="hljs-doctag">@param</span> x</span>
+<span class="hljs-comment"> * <span class="hljs-doctag">@return</span></span>
+<span class="hljs-comment"> */</span>
+<span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> <span class="hljs-title">findSet</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x)</span> </span>&#123;
+    <span class="hljs-comment">// 如果x 与 par[x] 不等说明 x 不是一个单独的集合，继续循环</span>
+    <span class="hljs-keyword">while</span> (x != par[x])&#123;
+        x = par[x]; 
+    &#125;
+    <span class="hljs-keyword">return</span> x;
+&#125;</code></pre></div>
+<p>在上面的函数中寻找一个节点x的根节点时，如果par[x] != x ,这时我们需要做如下操作</p>
 <ol>
 <li>x = par[x]</li>
 <li>接着判断x 与par[x]的关系</li>
@@ -636,6 +650,7 @@
                 height[x]++;
             &#125;
         &#125;
+        <span class="hljs-comment">// 每当发生合并时，就要将集合数量减一</span>
         setNum--;
     &#125;
 
