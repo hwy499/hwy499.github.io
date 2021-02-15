@@ -4,6 +4,35 @@
   
   
   <entry>
+    <title>【每日一题】leetcode-485-最大连续1的个数</title>
+    <link href="/2021/02/15/%E3%80%90%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98%E3%80%91leetcode-485-%E6%9C%80%E5%A4%A7%E8%BF%9E%E7%BB%AD1%E7%9A%84%E4%B8%AA%E6%95%B0/"/>
+    <url>/2021/02/15/%E3%80%90%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98%E3%80%91leetcode-485-%E6%9C%80%E5%A4%A7%E8%BF%9E%E7%BB%AD1%E7%9A%84%E4%B8%AA%E6%95%B0/</url>
+    
+    <content type="html"><![CDATA[<h1 id="leetcode-485-最大连续1的个数"><a href="#leetcode-485-最大连续1的个数" class="headerlink" title="leetcode-485-最大连续1的个数"></a><a href="https://leetcode-cn.com/problems/max-consecutive-ones/">leetcode-485-最大连续1的个数</a></h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给定一个二进制数组， 计算其中最大连续1的个数。</p><p><strong>示例 1:</strong></p><blockquote><p>输入: [1,1,0,1,1,1]<br>输出: 3<br>解释: 开头的两位和最后的三位都是连续1，所以最大连续1的个数是 3.</p></blockquote><p><strong>注意：</strong></p><ul><li>输入的数组只包含 <code>0</code> 和<code>1</code>。</li><li>输入数组的长度是正整数，且不超过 10,000。</li></ul><p>来源：力扣（LeetCode）</p><p>链接：<a href="https://leetcode-cn.com/problems/max-consecutive-ones/">https://leetcode-cn.com/problems/max-consecutive-ones/</a></p><p>著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。</p><h2 id="我的想法"><a href="#我的想法" class="headerlink" title="我的想法"></a>我的想法</h2><p>初始化两个变量ans,temp。遍历整个数组，遇到为1的元素temp就加一，然后遇到为0的ans = Max(temp,ans)，然后temp = 0。遍历结束后，ans即为所求。</p><h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-keyword">import</span> org.omg.PortableInterceptor.INACTIVE;<span class="hljs-keyword">import</span> util.ArrayUtil;<span class="hljs-keyword">import</span> 交错<span class="hljs-number">01</span>串.Main;<span class="hljs-keyword">import</span> java.util.*;<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">TreeNode</span> </span>&#123;    <span class="hljs-keyword">int</span> val = <span class="hljs-number">0</span>;    TreeNode left = <span class="hljs-keyword">null</span>;    TreeNode right = <span class="hljs-keyword">null</span>;&#125;<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> </span>&#123;        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">findMaxConsecutiveOnes</span><span class="hljs-params">(<span class="hljs-keyword">int</span>[] nums)</span> </span>&#123;        <span class="hljs-keyword">int</span> ans = <span class="hljs-number">0</span>;        <span class="hljs-keyword">int</span> temp = <span class="hljs-number">0</span>;        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> item : nums) &#123;            <span class="hljs-keyword">if</span> (item != <span class="hljs-number">0</span>) &#123;                temp++;            &#125; <span class="hljs-keyword">else</span> &#123;                temp = <span class="hljs-number">0</span>;            &#125;            ans = Math.max(ans, temp);        &#125;        <span class="hljs-keyword">return</span> ans;    &#125;    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;        Solution solution = <span class="hljs-keyword">new</span> Solution();        <span class="hljs-keyword">int</span> temp[] = <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[]&#123;<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">10</span>&#125;;        System.out.println(solution.findMaxConsecutiveOnes(temp));    &#125;&#125;</code></pre></div>]]></content>
+    
+    
+    <categories>
+      
+      <category>每日一题</category>
+      
+      <category>leetcode</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>每日一题</tag>
+      
+      <tag>双指针</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>【数据结构】并查集</title>
     <link href="/2021/02/14/%E3%80%90%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E3%80%91%E5%B9%B6%E6%9F%A5%E9%9B%86/"/>
     <url>/2021/02/14/%E3%80%90%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E3%80%91%E5%B9%B6%E6%9F%A5%E9%9B%86/</url>
@@ -689,11 +718,11 @@
     
     <tags>
       
-      <tag>源码</tag>
-      
       <tag>框架</tag>
       
       <tag>IOC</tag>
+      
+      <tag>源码</tag>
       
       <tag>Spring</tag>
       
