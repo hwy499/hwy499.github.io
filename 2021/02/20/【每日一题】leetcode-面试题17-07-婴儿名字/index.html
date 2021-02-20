@@ -17,7 +17,7 @@
   <meta name="description" content="good good study,day day up">
   <meta name="author" content="何文垚">
   <meta name="keywords" content="">
-  <title>【每日一题】leetcode-1208-尽可能使字符串相等 - hwyblog</title>
+  <title>【每日一题】leetcode-面试题17.07.婴儿名字 - hwyblog</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
 
@@ -162,7 +162,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="【每日一题】leetcode-1208-尽可能使字符串相等">
+            <span class="h2" id="subtitle" title="【每日一题】leetcode-面试题17.07.婴儿名字">
               
             </span>
 
@@ -172,8 +172,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2021-02-09 00:16" pubdate>
-        2021年2月9日 凌晨
+      <time datetime="2021-02-20 20:53" pubdate>
+        2021年2月20日 晚上
       </time>
     </span>
   
@@ -184,7 +184,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      584 字
+      911 字
     </span>
   
 
@@ -194,7 +194,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      7
+      12
        分钟
     </span>
   
@@ -232,78 +232,113 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">【每日一题】leetcode-1208-尽可能使字符串相等</h1>
+            <h1 style="display: none">【每日一题】leetcode-面试题17.07.婴儿名字</h1>
             
               <p class="note note-info">
                 
-                  本文最后更新于：12 天前
+                  本文最后更新于：几秒前
                 
               </p>
             
             <div class="markdown-body">
-              <h1 id="leetcode-1208-尽可能使字符串相等"><a href="#leetcode-1208-尽可能使字符串相等" class="headerlink" title="leetcode-1208-尽可能使字符串相等"></a>leetcode-1208-尽可能使字符串相等</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>给你两个长度相同的字符串，s 和 t。</p>
-<p>将 s 中的第 i 个字符变到 t 中的第 i 个字符需要 |s[i] - t[i]| 的开销（开销可能为 0），也就是两个字符的 ASCII 码值的差的绝对值。</p>
-<p>用于变更字符串的最大预算是 maxCost。在转化字符串时，总开销应当小于等于该预算，这也意味着字符串的转化可能是不完全的。</p>
-<p>如果你可以将 s 的子字符串转化为它在 t 中对应的子字符串，则返回可以转化的最大长度。</p>
-<p>如果 s 中没有子字符串可以转化成 t 中对应的子字符串，则返回 0。</p>
-<p>示例 1：</p>
+              <h1 id="leetcode-面试题17-07-婴儿名字"><a href="#leetcode-面试题17-07-婴儿名字" class="headerlink" title="leetcode-面试题17.07.婴儿名字"></a><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/baby-names-lcci">leetcode-面试题17.07.婴儿名字</a></h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>每年，政府都会公布一万个最常见的婴儿名字和它们出现的频率，也就是同名婴儿的数量。有些名字有多种拼法，例如，John 和 Jon 本质上是相同的名字，但被当成了两个名字公布出来。给定两个列表，一个是名字及对应的频率，另一个是本质相同的名字对。设计一个算法打印出每个真实名字的实际频率。注意，如果 John 和 Jon 是相同的，并且 Jon 和 Johnny 相同，则 John 与 Johnny 也相同，即它们有传递和对称性。</p>
+<p>在结果列表中，选择 字典序最小 的名字作为真实名字。</p>
+<p>示例：</p>
 <blockquote>
-<p>输入：s = “abcd”, t = “bcdf”, cost = 3<br>输出：3<br>解释：s 中的 “abc” 可以变为 “bcd”。开销为 3，所以最大长度为 3。</p>
-</blockquote>
-<p>示例 2：</p>
-<blockquote>
-<p>输入：s = “abcd”, t = “cdef”, cost = 3<br>输出：1<br>解释：s 中的任一字符要想变成 t 中对应的字符，其开销都是 2。因此，最大长度为 1。</p>
-</blockquote>
-<p>示例 3：</p>
-<blockquote>
-<p>输入：s = “abcd”, t = “acde”, cost = 0<br>输出：1<br>解释：你无法作出任何改动，所以最大长度为 1。</p>
+<p>输入：names = [“John(15)”,”Jon(12)”,”Chris(13)”,”Kris(4)”,”Christopher(19)”], synonyms = [“(Jon,John)”,”(John,Johnny)”,”(Chris,Kris)”,”(Chris,Christopher)”]<br>输出：[“John(27)”,”Chris(36)”]</p>
 </blockquote>
 <p>提示：</p>
 <ul>
-<li>1 &lt;= s.length, t.length &lt;= 10^5</li>
-<li>0 &lt;= maxCost &lt;= 10^6</li>
-<li>s 和 t 都只含小写英文字母。</li>
+<li>names.length &lt;= 100000</li>
 </ul>
-<p>来源：力扣（LeetCode）<br>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/get-equal-substrings-within-budget">https://leetcode-cn.com/problems/get-equal-substrings-within-budget</a><br>著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。</p>
-<h2 id="我的想法"><a href="#我的想法" class="headerlink" title="我的想法"></a>我的想法</h2><p>利用双指针的思想，一个指针在字串头，一个指针在字串尾。</p>
-<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-keyword">package</span> V1_20200207;
+<p>来源：力扣（LeetCode）<br>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/baby-names-lcci">https://leetcode-cn.com/problems/baby-names-lcci</a><br>著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。</p>
+<h2 id="我的想法"><a href="#我的想法" class="headerlink" title="我的想法"></a>我的想法</h2><p>题目中提到了传递性，这时我们就可以考虑用并查集来做这道题，当然标准的并查集得做出改动。</p>
+<ul>
+<li><strong>底层数据结构：</strong>由于在第二个列表中会出现第一个列表中不存在的名字，我们需要动态维护节点列表，因为节点类型属于字符串，这里我们采用HashMap来存放节点与节点之间的关系，并且再用一个 HashMap 来维护每一个名字的出现频率。</li>
+<li><strong>合并：</strong>由于选择字典序最小的名字作为真实名字，标准的并查集中按照高度进行合并就要改成按照字典序来进行合并了，两个不同名字合并时也需要进行频率合并。</li>
+</ul>
+<p>最终遍历并查集所有的根节点，然后获取对应的出现频率，拼接成符合条件的结果输出。</p>
+<h2 id="我的代码"><a href="#我的代码" class="headerlink" title="我的代码"></a>我的代码</h2><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> </span>&#123;
 
-<span class="hljs-keyword">import</span> java.util.Arrays;
+    <span class="hljs-comment">// 所有节点集合</span>
+    Map&lt;String, String&gt; nodes;
+    <span class="hljs-comment">// 每个节点对应的频率</span>
+    Map&lt;String, Integer&gt; frequency;
 
-<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> </span>&#123;
-
-    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">equalSubstring</span><span class="hljs-params">(String s, String t, <span class="hljs-keyword">int</span> maxCost)</span> </span>&#123;
-        <span class="hljs-keyword">int</span> res = <span class="hljs-number">0</span>;
-        <span class="hljs-keyword">char</span>[] temp1 = s.toCharArray();
-        <span class="hljs-keyword">char</span>[] temp2 = t.toCharArray();
-        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> start = <span class="hljs-number">0</span>, end = <span class="hljs-number">0</span>; end &lt; temp1.length; ) &#123;
-            <span class="hljs-comment">// 计算本次开销</span>
-            <span class="hljs-keyword">int</span> cost = Math.abs(temp1[end] - temp2[end]);
-            <span class="hljs-comment">// 如果预算还够的话</span>
-            <span class="hljs-keyword">if</span> (maxCost - cost &gt;= <span class="hljs-number">0</span>) &#123;
-                <span class="hljs-comment">// 将本次开销减去</span>
-                maxCost = maxCost - cost;
-                <span class="hljs-comment">// res 保持最大值</span>
-                res = Math.max(res, end - start + <span class="hljs-number">1</span>);
-                <span class="hljs-comment">// 向后走</span>
-                end++;
-                <span class="hljs-keyword">continue</span>;
-            &#125;
-            <span class="hljs-comment">// 将start的开销补回来，因为之后不会计算start位置的开销了</span>
-            maxCost = maxCost + Math.abs(temp1[start] - temp2[start]);
-            start++;
-        &#125;
-        <span class="hljs-keyword">return</span> res;
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Solution</span><span class="hljs-params">()</span> </span>&#123;
+        <span class="hljs-keyword">this</span>.nodes = <span class="hljs-keyword">new</span> HashMap&lt;&gt;();
+        <span class="hljs-keyword">this</span>.frequency = <span class="hljs-keyword">new</span> HashMap&lt;&gt;();
     &#125;
 
-    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;
+    <span class="hljs-comment">//找到x的根节点</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">find</span><span class="hljs-params">(String x)</span> </span>&#123;
+        <span class="hljs-keyword">if</span> (!nodes.get(x).equals(x)) &#123;
+            <span class="hljs-comment">//路径压缩</span>
+            nodes.put(x, find(nodes.get(x)));
+        &#125;
+        <span class="hljs-keyword">return</span> nodes.get(x);
+    &#125;
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">union</span><span class="hljs-params">(String x, String y)</span> </span>&#123;
+        String str1 = find(x), str2 = find(y);
+        <span class="hljs-keyword">if</span> (str1.equals(str2))
+            <span class="hljs-keyword">return</span>;
+        <span class="hljs-comment">// 字典序小的作为根</span>
+        <span class="hljs-keyword">if</span> (str1.compareTo(str2) &gt; <span class="hljs-number">0</span>) &#123;
+            nodes.put(str1, str2);
+            <span class="hljs-comment">//人数累加到根节点</span>
+            frequency.put(str2, frequency.get(str1) + frequency.get(str2));
+        &#125; <span class="hljs-keyword">else</span> &#123;
+            nodes.put(str2, str1);
+            frequency.put(str1, frequency.get(str2) + frequency.get(str1));
+        &#125;
+    &#125;
+
+    <span class="hljs-keyword">public</span> String[] trulyMostPopular(String[] names, String[] synonyms) &#123;
         Solution solution = <span class="hljs-keyword">new</span> Solution();
 
-        System.out.println(solution.equalSubstring(<span class="hljs-string">&quot;abcd&quot;</span>, <span class="hljs-string">&quot;bcdf&quot;</span>, <span class="hljs-number">3</span>));
+        <span class="hljs-keyword">for</span> (String str : names) &#123;
+            <span class="hljs-keyword">int</span> index1 = str.indexOf(<span class="hljs-string">&#x27;(&#x27;</span>), index2 = str.indexOf(<span class="hljs-string">&#x27;)&#x27;</span>);
+            <span class="hljs-comment">// 孩子姓名</span>
+            String name = str.substring(<span class="hljs-number">0</span>, index1);
+            <span class="hljs-comment">// 频率</span>
+            <span class="hljs-keyword">int</span> frequency = Integer.valueOf(str.substring(index1 + <span class="hljs-number">1</span>, index2));
+            <span class="hljs-comment">//将节点一一加入到并查集中</span>
+            solution.nodes.put(name, name);
+            <span class="hljs-comment">// 把每个名字的频率一一映射</span>
+            solution.frequency.put(name, frequency);
+        &#125;
+
+        <span class="hljs-keyword">for</span> (String synonym : synonyms) &#123;
+            <span class="hljs-keyword">int</span> index = synonym.indexOf(<span class="hljs-string">&#x27;,&#x27;</span>);
+            String name1 = synonym.substring(<span class="hljs-number">1</span>, index);
+            String name2 = synonym.substring(index + <span class="hljs-number">1</span>, synonym.length() - <span class="hljs-number">1</span>);
+            <span class="hljs-comment">// 对于不存在的孩子姓名做一下处理</span>
+            <span class="hljs-keyword">if</span> (!solution.nodes.containsKey(name1)) &#123;
+                solution.nodes.put(name1, name1);
+                <span class="hljs-comment">//频率为0</span>
+                solution.frequency.put(name1, <span class="hljs-number">0</span>);
+            &#125;
+            <span class="hljs-keyword">if</span> (!solution.nodes.containsKey(name2)) &#123;
+                solution.nodes.put(name2, name2);
+                <span class="hljs-comment">//频率为0</span>
+                solution.frequency.put(name2, <span class="hljs-number">0</span>);
+            &#125;
+            solution.union(name1, name2);
+        &#125;
+
+        List&lt;String&gt; res = <span class="hljs-keyword">new</span> ArrayList&lt;&gt;();
+        <span class="hljs-keyword">for</span> (String str : names) &#123;
+            <span class="hljs-keyword">int</span> index1 = str.indexOf(<span class="hljs-string">&#x27;(&#x27;</span>);
+            String name = str.substring(<span class="hljs-number">0</span>, index1);
+            <span class="hljs-comment">// 是否为根节点</span>
+            <span class="hljs-keyword">if</span> (name.equals(solution.find(name))) &#123;
+                res.add(name + <span class="hljs-string">&quot;(&quot;</span> + solution.frequency.get(name) + <span class="hljs-string">&quot;)&quot;</span>);
+            &#125;
+        &#125;
+        <span class="hljs-keyword">return</span> res.toArray(<span class="hljs-keyword">new</span> String[res.size()]);
     &#125;
 &#125;</code></pre></div>
-
-
 
             </div>
             <hr>
@@ -323,9 +358,11 @@
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/tags/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/">每日一题</a>
+                      <a class="hover-with-bg" href="/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/">面试题</a>
                     
-                      <a class="hover-with-bg" href="/tags/%E5%8F%8C%E6%8C%87%E9%92%88/">双指针</a>
+                      <a class="hover-with-bg" href="/tags/%E5%B9%B6%E6%9F%A5%E9%9B%86/">并查集</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/">每日一题</a>
                     
                   </div>
                 
@@ -338,18 +375,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2021/02/09/%E3%80%90%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98%E3%80%91leetcode-84-%E6%9F%B1%E7%8A%B6%E5%9B%BE%E4%B8%AD%E6%9C%80%E5%A4%A7%E7%9A%84%E7%9F%A9%E5%BD%A2/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">【每日一题】leetcode-84-柱状图中最大的矩形</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2021/02/08/%E3%80%90%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98%E3%80%91leetcode-978-%E6%9C%80%E9%95%BF%E6%B9%8D%E6%B5%81%E5%AD%90%E6%95%B0%E7%BB%84/">
-                        <span class="hidden-mobile">【每日一题】leetcode-978-最长湍流子数组</span>
+                      <a href="/2021/02/17/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91%E6%9C%80%E5%B0%8F%E7%94%9F%E6%88%90%E6%A0%91/">
+                        <span class="hidden-mobile">【算法】最小生成树</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -364,7 +395,7 @@
               <article class="comments" id="comments">
                 
                 
-  <div id="SOHUCS" sid='http://example.com/2021/02/09/%E3%80%90%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98%E3%80%91leetcode-1208-%E5%B0%BD%E5%8F%AF%E8%83%BD%E4%BD%BF%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9B%B8%E7%AD%89/'></div>
+  <div id="SOHUCS" sid='http://example.com/2021/02/20/%E3%80%90%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98%E3%80%91leetcode-%E9%9D%A2%E8%AF%95%E9%A2%9817-07-%E5%A9%B4%E5%84%BF%E5%90%8D%E5%AD%97/'></div>
   <script type="text/javascript">
     Fluid.utils.waitElementVisible('SOHUCS', function() {
       var appid = 'cyviJi7Eb';
