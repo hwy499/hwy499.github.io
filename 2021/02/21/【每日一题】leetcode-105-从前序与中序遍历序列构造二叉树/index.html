@@ -184,7 +184,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      642 字
+      1.4k 字
     </span>
   
 
@@ -194,7 +194,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      9
+      20
        分钟
     </span>
   
@@ -236,13 +236,13 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：3 分钟前
+                  本文最后更新于：几秒前
                 
               </p>
             
             <div class="markdown-body">
-              <h1 id="leetcode-105-从前序与中序遍历序列构造二叉树"><a href="#leetcode-105-从前序与中序遍历序列构造二叉树" class="headerlink" title="leetcode-105-从前序与中序遍历序列构造二叉树"></a>leetcode-105-从前序与中序遍历序列构造二叉树</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>根据一棵树的前序遍历与中序遍历构造二叉树。</p>
-<p>注意:<br>你可以假设树中没有重复的元素。</p>
+              <h1 id="leetcode-105-从前序与中序遍历序列构造二叉树"><a href="#leetcode-105-从前序与中序遍历序列构造二叉树" class="headerlink" title="leetcode-105-从前序与中序遍历序列构造二叉树"></a><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal">leetcode-105-从前序与中序遍历序列构造二叉树</a></h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>根据一棵树的前序遍历与中序遍历构造二叉树。</p>
+<p>注意:<br><strong>你可以假设树中没有重复的元素。</strong></p>
 <p>例如，给出</p>
 <blockquote>
 <p>前序遍历 preorder = [3,9,20,15,7]<br>中序遍历 inorder = [9,3,15,20,7]</p>
@@ -254,7 +254,7 @@
 </blockquote>
 <p>来源：力扣（LeetCode）<br>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal">https://leetcode-cn.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal</a><br>著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。</p>
 <h2 id="我的想法"><a href="#我的想法" class="headerlink" title="我的想法"></a>我的想法</h2><p>假设我们要还原的树是下图</p>
-<img src="https://i.loli.net/2021/02/21/F5p8VYKeomudkHQ.png" srcset="/img/loading.gif" alt="tree.png" style="zoom:50%;">
+<img src="https://i.loli.net/2021/02/21/F5p8VYKeomudkHQ.png" srcset="/img/loading.gif" alt="tree.png" style="zoom: 67%;">
 
 <blockquote>
 <p> 前序遍历： [3, 9, 20, 15, 7 ]</p>
@@ -264,7 +264,133 @@
 <p>中序遍历 [ 20, 9, 15, 3, 7 ]</p>
 </blockquote>
 <p><strong>中序遍历</strong>首先遍历左子树，然后是根节点，最后是右子树。</p>
-<h2 id="我的代码"><a href="#我的代码" class="headerlink" title="我的代码"></a>我的代码</h2><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.util.Stack;
+<p>前序遍历先访问的是根节点，所以节点3就是根节点。由于中序遍历是在左子树都遍历完的时候才遍历根节点，所有在中序遍历中节点3前面的都是节点3的左子树节点，后面的都是节点3的右子树节点。也就是下面这样。</p>
+<img src="https://i.loli.net/2021/02/22/EFhsYmK8QGetv3f.png" srcset="/img/loading.gif" alt="step1.png" style="zoom: 67%;">
+
+<p>我们再使用同样的方式对左右子树继续划分，一直这样下去，直到不能再分为止，我们来看下代码。</p>
+<h2 id="我的代码"><a href="#我的代码" class="headerlink" title="我的代码"></a>我的代码</h2><h3 id="方法一：递归方式实现"><a href="#方法一：递归方式实现" class="headerlink" title="方法一：递归方式实现"></a>方法一：递归方式实现</h3><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.util.HashMap;
+
+<span class="hljs-comment">/**</span>
+<span class="hljs-comment"> * 二叉树节点</span>
+<span class="hljs-comment"> */</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">TreeNode</span> </span>&#123;
+    <span class="hljs-keyword">int</span> val;
+    TreeNode left;
+    TreeNode right;
+
+    TreeNode() &#123;
+    &#125;
+
+    TreeNode(<span class="hljs-keyword">int</span> val) &#123;
+        <span class="hljs-keyword">this</span>.val = val;
+    &#125;
+
+    TreeNode(<span class="hljs-keyword">int</span> val, TreeNode left, TreeNode right) &#123;
+        <span class="hljs-keyword">this</span>.val = val;
+        <span class="hljs-keyword">this</span>.left = left;
+        <span class="hljs-keyword">this</span>.right = right;
+    &#125;
+&#125;
+
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> </span>&#123;
+
+    <span class="hljs-comment">/**</span>
+<span class="hljs-comment">     * 利用hash表更快定位根节点在中序遍历中的位置</span>
+<span class="hljs-comment">     */</span>
+    <span class="hljs-keyword">private</span> HashMap&lt;Integer, Integer&gt; rootIndex;
+
+    <span class="hljs-comment">/**</span>
+<span class="hljs-comment">     * 功能：根据前序遍历以及中序遍历构建一个完整的二叉树</span>
+<span class="hljs-comment">     *</span>
+<span class="hljs-comment">     * <span class="hljs-doctag">@param</span> preorder</span>
+<span class="hljs-comment">     * <span class="hljs-doctag">@param</span> inorder</span>
+<span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span>
+<span class="hljs-comment">     */</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> TreeNode <span class="hljs-title">buildTree</span><span class="hljs-params">(<span class="hljs-keyword">int</span>[] preorder, <span class="hljs-keyword">int</span>[] inorder)</span> </span>&#123;
+        rootIndex = <span class="hljs-keyword">new</span> HashMap&lt;&gt;();
+        <span class="hljs-comment">// 维护每个节点在中序遍历中的索引，便于在递归中寻找根节点root在中序遍历结果中的位置</span>
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; inorder.length; i++) &#123;
+            rootIndex.put(inorder[i], i);
+        &#125;
+        <span class="hljs-keyword">return</span> obtainTree(preorder, inorder, <span class="hljs-number">0</span>, preorder.length - <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, inorder.length - <span class="hljs-number">1</span>);
+    &#125;
+
+    <span class="hljs-comment">/**</span>
+<span class="hljs-comment">     * 功能：根据前序遍历以及中序遍历构建一个完整的二叉树</span>
+<span class="hljs-comment">     *</span>
+<span class="hljs-comment">     * <span class="hljs-doctag">@param</span> preorder</span>
+<span class="hljs-comment">     * <span class="hljs-doctag">@param</span> inorder</span>
+<span class="hljs-comment">     * <span class="hljs-doctag">@param</span> pre_left</span>
+<span class="hljs-comment">     * <span class="hljs-doctag">@param</span> pre_right</span>
+<span class="hljs-comment">     * <span class="hljs-doctag">@param</span> in_left</span>
+<span class="hljs-comment">     * <span class="hljs-doctag">@param</span> in_right</span>
+<span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span>
+<span class="hljs-comment">     */</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> TreeNode <span class="hljs-title">obtainTree</span><span class="hljs-params">(<span class="hljs-keyword">int</span>[] preorder, <span class="hljs-keyword">int</span>[] inorder, <span class="hljs-keyword">int</span> pre_left, <span class="hljs-keyword">int</span> pre_right, <span class="hljs-keyword">int</span> in_left, <span class="hljs-keyword">int</span> in_right)</span> </span>&#123;
+        <span class="hljs-comment">// 出口条件</span>
+        <span class="hljs-keyword">if</span> (pre_left &gt; pre_right) &#123;
+            <span class="hljs-keyword">return</span> <span class="hljs-keyword">null</span>;
+        &#125;
+        <span class="hljs-comment">// pre_left 是每一个子树根节点所在的位置,根据 pre_left 初始化每一个子树的根节点</span>
+        TreeNode root = <span class="hljs-keyword">new</span> TreeNode(preorder[pre_left]);
+        <span class="hljs-comment">// 获取该节点在中序遍历中的位置</span>
+        <span class="hljs-keyword">int</span> root_index = rootIndex.get(root.val);
+        <span class="hljs-comment">// 获取子树中左子树中节点的个数</span>
+        <span class="hljs-keyword">int</span> leftSubtreeNodeNum = root_index - in_left;
+        <span class="hljs-comment">// 递归构建 root 的左子树</span>
+        <span class="hljs-comment">// pre_left +1 -&gt; pre_right + leftSubtreeNodeNum 是以 root 为根节点的左子树的先序遍历结果</span>
+        <span class="hljs-comment">// in_left -&gt; root_index - 1 是以 root 为根节点的子树的中序遍历结果</span>
+        root.left = obtainTree(preorder, inorder, pre_left + <span class="hljs-number">1</span>, pre_left + leftSubtreeNodeNum, in_left, root_index - <span class="hljs-number">1</span>);
+        <span class="hljs-comment">// 递归构建root的右子树</span>
+        <span class="hljs-comment">// pre_left + leftSubtreeNodeNum + 1 -&gt; pre_right 是以 root 为根节点的右子树的先序遍历结果</span>
+        <span class="hljs-comment">// root_index + 1 -&gt; in_right 是以 root 为根节点的右子树的中序遍历结果</span>
+        root.right = obtainTree(preorder, inorder, pre_left + leftSubtreeNodeNum + <span class="hljs-number">1</span>, pre_right, root_index + <span class="hljs-number">1</span>, in_right);
+        <span class="hljs-comment">// 构建完root的左右子树，将root返回</span>
+        <span class="hljs-keyword">return</span> root;
+    &#125;
+
+    <span class="hljs-comment">/**</span>
+<span class="hljs-comment">     * 前序遍历</span>
+<span class="hljs-comment">     *</span>
+<span class="hljs-comment">     * <span class="hljs-doctag">@param</span> node</span>
+<span class="hljs-comment">     */</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">preOrder</span><span class="hljs-params">(TreeNode node)</span> </span>&#123;
+        <span class="hljs-keyword">if</span> (node == <span class="hljs-keyword">null</span>) &#123;
+            <span class="hljs-keyword">return</span>;
+        &#125;
+        System.out.print(node.val + <span class="hljs-string">&quot; &quot;</span>);
+        preOrder(node.left);
+        preOrder(node.right);
+    &#125;
+
+    <span class="hljs-comment">/**</span>
+<span class="hljs-comment">     * 中序遍历</span>
+<span class="hljs-comment">     *</span>
+<span class="hljs-comment">     * <span class="hljs-doctag">@param</span> node</span>
+<span class="hljs-comment">     */</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">inOrder</span><span class="hljs-params">(TreeNode node)</span> </span>&#123;
+        <span class="hljs-keyword">if</span> (node == <span class="hljs-keyword">null</span>) &#123;
+            <span class="hljs-keyword">return</span>;
+        &#125;
+        inOrder(node.left);
+        System.out.print(node.val + <span class="hljs-string">&quot; &quot;</span>);
+        inOrder(node.right);
+    &#125;
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;
+        Solution solution = <span class="hljs-keyword">new</span> Solution();
+        <span class="hljs-keyword">int</span> preorder[] = <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[]&#123;<span class="hljs-number">3</span>, <span class="hljs-number">9</span>, <span class="hljs-number">20</span>, <span class="hljs-number">15</span>, <span class="hljs-number">7</span>&#125;;
+        <span class="hljs-keyword">int</span> inorder[] = <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[]&#123;<span class="hljs-number">20</span>, <span class="hljs-number">9</span>, <span class="hljs-number">15</span>, <span class="hljs-number">3</span>, <span class="hljs-number">7</span>&#125;;
+        TreeNode root = solution.buildTree(preorder, inorder);
+        System.out.println(<span class="hljs-string">&quot;前序遍历:&quot;</span>);
+        solution.preOrder(root);
+        System.out.println(<span class="hljs-string">&quot;\n中序遍历:&quot;</span>);
+        solution.inOrder(root);
+    &#125;
+&#125;
+</code></pre></div>
+<p><strong>复杂度：</strong>时间复杂度：O(n)，空间复杂度：O(n)</p>
+<h3 id="方法二：利用栈实现（递归实现的方法总是能用栈的方式实现）"><a href="#方法二：利用栈实现（递归实现的方法总是能用栈的方式实现）" class="headerlink" title="方法二：利用栈实现（递归实现的方法总是能用栈的方式实现）"></a>方法二：利用栈实现（递归实现的方法总是能用栈的方式实现）</h3><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.util.Stack;
 
 <span class="hljs-comment">/**</span>
 <span class="hljs-comment"> * 二叉树节点</span>
@@ -369,15 +495,8 @@
 
     &#125;
 
-
-&#125;
-</code></pre></div>
-
-
-
-
-
-
+&#125;</code></pre></div>
+<p><strong>复杂度：</strong>时间复杂度：O(n)，空间复杂度：O(n)</p>
 
             </div>
             <hr>
