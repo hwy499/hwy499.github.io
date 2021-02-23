@@ -184,7 +184,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.4k 字
+      1.6k 字
     </span>
   
 
@@ -194,7 +194,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      20
+      22
        分钟
     </span>
   
@@ -236,7 +236,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：几秒前
+                  本文最后更新于：35 分钟前
                 
               </p>
             
@@ -312,6 +312,7 @@
         <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; inorder.length; i++) &#123;
             rootIndex.put(inorder[i], i);
         &#125;
+        <span class="hljs-comment">// 调用obtainTree方法，根据前序以及中序遍历构建一颗二叉树</span>
         <span class="hljs-keyword">return</span> obtainTree(preorder, inorder, <span class="hljs-number">0</span>, preorder.length - <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, inorder.length - <span class="hljs-number">1</span>);
     &#125;
 
@@ -424,33 +425,43 @@
 <span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span>
 <span class="hljs-comment">     */</span>
     <span class="hljs-function"><span class="hljs-keyword">public</span> TreeNode <span class="hljs-title">buildTree</span><span class="hljs-params">(<span class="hljs-keyword">int</span>[] preorder, <span class="hljs-keyword">int</span>[] inorder)</span> </span>&#123;
+        <span class="hljs-comment">// 如果数组为空或长度为 0 说明不能创建二叉树</span>
         <span class="hljs-keyword">if</span> (preorder == <span class="hljs-keyword">null</span> || preorder.length == <span class="hljs-number">0</span>) &#123;
             <span class="hljs-keyword">return</span> <span class="hljs-keyword">null</span>;
         &#125;
+        <span class="hljs-comment">// 保存未处理过右子树的节点</span>
         Stack&lt;TreeNode&gt; stack = <span class="hljs-keyword">new</span> Stack&lt;&gt;();
+        <span class="hljs-comment">// 初始化树的根节点</span>
         TreeNode root = <span class="hljs-keyword">new</span> TreeNode(preorder[<span class="hljs-number">0</span>]);
+        <span class="hljs-comment">// 将根节点压入栈中</span>
         stack.push(root);
+        <span class="hljs-comment">// 中序数组指针</span>
         <span class="hljs-keyword">int</span> index = <span class="hljs-number">0</span>;
+        <span class="hljs-comment">// 循环中优先处理每个父节点的左孩子，如果节点没有了左孩子，</span>
+        <span class="hljs-comment">// 就遍历栈中节点，处理节点的右孩子，没有右孩子就不做处理</span>
         <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; i &lt; preorder.length; i++) &#123;
+            <span class="hljs-comment">// 获取栈顶元素</span>
             TreeNode temp = stack.peek();
-            <span class="hljs-comment">// 如果栈顶元素不等于此时的中序元素 说明要构建右子树了 等于的话就接着构建构建左子树</span>
+            <span class="hljs-comment">// 判断节点 temp 存不存在左孩子</span>
+            <span class="hljs-comment">// 如果当前节点不是 inorder[index],说明还有左孩子</span>
             <span class="hljs-keyword">if</span> (temp.val != inorder[index]) &#123;
-                <span class="hljs-comment">// 初始化节点的左子树</span>
+                <span class="hljs-comment">// 初始化 temp 节点的左子树</span>
                 temp.left = <span class="hljs-keyword">new</span> TreeNode(preorder[i]);
                 <span class="hljs-comment">// 将此压入栈中</span>
                 stack.push(temp.left);
             &#125; <span class="hljs-keyword">else</span> &#123;
-                <span class="hljs-comment">// 寻找右子树的根节点 如果栈顶元素不等于此时的中序元素，说明找到了</span>
+                <span class="hljs-comment">// 节点temp没有左孩子了，就需要遍历栈中元素，知道找到拥有右孩子的节点</span>
                 <span class="hljs-keyword">while</span> (!stack.isEmpty() &amp;&amp; stack.peek().val == inorder[index]) &#123;
+                    <span class="hljs-comment">// 将栈顶节点弹出，表示该节点已经处理完毕</span>
                     temp = stack.pop();
+                    <span class="hljs-comment">// 指向中序数组的指针向右移动，因为index指向的节点都已经被处理完毕</span>
                     index++;
                 &#125;
-                <span class="hljs-comment">// 初始化节点的右子树</span>
+                <span class="hljs-comment">// 此时说明已经找到拥有右孩子的节点了，初始化该节点的右孩子</span>
                 temp.right = <span class="hljs-keyword">new</span> TreeNode(preorder[i]);
-                <span class="hljs-comment">// 将此压入栈中</span>
+                <span class="hljs-comment">// 并将此节点压入栈中</span>
                 stack.push(temp.right);
             &#125;
-
         &#125;
         <span class="hljs-keyword">return</span> root;
     &#125;
