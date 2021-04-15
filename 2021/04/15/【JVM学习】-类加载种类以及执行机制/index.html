@@ -17,7 +17,7 @@
   <meta name="description" content="good good study,day day up">
   <meta name="author" content="何文垚">
   <meta name="keywords" content="">
-  <title>【开发术语】第一篇 - hwyblog</title>
+  <title>hwyblog</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
 
@@ -162,7 +162,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="【开发术语】第一篇">
+            <span class="h2" id="subtitle" title="">
               
             </span>
 
@@ -172,7 +172,7 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2021-04-15 20:18" pubdate>
+      <time datetime="2021-04-15 22:32" pubdate>
         2021年4月15日 晚上
       </time>
     </span>
@@ -184,7 +184,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.4k 字
+      1.1k 字
     </span>
   
 
@@ -194,7 +194,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      14
+      12
        分钟
     </span>
   
@@ -232,19 +232,33 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">【开发术语】第一篇</h1>
+            <h1 style="display: none"></h1>
             
               <p class="note note-info">
                 
-                  本文最后更新于：3 小时前
+                  本文最后更新于：4 分钟前
                 
               </p>
             
             <div class="markdown-body">
-              <h1 id="吞吐量（TPS）、QPS、并发数、响应时间（RT）概念"><a href="#吞吐量（TPS）、QPS、并发数、响应时间（RT）概念" class="headerlink" title="吞吐量（TPS）、QPS、并发数、响应时间（RT）概念"></a>吞吐量（TPS）、QPS、并发数、响应时间（RT）概念</h1><h3 id="吞吐量-Throughput"><a href="#吞吐量-Throughput" class="headerlink" title="吞吐量(Throughput)"></a>吞吐量(Throughput)</h3><p>   吞吐量是指系统在单位时间内处理请求的数量。对于无并发的应用系统而言，吞吐量与响应时间成严格的反比关系，实际上此时吞吐量就是响应时间的倒数。前面已经说过，对于单用户的系统，响应时间（或者系统响应时间和应用延迟时间）可以很好地度量系统的性能，但对于并发系统，通常需要用吞吐量作为性能指标。<br>　　对于一个多用户的系统，如果只有一个用户使用时系统的平均响应时间是t，当有你n个用户使用时，每个用户看到的响应时间通常并不是n×t，而往往比n×t小很多（当然，在某些特殊情况下也可能比n×t大，甚至大很多）。这是因为处理每个请求需要用到很多资源，由于每个请求的处理过程中有许多不走难以并发执行，这导致在具体的一个时间点，所占资源往往并不多。也就是说在处理单个请求时，在每个时间点都可能有许多资源被闲置，当处理多个请求时，如果资源配置合理，每个用户看到的平均响应时间并不随用户数的增加而线性增加。实际上，不同系统的平均响应时间随用户数增加而增长的速度也不大相同，这也是采用吞吐量来度量并发系统的性能的主要原因。一般而言，吞吐量是一个比较通用的指标，两个具有不同用户数和用户使用模式的系统，如果其最大吞吐量基本一致，则可以判断两个系统的处理能力基本一致。 </p>
-<h3 id="QPS每秒查询率-Query-Per-Second"><a href="#QPS每秒查询率-Query-Per-Second" class="headerlink" title="QPS每秒查询率(Query Per Second)"></a>QPS每秒查询率(Query Per Second)</h3><p>　　每秒查询率QPS是对一个特定的查询服务器在规定时间内所处理流量多少的衡量标准，在因特网上，作为域名系统服务器的机器的性能经常用每秒查询率来衡量。对应fetches/sec，即每秒的响应请求数，也即是最大吞吐能力。 （看来是类似于TPS，只是应用于特定场景的吞吐量）</p>
-<h3 id="并发用户数"><a href="#并发用户数" class="headerlink" title="并发用户数"></a>并发用户数</h3><p>　　并发用户数是指系统可以同时承载的正常使用系统功能的用户的数量。与吞吐量相比，并发用户数是一个更直观但也更笼统的性能指标。实际上，并发用户数是一个非常不准确的指标，因为用户不同的使用模式会导致不同用户在单位时间发出不同数量的请求。一网站系统为例，假设用户只有注册后才能使用，但注册用户并不是每时每刻都在使用该网站，因此具体一个时刻只有部分注册用户同时在线，在线用户就在浏览网站时会花很多时间阅读网站上的信息，因而具体一个时刻只有部分在线用户同时向系统发出请求。这样，对于网站系统我们会有三个关于用户数的统计数字：注册用户数、在线用户数和同时发请求用户数。由于注册用户可能长时间不登陆网站，使用注册用户数作为性能指标会造成很大的误差。而在线用户数和同事发请求用户数都可以作为性能指标。相比而言，以在线用户作为性能指标更直观些，而以同时发请求用户数作为性能指标更准确些。 </p>
-<h3 id="响应时间-RT"><a href="#响应时间-RT" class="headerlink" title="响应时间(RT)"></a>响应时间(RT)</h3><p>　　响应时间是指系统对请求作出响应的时间。直观上看，这个指标与人对软件性能的主观感受是非常一致的，因为它完整地记录了整个计算机系统处理请求的时间。由于一个系统通常会提供许多功能，而不同功能的处理逻辑也千差万别，因而不同功能的响应时间也不尽相同，甚至同一功能在不同输入数据的情况下响应时间也不相同。所以，在讨论一个系统的响应时间时，人们通常是指该系统所有功能的平均时间或者所有功能的最大响应时间。当然，往往也需要对每个或每组功能讨论其平均响应时间和最大响应时间。<br>　　对于单机的没有并发操作的应用系统而言，人们普遍认为响应时间是一个合理且准确的性能指标。需要指出的是，响应时间的绝对值并不能直接反映软件的性能的高低，软件性能的高低实际上取决于用户对该响应时间的接受程度。对于一个游戏软件来说，响应时间小于100毫秒应该是不错的，响应时间在1秒左右可能属于勉强可以接受，如果响应时间达到3秒就完全难以接受了。而对于编译系统来说，完整编译一个较大规模软件的源代码可能需要几十分钟甚至更长时间，但这些响应时间对于用户来说都是可以接受的。 </p>
+              <h2 id="【JVM学习】-类加载器种类以及类加载机制"><a href="#【JVM学习】-类加载器种类以及类加载机制" class="headerlink" title="【JVM学习】-类加载器种类以及类加载机制"></a>【JVM学习】-类加载器种类以及类加载机制</h2><h3 id="类加载器的种类"><a href="#类加载器的种类" class="headerlink" title="类加载器的种类"></a>类加载器的种类</h3><h4 id="（1）启动类加载器（Bootstrap-ClassLoader）"><a href="#（1）启动类加载器（Bootstrap-ClassLoader）" class="headerlink" title="（1）启动类加载器（Bootstrap ClassLoader）"></a>（1）启动类加载器（Bootstrap ClassLoader）</h4><p>它用来加载 Java 的核心类，是用原生代码来实现的，并不继承自 java.lang.ClassLoader（负责加载$JAVA_HOME中jre/lib/rt.jar里所有的class，由C++实现，不是ClassLoader子类）。由于引导类加载器涉及到虚拟机本地实现细节，开发者无法直接获取到启动类加载器的引用，所以不允许直接通过引用进行操作。</p>
+<h4 id="（2）扩展类加载器（Extension-ClassLoader）"><a href="#（2）扩展类加载器（Extension-ClassLoader）" class="headerlink" title="（2）扩展类加载器（Extension ClassLoader）"></a>（2）扩展类加载器（Extension ClassLoader）</h4><p>它负责加载JRE的扩展目录，lib/ext或者由java.ext.dirs系统属性指定的目录中的JAR包的类。由Java语言实现，父类加载器为null。</p>
+<h4 id="（3）应用程序类加载器（Application-ClassLoader）"><a href="#（3）应用程序类加载器（Application-ClassLoader）" class="headerlink" title="（3）应用程序类加载器（Application ClassLoader）"></a>（3）应用程序类加载器（Application ClassLoader）</h4><p>它负责在JVM启动时加载来自Java命令的-classpath选项、java.class.path系统属性，或者CLASSPATH换将变量所指定的JAR包和类路径。程序可以通过ClassLoader的静态方法getSystemClassLoader()来获取系统类加载器。如果没有特别指定，则用户自定义的类加载器都以此类加载器作为父加载器。由Java语言实现，父类加载器为ExtClassLoader。</p>
+<h4 id="（4）自定义类加载器"><a href="#（4）自定义类加载器" class="headerlink" title="（4）自定义类加载器"></a>（4）自定义类加载器</h4><p>除了上面那几种之外，还可以自定义类加载器，去根据你自己的需求加载你的类。</p>
+<h3 id="类加载机制："><a href="#类加载机制：" class="headerlink" title="类加载机制："></a>类加载机制：</h3><p>​                                        <img src="https://i.loli.net/2021/04/15/SL5I9gabe2oUcDY.png" srcset="/img/loading.gif" alt="双亲加载.png"></p>
+<p><strong>JVM的类加载机制主要有如下3种:</strong></p>
+<ul>
+<li>全盘负责：所谓全盘负责，就是当一个类加载器负责加载某个Class时，该Class所依赖和引用其他Class也将由该类加载器负责载入，除非显示使用另外一个类加载器来载入。</li>
+<li>双亲委派：所谓的双亲委派，则是先让父类加载器试图加载该Class，只有在父类加载器无法加载该类时才尝试从自己的类路径中加载该类。通俗的讲，就是某个特定的类加载器在接到加载类的请求时，首先将加载任务委托给父加载器，依次递归，如果父加载器可以完成类加载任务，就成功返回；只有父加载器无法完成此加载任务时，才自己去加载。</li>
+<li>缓存机制。缓存机制将会保证所有加载过的Class都会被缓存，当程序中需要使用某个Class时，类加载器先从缓存区中搜寻该Class，只有当缓存区中不存在该Class对象时，系统才会读取该类对应的二进制数据，并将其转换成Class对象，存入缓冲区中。这就是为很么修改了Class后，必须重新启动JVM，程序所做的修改才会生效的原因。</li>
+</ul>
+<p><strong>说明一下双亲委派机制：</strong></p>
+<ul>
+<li><p>双亲委派机制，其工作原理的是，如果一个类加载器收到了类加载请求，它并不会自己先去加载，而是把这个请求委托给父类的加载器去执行，如果父类加载器还存在其父类加载器，则进一步向上委托，依次递归，请求最终将到达顶层的启动类加载器，如果父类加载器可以完成类加载任务，就成功返回，倘若父类加载器无法完成此加载任务，子加载器才会尝试自己去加载，这就是双亲委派模式，即每个儿子都很懒，每次有活就丢给父亲去干，直到父亲说这件事我也干不了时，儿子自己才想办法去完成。</p>
+</li>
+<li><p>双亲委派机制的优势：采用双亲委派模式的是好处是Java类随着它的类加载器一起具备了一种带有优先级的层次关系，通过这种层级关可以避免类的重复加载，当父亲已经加载了该类时，就没有必要子ClassLoader再加载一次。其次是考虑到安全因素，java核心api中定义类型不会被随意替换，假设通过网络传递一个名为java.lang.Integer的类，通过双亲委托模式传递到启动类加载器，而启动类加载器在核心Java API发现这个名字的类，发现该类已被加载，并不会重新加载网络传递的过来的java.lang.Integer，而直接返回已加载过的Integer.class，这样便可以防止核心API库被随意篡改。</p>
+</li>
+</ul>
 
             </div>
             <hr>
@@ -254,7 +268,7 @@
                   <div class="post-meta mr-3">
                     <i class="iconfont icon-category"></i>
                     
-                      <a class="hover-with-bg" href="/categories/%E5%BC%80%E5%8F%91%E5%B8%B8%E8%AF%86/">开发常识</a>
+                      <a class="hover-with-bg" href="/categories/JVM/">JVM</a>
                     
                   </div>
                 
@@ -262,7 +276,11 @@
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/tags/%E5%BC%80%E5%8F%91%E6%9C%AF%E8%AF%AD-%E5%BC%80%E5%8F%91%E5%B8%B8%E8%AF%86/">开发术语 开发常识</a>
+                      <a class="hover-with-bg" href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/">类加载器</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE/">双亲委派</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/">类加载机制</a>
                     
                   </div>
                 
@@ -275,9 +293,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2021/04/15/%E3%80%90JVM%E5%AD%A6%E4%B9%A0%E3%80%91-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E7%A7%8D%E7%B1%BB%E4%BB%A5%E5%8F%8A%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6/">
+                      <a href="/2021/04/15/%E3%80%90JVM%E5%AD%A6%E4%B9%A0%E3%80%91-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E7%A7%8D%E7%B1%BB%E4%BB%A5%E5%8F%8A%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6/">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile"></span>
+                        <span class="hidden-mobile">【JVM学习】-类加载器种类以及执行机制</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -285,8 +303,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2021/02/24/%E3%80%90%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98%E3%80%91leetcode-124-%E4%BA%8C%E5%8F%89%E6%A0%91%E4%B8%AD%E7%9A%84%E6%9C%80%E5%A4%A7%E8%B7%AF%E5%BE%84%E5%92%8C/">
-                        <span class="hidden-mobile">【每日一题】leetcode-124-二叉树中的最大路径和</span>
+                      <a href="/2021/04/15/%E3%80%90%E5%BC%80%E5%8F%91%E6%9C%AF%E8%AF%AD%E3%80%91%E7%AC%AC%E4%B8%80%E7%AF%87/">
+                        <span class="hidden-mobile">【开发术语】第一篇</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -301,7 +319,7 @@
               <article class="comments" id="comments">
                 
                 
-  <div id="SOHUCS" sid='http://example.com/2021/04/15/%E3%80%90%E5%BC%80%E5%8F%91%E6%9C%AF%E8%AF%AD%E3%80%91%E7%AC%AC%E4%B8%80%E7%AF%87/'></div>
+  <div id="SOHUCS" sid='http://example.com/2021/04/15/%E3%80%90JVM%E5%AD%A6%E4%B9%A0%E3%80%91-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E7%A7%8D%E7%B1%BB%E4%BB%A5%E5%8F%8A%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6/'></div>
   <script type="text/javascript">
     Fluid.utils.waitElementVisible('SOHUCS', function() {
       var appid = 'cyviJi7Eb';
