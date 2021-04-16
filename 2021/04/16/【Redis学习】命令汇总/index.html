@@ -17,7 +17,7 @@
   <meta name="description" content="good good study,day day up">
   <meta name="author" content="何文垚">
   <meta name="keywords" content="">
-  <title>【JVM学习】-类加载器种类以及类加载机制 - hwyblog</title>
+  <title>【Redis学习】命令汇总 - hwyblog</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
 
@@ -162,7 +162,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="【JVM学习】-类加载器种类以及类加载机制">
+            <span class="h2" id="subtitle" title="【Redis学习】命令汇总">
               
             </span>
 
@@ -172,8 +172,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2021-04-15 22:32" pubdate>
-        2021年4月15日 晚上
+      <time datetime="2021-04-16 08:02" pubdate>
+        2021年4月16日 早上
       </time>
     </span>
   
@@ -184,7 +184,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      970 字
+      1.8k 字
     </span>
   
 
@@ -194,7 +194,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      10
+      22
        分钟
     </span>
   
@@ -232,30 +232,129 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">【JVM学习】-类加载器种类以及类加载机制</h1>
+            <h1 style="display: none">【Redis学习】命令汇总</h1>
             
               <p class="note note-info">
                 
-                  本文最后更新于：9 小时前
+                  本文最后更新于：几秒前
                 
               </p>
             
             <div class="markdown-body">
-              <h2 id="【JVM学习】-类加载器种类以及类加载机制"><a href="#【JVM学习】-类加载器种类以及类加载机制" class="headerlink" title="【JVM学习】-类加载器种类以及类加载机制"></a>【JVM学习】-类加载器种类以及类加载机制</h2><h3 id="类加载器的种类"><a href="#类加载器的种类" class="headerlink" title="类加载器的种类"></a>类加载器的种类</h3><h4 id="（1）启动类加载器（Bootstrap-ClassLoader）"><a href="#（1）启动类加载器（Bootstrap-ClassLoader）" class="headerlink" title="（1）启动类加载器（Bootstrap ClassLoader）"></a>（1）启动类加载器（Bootstrap ClassLoader）</h4><p>它用来加载 Java 的核心类，是用原生代码来实现的，并不继承自 java.lang.ClassLoader（负责加载$JAVA_HOME中jre/lib/rt.jar里所有的class，由C++实现，不是ClassLoader子类）。由于引导类加载器涉及到虚拟机本地实现细节，开发者无法直接获取到启动类加载器的引用，所以不允许直接通过引用进行操作。</p>
-<h4 id="（2）扩展类加载器（Extension-ClassLoader）"><a href="#（2）扩展类加载器（Extension-ClassLoader）" class="headerlink" title="（2）扩展类加载器（Extension ClassLoader）"></a>（2）扩展类加载器（Extension ClassLoader）</h4><p>它负责加载JRE的扩展目录，lib/ext或者由java.ext.dirs系统属性指定的目录中的JAR包的类。由Java语言实现，父类加载器为null。</p>
-<h4 id="（3）应用程序类加载器（Application-ClassLoader）"><a href="#（3）应用程序类加载器（Application-ClassLoader）" class="headerlink" title="（3）应用程序类加载器（Application ClassLoader）"></a>（3）应用程序类加载器（Application ClassLoader）</h4><p>它负责在JVM启动时加载来自Java命令的-classpath选项、java.class.path系统属性，或者CLASSPATH换将变量所指定的JAR包和类路径。程序可以通过ClassLoader的静态方法getSystemClassLoader()来获取系统类加载器。如果没有特别指定，则用户自定义的类加载器都以此类加载器作为父加载器。由Java语言实现，父类加载器为ExtClassLoader。</p>
-<h4 id="（4）自定义类加载器"><a href="#（4）自定义类加载器" class="headerlink" title="（4）自定义类加载器"></a>（4）自定义类加载器</h4><p>除了上面那几种之外，还可以自定义类加载器，去根据你自己的需求加载你的类。</p>
-<h3 id="类加载机制："><a href="#类加载机制：" class="headerlink" title="类加载机制："></a>类加载机制：</h3><p>​                                        <img src="https://i.loli.net/2021/04/15/SL5I9gabe2oUcDY.png" srcset="/img/loading.gif" alt="双亲加载.png"></p>
-<p><strong>JVM的类加载机制主要有如下3种:</strong></p>
-<ul>
-<li>全盘负责：所谓全盘负责，就是当一个类加载器负责加载某个Class时，该Class所依赖和引用其他Class也将由该类加载器负责载入，除非显示使用另外一个类加载器来载入。</li>
-<li>双亲委派：所谓的双亲委派，则是先让父类加载器试图加载该Class，只有在父类加载器无法加载该类时才尝试从自己的类路径中加载该类。通俗的讲，就是某个特定的类加载器在接到加载类的请求时，首先将加载任务委托给父加载器，依次递归，如果父加载器可以完成类加载任务，就成功返回；只有父加载器无法完成此加载任务时，才自己去加载。</li>
-<li>缓存机制。缓存机制将会保证所有加载过的Class都会被缓存，当程序中需要使用某个Class时，类加载器先从缓存区中搜寻该Class，只有当缓存区中不存在该Class对象时，系统才会读取该类对应的二进制数据，并将其转换成Class对象，存入缓冲区中。这就是为很么修改了Class后，必须重新启动JVM，程序所做的修改才会生效的原因。</li>
+              <h2 id="Redis-命令汇总"><a href="#Redis-命令汇总" class="headerlink" title="Redis 命令汇总"></a>Redis 命令汇总</h2><h3 id="1、连接操作相关的命令"><a href="#1、连接操作相关的命令" class="headerlink" title="1、连接操作相关的命令"></a>1、连接操作相关的命令</h3><ul>
+<li>ping：测试连接是否存活如果正常会返回 pong</li>
+<li>echo：打印</li>
+<li>select：切换到指定的数据库，数据库索引号 index 用数字值指定，以 0 作为起始索引值</li>
+<li>quit：关闭连接（connection）</li>
+<li>auth：简单密码认证</li>
 </ul>
-<p><strong>说明一下双亲委派机制：</strong></p>
-<ul>
-<li>双亲委派机制，其工作原理的是，是指多个类加载器之间存在父子关系的时候，某个class类具体由哪个加载器进行加载的问题。其具体的过程表现为：当一个类加载的过程中，它首先不会去加载，而是委托给自己的父类去加载，父类又委托给自己的父类。因此所有的类加载都会委托给顶层的父类，即Bootstrap Classloader进行加载，然后父类自己无法完成这个加载请求，子加载器才会尝试自己去加载。</li>
-<li>双亲委派机制的优势：使用双亲委派模型，Java类随着它的加载器一起具备了一种带有优先级的层次关系，通过这种层次模型，可以避免类的重复加载，也可以避免核心类被不同的类加载器加载到内存中造成冲突和混乱，从而保证了Java核心库的安全。</li>
+<h3 id="2、服务端相关命令"><a href="#2、服务端相关命令" class="headerlink" title="2、服务端相关命令"></a>2、服务端相关命令</h3><ul>
+<li>time：返回当前服务器时间</li>
+<li>client list: 返回所有连接到服务器的客户端信息和统计数据 参见 - <a target="_blank" rel="noopener" href="http://redisdoc.com/server/client_list.html">http://redisdoc.com/server/client_list.html</a></li>
+<li>client kill ip:port：关闭地址为 ip:port 的客户端</li>
+<li>save：将数据同步保存到磁盘</li>
+<li>bgsave：将数据异步保存到磁盘</li>
+<li>lastsave：返回上次成功将数据保存到磁盘的Unix时戳</li>
+<li>shundown：将数据同步保存到磁盘，然后关闭服务</li>
+<li>info：提供服务器的信息和统计</li>
+<li>config resetstat：重置 info 命令中的某些统计数据</li>
+<li>config get：获取配置文件信息</li>
+<li>config set：动态地调整 Redis 服务器的配置(configuration)而无须重启，可以修改的配置参数可以使用命令 CONFIG GET * 来列出</li>
+<li>config rewrite：Redis 服务器时所指定的 redis.conf 文件进行改写</li>
+<li>monitor：实时转储收到的请求</li>
+<li>slaveof：改变复制策略设置</li>
+</ul>
+<h3 id="3、发布订阅相关命令"><a href="#3、发布订阅相关命令" class="headerlink" title="3、发布订阅相关命令"></a>3、发布订阅相关命令</h3><ul>
+<li>psubscribe：订阅一个或多个符合给定模式的频道 例如 psubscribe news.* tweet.*</li>
+<li>publish：将信息 message 发送到指定的频道 channel 例如 publish msg “good morning”</li>
+<li>pubsub channels：列出当前的活跃频道 例如 PUBSUB CHANNELS news.i*</li>
+<li>pubsub numsub：返回给定频道的订阅者数量 例如 PUBSUB NUMSUB <a target="_blank" rel="noopener" href="http://news.it/">news.it</a> news.internet news.sport news.music</li>
+<li>pubsub numpat：返回客户端订阅的所有模式的数量总和</li>
+<li>punsubscribe：指示客户端退订所有给定模式。</li>
+<li>subscribe：订阅给定的一个或多个频道的信息。例如 subscribe msg chat_room</li>
+<li>unsubscribe：指示客户端退订给定的频道。</li>
+</ul>
+<h3 id="4、对-KEY-操作的命令"><a href="#4、对-KEY-操作的命令" class="headerlink" title="4、对 KEY 操作的命令"></a>4、对 KEY 操作的命令</h3><ul>
+<li>exists(key)：确认一个 key 是否存在</li>
+<li>del(key)：删除一个 key</li>
+<li>type(key)：返回值的类型</li>
+<li>keys(pattern)：返回满足给定 pattern 的所有 key</li>
+<li>randomkey：随机返回 key 空间的一个</li>
+<li>keyrename(oldname, newname)：重命名 key</li>
+<li>dbsize：返回当前数据库中 key 的数目</li>
+<li>expire：设定一个 key 的活动时间（s）</li>
+<li>ttl：获得一个 key 的活动时间</li>
+<li>move(key, dbindex)：移动当前数据库中的 key 到 dbindex 数据库</li>
+<li>flushdb：删除当前选择数据库中的所有 key</li>
+<li>flushall：删除所有数据库中的所有 key</li>
+</ul>
+<h3 id="5、对-String-操作的命令"><a href="#5、对-String-操作的命令" class="headerlink" title="5、对 String 操作的命令"></a>5、对 String 操作的命令</h3><ul>
+<li>set(key, value)：给数据库中名称为 key 的 string 赋予值 value</li>
+<li>get(key)：返回数据库中名称为 key 的 string 的 value</li>
+<li>getset(key, value)：给名称为 key 的 string 赋予上一次的 value</li>
+<li>mget(key1, key2,…, key N)：返回库中多个 string 的 value</li>
+<li>setnx(key, value)：添加 string，名称为 key，值为 value</li>
+<li>setex(key, time, value)：向库中添加 string，设定过期时间 time</li>
+<li>mset(key N, value N)：批量设置多个 string 的值</li>
+<li>msetnx(key N, value N)：如果所有名称为 key i 的 string 都不存在</li>
+<li>incr(key)：名称为 key 的 string 增 1 操作</li>
+<li>incrby(key, integer)：名称为 key 的 string 增加 integer</li>
+<li>decr(key)：名称为 key 的 string 减 1 操作</li>
+<li>decrby(key, integer)：名称为 key 的 string 减少 integer</li>
+<li>append(key, value)：名称为 key 的 string 的值附加 value</li>
+<li>substr(key, start, end)：返回名称为 key 的 string 的 value 的子串</li>
+</ul>
+<h3 id="6、对-List-操作的命令"><a href="#6、对-List-操作的命令" class="headerlink" title="6、对 List 操作的命令"></a>6、对 List 操作的命令</h3><ul>
+<li>rpush(key, value)：在名称为 key 的 list 尾添加一个值为 value 的元素</li>
+<li>lpush(key, value)：在名称为 key 的 list 头添加一个值为 value 的元素</li>
+<li>llen(key)：返回名称为 key 的 list 的长度</li>
+<li>lrange(key, start, end)：返回名称为 key 的 list 中 start 至 end 之间的元素</li>
+<li>ltrim(key, start, end)：截取名称为 key 的 list</li>
+<li>lindex(key, index)：返回名称为 key 的 list 中 index 位置的元素</li>
+<li>lset(key, index, value)：给名称为 key 的 list 中 index 位置的元素赋值</li>
+<li>lrem(key, count, value)：删除 count 个 key 的 list 中值为 value 的元素</li>
+<li>lpop(key)：返回并删除名称为 key 的 list 中的首元素</li>
+<li>rpop(key)：返回并删除名称为 key 的 list 中的尾元素</li>
+<li>blpop(key1, key2,… key N, timeout)：lpop 命令的 block 版本。</li>
+<li>brpop(key1, key2,… key N, timeout)：rpop 的 block 版本。</li>
+<li>rpoplpush(srckey, dstkey)：返回并删除名称为 srckey 的 list 的尾元素，并将该元素添加到名称为 dstkey 的 list 的头部</li>
+</ul>
+<h3 id="7、对-Set-操作的命令"><a href="#7、对-Set-操作的命令" class="headerlink" title="7、对 Set 操作的命令"></a>7、对 Set 操作的命令</h3><ul>
+<li>sadd(key, member)：向名称为 key 的 set 中添加元素 member</li>
+<li>srem(key, member) ：删除名称为 key 的 set 中的元素 member</li>
+<li>spop(key) ：随机返回并删除名称为 key 的 set 中一个元素</li>
+<li>smove(srckey, dstkey, member) ：移到集合元素</li>
+<li>scard(key) ：返回名称为 key 的 set 的基数</li>
+<li>sismember(key, member) ：member 是否是名称为 key 的 set 的元素</li>
+<li>sinter(key1, key2,…key N) ：求交集</li>
+<li>sinterstore(dstkey, (keys)) ：求交集并将交集保存到 dstkey 的集合</li>
+<li>sunion(key1, (keys)) ：求并集</li>
+<li>sunionstore(dstkey, (keys)) ：求并集并将并集保存到 dstkey 的集合</li>
+<li>sdiff(key1, (keys)) ：求差集</li>
+<li>sdiffstore(dstkey, (keys)) ：求差集并将差集保存到 dstkey 的集合</li>
+<li>smembers(key) ：返回名称为 key 的 set 的所有元素</li>
+<li>srandmember(key) ：随机返回名称为 key 的 set 的一个元素</li>
+</ul>
+<h3 id="8、-Hash-操作的命令"><a href="#8、-Hash-操作的命令" class="headerlink" title="8、 Hash 操作的命令"></a>8、 Hash 操作的命令</h3><ul>
+<li>hset(key, field, value)：向名称为 key 的 hash 中添加元素 field</li>
+<li>hget(key, field)：返回名称为 key 的 hash 中 field 对应的 value</li>
+<li>hmget(key, (fields))：返回名称为 key 的 hash 中 field i 对应的 value</li>
+<li>hmset(key, (fields))：向名称为 key 的 hash 中添加元素 field</li>
+<li>hincrby(key, field, integer)：将名称为 key 的 hash 中 field 的 value 增加 integer</li>
+<li>hexists(key, field)：名称为 key 的 hash 中是否存在键为 field 的域</li>
+<li>hdel(key, field)：删除名称为 key 的 hash 中键为 field 的域</li>
+<li>hlen(key)：返回名称为 key 的 hash 中元素个数</li>
+<li>hkeys(key)：返回名称为 key 的 hash 中所有键</li>
+<li>hvals(key)：返回名称为 key 的 hash 中所有键对应的 value</li>
+<li>hgetall(key)：返回名称为 key 的 hash 中所有的键（field）及其对应的 value</li>
+</ul>
+<h3 id="9、Redis-Sentinel"><a href="#9、Redis-Sentinel" class="headerlink" title="9、Redis Sentinel"></a>9、Redis Sentinel</h3><ul>
+<li>ping ：返回 pong</li>
+<li>sentinel masters ：列出所有被监视的主服务器，以及这些主服务器的当前状态。</li>
+<li>sentinel slaves：列出给定主服务器的所有从服务器，以及这些从服务器的当前状态。</li>
+<li>sentinel get-master-addr-by-name：返回给定名字的主服务器的 IP 地址和端口号。如果这个主服务器正在执行故障转移操作，或者针对这个主服务器的故障转移操作已经完成，那么这个命令返回新的主服务器的 IP 地址和端口号。</li>
+<li>sentinel reset：重置所有名字和给定模式 pattern 相匹配的主服务器。pattern 参数是一个 Glob 风格的模式 重置操作清楚主服务器目前的所有状态，包括正在执行中的故障转移，并移除目前已经发现和关联的，主服务器的所有从服务器和 Sentinel 。</li>
+<li>sentinel failover：当主服务器失效时，在不询问其他 Sentinel 意见的情况下，强制开始一次自动故障迁移（不过发起故障转移的 Sentinel 会向其他 Sentinel 发送一个新的配置，其他 Sentinel 会根据这个配置进行相应的更新）。</li>
 </ul>
 
             </div>
@@ -266,7 +365,9 @@
                   <div class="post-meta mr-3">
                     <i class="iconfont icon-category"></i>
                     
-                      <a class="hover-with-bg" href="/categories/JVM/">JVM</a>
+                      <a class="hover-with-bg" href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/">中间件</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/redis/">redis</a>
                     
                   </div>
                 
@@ -274,11 +375,7 @@
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8/">类加载器</a>
-                    
-                      <a class="hover-with-bg" href="/tags/%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE/">双亲委派</a>
-                    
-                      <a class="hover-with-bg" href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/">类加载机制</a>
+                      <a class="hover-with-bg" href="/tags/redis/">redis</a>
                     
                   </div>
                 
@@ -291,18 +388,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2021/04/16/%E3%80%90Redis%E5%AD%A6%E4%B9%A0%E3%80%91%E5%91%BD%E4%BB%A4%E6%B1%87%E6%80%BB/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">【Redis学习】命令汇总</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2021/04/15/%E3%80%90%E5%BC%80%E5%8F%91%E6%9C%AF%E8%AF%AD%E3%80%91%E7%AC%AC%E4%B8%80%E7%AF%87/">
-                        <span class="hidden-mobile">【开发术语】第一篇</span>
+                      <a href="/2021/04/15/%E3%80%90JVM%E5%AD%A6%E4%B9%A0%E3%80%91-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E7%A7%8D%E7%B1%BB%E4%BB%A5%E5%8F%8A%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/">
+                        <span class="hidden-mobile">【JVM学习】-类加载器种类以及类加载机制</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -317,7 +408,7 @@
               <article class="comments" id="comments">
                 
                 
-  <div id="SOHUCS" sid='http://example.com/2021/04/15/%E3%80%90JVM%E5%AD%A6%E4%B9%A0%E3%80%91-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E7%A7%8D%E7%B1%BB%E4%BB%A5%E5%8F%8A%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/'></div>
+  <div id="SOHUCS" sid='http://example.com/2021/04/16/%E3%80%90Redis%E5%AD%A6%E4%B9%A0%E3%80%91%E5%91%BD%E4%BB%A4%E6%B1%87%E6%80%BB/'></div>
   <script type="text/javascript">
     Fluid.utils.waitElementVisible('SOHUCS', function() {
       var appid = 'cyviJi7Eb';
