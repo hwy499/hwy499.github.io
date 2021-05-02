@@ -317,11 +317,11 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/%E6%BA%90%E7%A0%81/">源码</a>
-            
               <a href="/tags/%E6%A1%86%E6%9E%B6/">框架</a>
             
               <a href="/tags/IOC/">IOC</a>
+            
+              <a href="/tags/%E6%BA%90%E7%A0%81/">源码</a>
             
               <a href="/tags/Spring/">Spring</a>
             
@@ -680,19 +680,18 @@ Netty is an asynchronous event-driven network application framework for rapid de
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2021/01/16/%E6%B5%85%E6%9E%90volatile/">浅析volatile</a>
+        <a href="/2021/01/16/volatile%20%E5%85%B3%E9%94%AE%E5%AD%97%E4%B8%8E%E5%86%85%E5%AD%98%E5%8F%AF%E8%A7%81%E6%80%A7/">volatile 关键字与内存可见性</a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2021/01/16/%E6%B5%85%E6%9E%90volatile/">
+        <a href="/2021/01/16/volatile%20%E5%85%B3%E9%94%AE%E5%AD%97%E4%B8%8E%E5%86%85%E5%AD%98%E5%8F%AF%E8%A7%81%E6%80%A7/">
           
           
             
           
-          浅析volatile为什么引入volatile
+          volatile 关键字与内存可见性内存可见性问题的出现线程运行的代码对应的是一些指令，是由CPU执行的！CPU每次执行指令运算的时候，每次需要一个变量的值，都从主内存加载，性能会比较差。后来，就提出了线程工作内存的概念，类似于一个高速的本地缓存。这样一来，线程的代码在执行过程中，就可以直接从自己本地缓存里加载变量副本，不需要从主内存加载变量值，性能可以提升很多！
 
-举个例子，比如说有两个线程，他们的代码里都需要读取data这个变量的值，那么他们都会从主内存里加载data变量的值到自己的工作内存，然后才可以使用那个值。好了，现在大家从图里看到，每个线程都把data这个变量的副本加载到了自己的工作内存里了，所以每个线程都可以读到data = 0这个值。
-这样，在线程代码运行的过程中，对data的值都可以直接从工作
+举个例子，比如说有两个线程，代
         </a>
       </p>
 
