@@ -4,6 +4,39 @@
   
   
   <entry>
+    <title>【高并发编程】原子变量类</title>
+    <link href="/2021/05/02/%E3%80%90%E9%AB%98%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E3%80%91%E5%8E%9F%E5%AD%90%E5%8F%98%E9%87%8F%E7%B1%BB/"/>
+    <url>/2021/05/02/%E3%80%90%E9%AB%98%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E3%80%91%E5%8E%9F%E5%AD%90%E5%8F%98%E9%87%8F%E7%B1%BB/</url>
+    
+    <content type="html"><![CDATA[<h2 id="【高并发编程】原子变量类"><a href="#【高并发编程】原子变量类" class="headerlink" title="【高并发编程】原子变量类"></a>【高并发编程】原子变量类</h2><h3 id="为何需要原子变量类"><a href="#为何需要原子变量类" class="headerlink" title="为何需要原子变量类"></a>为何需要原子变量类</h3><p>保证线程安全是 Java 并发编程必须要解决的重要问题,Java提供的基本变量和引用数据变量是费非线程安全的。Java 从原子性、可见性、有序性这三大特性入手，确保多线程的数据一致性。</p><ul><li><p>确保线程安全最常见的做法是利用锁机制（<code>Lock</code>、<code>sychronized</code>）来对共享数据做互斥同步，这样在同一个时刻，只有一个线程可以执行某个方法或者某个代码块，那么操作必然是原子性的，线程安全的。互斥同步最主要的问题是线程阻塞和唤醒所带来的性能问题。</p></li><li><p><code>volatile</code> 是轻量级的锁（自然比普通锁性能要好），它保证了共享变量在多线程中的可见性，但无法保证原子性。所以，它只能在一些特定场景下使用。</p></li><li><p>为了兼顾原子性以及锁带来的性能问题，Java 引入了 CAS（Compare And Swap） （主要体现在 <code>Unsafe</code> 类）来实现非阻塞同步（也叫乐观锁）。并基于 CAS ，提供了一套原子工具类。</p></li></ul><h3 id="原子变量类的作用"><a href="#原子变量类的作用" class="headerlink" title="原子变量类的作用"></a>原子变量类的作用</h3><p>原子变量类 <strong>比锁的粒度更细，更轻量级</strong>，并且对于在多处理器系统上实现高性能的并发代码来说是非常关键的。原子变量将发生竞争的范围缩小到单个变量上。原子变量类相当于一种泛化的 <code>volatile</code> 变量，能够<strong>支持原子的、有条件的读/改/写操</strong>作。原子类在内部使用 CAS 指令（基于硬件的支持）来实现同步。这些指令通常比锁更快。</p><h3 id="原子变量的分类"><a href="#原子变量的分类" class="headerlink" title="原子变量的分类"></a>原子变量的分类</h3><h4 id="基本类型"><a href="#基本类型" class="headerlink" title="基本类型"></a>基本类型</h4><ul><li><code>AtomicBoolean</code> - 布尔类型原子类</li><li><code>AtomicInteger</code> - 整型原子类</li><li><code>AtomicLong</code> - 长整型原子类 </li></ul><h4 id="引用类型"><a href="#引用类型" class="headerlink" title="引用类型"></a>引用类型</h4><ul><li><code>AtomicReference</code> - 引用类型原子类</li><li><code>AtomicMarkableReference</code> - 带有标记位的引用类型原子类</li><li><code>AtomicStampedReference</code> - 带有版本号的引用类型原子类</li></ul><h4 id="数组类型"><a href="#数组类型" class="headerlink" title="数组类型"></a>数组类型</h4><ul><li><code>AtomicIntegerArray</code> - 整形数组原子类</li><li><code>AtomicLongArray</code> - 长整型数组原子类</li><li><code>AtomicReferenceArray</code> - 引用类型数组原子类</li></ul><h4 id="属性更新器类型"><a href="#属性更新器类型" class="headerlink" title="属性更新器类型"></a>属性更新器类型</h4><ul><li><code>AtomicIntegerFieldUpdater</code> - 整型字段的原子更新器。</li><li><code>AtomicLongFieldUpdater</code> - 长整型字段的原子更新器。</li><li><code>AtomicReferenceFieldUpdater</code> - 原子更新引用类型里的字段。</li></ul><h3 id="原子变量的使用"><a href="#原子变量的使用" class="headerlink" title="原子变量的使用"></a>原子变量的使用</h3><h4 id="利用AtomicReference-实现自旋锁"><a href="#利用AtomicReference-实现自旋锁" class="headerlink" title="利用AtomicReference 实现自旋锁"></a>利用<code>AtomicReference</code> 实现自旋锁</h4><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.util.concurrent.ExecutorService;<span class="hljs-keyword">import</span> java.util.concurrent.Executors;<span class="hljs-keyword">import</span> java.util.concurrent.atomic.AtomicReference;<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SpinLockDemo</span> </span>&#123;    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> ticket = <span class="hljs-number">10</span>;    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;        threadSafeDemo();    &#125;    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">threadSafeDemo</span><span class="hljs-params">()</span> </span>&#123;        VolatileTest.SpinLock lock = <span class="hljs-keyword">new</span> VolatileTest.SpinLock();        ExecutorService executorService = Executors.newFixedThreadPool(<span class="hljs-number">3</span>);        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">5</span>; i++) &#123;            executorService.execute(<span class="hljs-keyword">new</span> VolatileTest.MyThread(lock));        &#125;        executorService.shutdown();    &#125;    <span class="hljs-comment">/**</span><span class="hljs-comment">     * 基于 &#123;<span class="hljs-doctag">@link</span> AtomicReference&#125; 实现的简单自旋锁</span><span class="hljs-comment">     */</span>    <span class="hljs-keyword">static</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SpinLock</span> </span>&#123;               <span class="hljs-keyword">private</span> AtomicReference&lt;Thread&gt; atomicReference = <span class="hljs-keyword">new</span> AtomicReference&lt;&gt;();        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">lock</span><span class="hljs-params">()</span> </span>&#123;            Thread current = Thread.currentThread();            <span class="hljs-keyword">while</span> (!atomicReference.compareAndSet(<span class="hljs-keyword">null</span>, current)) &#123;&#125;        &#125;        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">unlock</span><span class="hljs-params">()</span> </span>&#123;            Thread current = Thread.currentThread();            atomicReference.compareAndSet(current, <span class="hljs-keyword">null</span>);        &#125;    &#125;    <span class="hljs-comment">/**</span><span class="hljs-comment">     * 利用自旋锁 &#123;<span class="hljs-doctag">@link</span> VolatileTest.SpinLock&#125; 并发处理数据</span><span class="hljs-comment">     */</span>    <span class="hljs-keyword">static</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyThread</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Runnable</span> </span>&#123;        <span class="hljs-keyword">private</span> VolatileTest.SpinLock lock;        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">MyThread</span><span class="hljs-params">(VolatileTest.SpinLock lock)</span> </span>&#123;            <span class="hljs-keyword">this</span>.lock = lock;        &#125;        <span class="hljs-meta">@Override</span>        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>&#123;            <span class="hljs-keyword">while</span> (ticket &gt; <span class="hljs-number">0</span>) &#123;                lock.lock();                <span class="hljs-keyword">if</span> (ticket &gt; <span class="hljs-number">0</span>) &#123;                    System.out.println(Thread.currentThread().getName() + <span class="hljs-string">&quot; 卖出了第 &quot;</span> + ticket + <span class="hljs-string">&quot; 张票&quot;</span>);                    ticket--;                &#125;                lock.unlock();            &#125;        &#125;    &#125;&#125;</code></pre></div>]]></content>
+    
+    
+    <categories>
+      
+      <category>编程语言</category>
+      
+      <category>Java</category>
+      
+      <category>多线程</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>java</tag>
+      
+      <tag>多线程</tag>
+      
+      <tag>volatile</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>【Redis学习】命令汇总</title>
     <link href="/2021/04/16/%E3%80%90Redis%E5%AD%A6%E4%B9%A0%E3%80%91%E5%91%BD%E4%BB%A4%E6%B1%87%E6%80%BB/"/>
     <url>/2021/04/16/%E3%80%90Redis%E5%AD%A6%E4%B9%A0%E3%80%91%E5%91%BD%E4%BB%A4%E6%B1%87%E6%80%BB/</url>
@@ -523,9 +556,9 @@
       
       <tag>Nginx</tag>
       
-      <tag>服务器</tag>
-      
       <tag>反向代理</tag>
+      
+      <tag>服务器</tag>
       
     </tags>
     

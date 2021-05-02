@@ -17,7 +17,7 @@
   <meta name="description" content="good good study,day day up">
   <meta name="author" content="何文垚">
   <meta name="keywords" content="">
-  <title>【Redis学习】命令汇总 - hwyblog</title>
+  <title>【高并发编程】原子变量类 - hwyblog</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
 
@@ -162,7 +162,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="【Redis学习】命令汇总">
+            <span class="h2" id="subtitle" title="【高并发编程】原子变量类">
               
             </span>
 
@@ -172,8 +172,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2021-04-16 08:02" pubdate>
-        2021年4月16日 早上
+      <time datetime="2021-05-02 18:33" pubdate>
+        2021年5月2日 晚上
       </time>
     </span>
   
@@ -184,7 +184,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.8k 字
+      816 字
     </span>
   
 
@@ -194,7 +194,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      22
+      10
        分钟
     </span>
   
@@ -232,130 +232,111 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">【Redis学习】命令汇总</h1>
+            <h1 style="display: none">【高并发编程】原子变量类</h1>
             
               <p class="note note-info">
                 
-                  本文最后更新于：17 天前
+                  本文最后更新于：1 分钟前
                 
               </p>
             
             <div class="markdown-body">
-              <h2 id="Redis-命令汇总"><a href="#Redis-命令汇总" class="headerlink" title="Redis 命令汇总"></a>Redis 命令汇总</h2><h3 id="1、连接操作相关的命令"><a href="#1、连接操作相关的命令" class="headerlink" title="1、连接操作相关的命令"></a>1、连接操作相关的命令</h3><ul>
-<li>ping：测试连接是否存活如果正常会返回 pong</li>
-<li>echo：打印</li>
-<li>select：切换到指定的数据库，数据库索引号 index 用数字值指定，以 0 作为起始索引值</li>
-<li>quit：关闭连接（connection）</li>
-<li>auth：简单密码认证</li>
+              <h2 id="【高并发编程】原子变量类"><a href="#【高并发编程】原子变量类" class="headerlink" title="【高并发编程】原子变量类"></a>【高并发编程】原子变量类</h2><h3 id="为何需要原子变量类"><a href="#为何需要原子变量类" class="headerlink" title="为何需要原子变量类"></a>为何需要原子变量类</h3><p>保证线程安全是 Java 并发编程必须要解决的重要问题,Java提供的基本变量和引用数据变量是费非线程安全的。Java 从原子性、可见性、有序性这三大特性入手，确保多线程的数据一致性。</p>
+<ul>
+<li><p>确保线程安全最常见的做法是利用锁机制（<code>Lock</code>、<code>sychronized</code>）来对共享数据做互斥同步，这样在同一个时刻，只有一个线程可以执行某个方法或者某个代码块，那么操作必然是原子性的，线程安全的。互斥同步最主要的问题是线程阻塞和唤醒所带来的性能问题。</p>
+</li>
+<li><p><code>volatile</code> 是轻量级的锁（自然比普通锁性能要好），它保证了共享变量在多线程中的可见性，但无法保证原子性。所以，它只能在一些特定场景下使用。</p>
+</li>
+<li><p>为了兼顾原子性以及锁带来的性能问题，Java 引入了 CAS（Compare And Swap） （主要体现在 <code>Unsafe</code> 类）来实现非阻塞同步（也叫乐观锁）。并基于 CAS ，提供了一套原子工具类。</p>
+</li>
 </ul>
-<h3 id="2、服务端相关命令"><a href="#2、服务端相关命令" class="headerlink" title="2、服务端相关命令"></a>2、服务端相关命令</h3><ul>
-<li>time：返回当前服务器时间</li>
-<li>client list: 返回所有连接到服务器的客户端信息和统计数据 参见 - <a target="_blank" rel="noopener" href="http://redisdoc.com/server/client_list.html">http://redisdoc.com/server/client_list.html</a></li>
-<li>client kill ip:port：关闭地址为 ip:port 的客户端</li>
-<li>save：将数据同步保存到磁盘</li>
-<li>bgsave：将数据异步保存到磁盘</li>
-<li>lastsave：返回上次成功将数据保存到磁盘的Unix时戳</li>
-<li>shundown：将数据同步保存到磁盘，然后关闭服务</li>
-<li>info：提供服务器的信息和统计</li>
-<li>config resetstat：重置 info 命令中的某些统计数据</li>
-<li>config get：获取配置文件信息</li>
-<li>config set：动态地调整 Redis 服务器的配置(configuration)而无须重启，可以修改的配置参数可以使用命令 CONFIG GET * 来列出</li>
-<li>config rewrite：Redis 服务器时所指定的 redis.conf 文件进行改写</li>
-<li>monitor：实时转储收到的请求</li>
-<li>slaveof：改变复制策略设置</li>
+<h3 id="原子变量类的作用"><a href="#原子变量类的作用" class="headerlink" title="原子变量类的作用"></a>原子变量类的作用</h3><p>原子变量类 <strong>比锁的粒度更细，更轻量级</strong>，并且对于在多处理器系统上实现高性能的并发代码来说是非常关键的。原子变量将发生竞争的范围缩小到单个变量上。原子变量类相当于一种泛化的 <code>volatile</code> 变量，能够<strong>支持原子的、有条件的读/改/写操</strong>作。原子类在内部使用 CAS 指令（基于硬件的支持）来实现同步。这些指令通常比锁更快。</p>
+<h3 id="原子变量的分类"><a href="#原子变量的分类" class="headerlink" title="原子变量的分类"></a>原子变量的分类</h3><h4 id="基本类型"><a href="#基本类型" class="headerlink" title="基本类型"></a>基本类型</h4><ul>
+<li><code>AtomicBoolean</code> - 布尔类型原子类</li>
+<li><code>AtomicInteger</code> - 整型原子类</li>
+<li><code>AtomicLong</code> - 长整型原子类 </li>
 </ul>
-<h3 id="3、发布订阅相关命令"><a href="#3、发布订阅相关命令" class="headerlink" title="3、发布订阅相关命令"></a>3、发布订阅相关命令</h3><ul>
-<li>psubscribe：订阅一个或多个符合给定模式的频道 例如 psubscribe news.* tweet.*</li>
-<li>publish：将信息 message 发送到指定的频道 channel 例如 publish msg “good morning”</li>
-<li>pubsub channels：列出当前的活跃频道 例如 PUBSUB CHANNELS news.i*</li>
-<li>pubsub numsub：返回给定频道的订阅者数量 例如 PUBSUB NUMSUB <a target="_blank" rel="noopener" href="http://news.it/">news.it</a> news.internet news.sport news.music</li>
-<li>pubsub numpat：返回客户端订阅的所有模式的数量总和</li>
-<li>punsubscribe：指示客户端退订所有给定模式。</li>
-<li>subscribe：订阅给定的一个或多个频道的信息。例如 subscribe msg chat_room</li>
-<li>unsubscribe：指示客户端退订给定的频道。</li>
+<h4 id="引用类型"><a href="#引用类型" class="headerlink" title="引用类型"></a>引用类型</h4><ul>
+<li><code>AtomicReference</code> - 引用类型原子类</li>
+<li><code>AtomicMarkableReference</code> - 带有标记位的引用类型原子类</li>
+<li><code>AtomicStampedReference</code> - 带有版本号的引用类型原子类</li>
 </ul>
-<h3 id="4、对-KEY-操作的命令"><a href="#4、对-KEY-操作的命令" class="headerlink" title="4、对 KEY 操作的命令"></a>4、对 KEY 操作的命令</h3><ul>
-<li>exists(key)：确认一个 key 是否存在</li>
-<li>del(key)：删除一个 key</li>
-<li>type(key)：返回值的类型</li>
-<li>keys(pattern)：返回满足给定 pattern 的所有 key</li>
-<li>randomkey：随机返回 key 空间的一个</li>
-<li>keyrename(oldname, newname)：重命名 key</li>
-<li>dbsize：返回当前数据库中 key 的数目</li>
-<li>expire：设定一个 key 的活动时间（s）</li>
-<li>ttl：获得一个 key 的活动时间</li>
-<li>move(key, dbindex)：移动当前数据库中的 key 到 dbindex 数据库</li>
-<li>flushdb：删除当前选择数据库中的所有 key</li>
-<li>flushall：删除所有数据库中的所有 key</li>
+<h4 id="数组类型"><a href="#数组类型" class="headerlink" title="数组类型"></a>数组类型</h4><ul>
+<li><code>AtomicIntegerArray</code> - 整形数组原子类</li>
+<li><code>AtomicLongArray</code> - 长整型数组原子类</li>
+<li><code>AtomicReferenceArray</code> - 引用类型数组原子类</li>
 </ul>
-<h3 id="5、对-String-操作的命令"><a href="#5、对-String-操作的命令" class="headerlink" title="5、对 String 操作的命令"></a>5、对 String 操作的命令</h3><ul>
-<li>set(key, value)：给数据库中名称为 key 的 string 赋予值 value</li>
-<li>get(key)：返回数据库中名称为 key 的 string 的 value</li>
-<li>getset(key, value)：给名称为 key 的 string 赋予上一次的 value</li>
-<li>mget(key1, key2,…, key N)：返回库中多个 string 的 value</li>
-<li>setnx(key, value)：添加 string，名称为 key，值为 value</li>
-<li>setex(key, time, value)：向库中添加 string，设定过期时间 time</li>
-<li>mset(key N, value N)：批量设置多个 string 的值</li>
-<li>msetnx(key N, value N)：如果所有名称为 key i 的 string 都不存在</li>
-<li>incr(key)：名称为 key 的 string 增 1 操作</li>
-<li>incrby(key, integer)：名称为 key 的 string 增加 integer</li>
-<li>decr(key)：名称为 key 的 string 减 1 操作</li>
-<li>decrby(key, integer)：名称为 key 的 string 减少 integer</li>
-<li>append(key, value)：名称为 key 的 string 的值附加 value</li>
-<li>substr(key, start, end)：返回名称为 key 的 string 的 value 的子串</li>
+<h4 id="属性更新器类型"><a href="#属性更新器类型" class="headerlink" title="属性更新器类型"></a>属性更新器类型</h4><ul>
+<li><code>AtomicIntegerFieldUpdater</code> - 整型字段的原子更新器。</li>
+<li><code>AtomicLongFieldUpdater</code> - 长整型字段的原子更新器。</li>
+<li><code>AtomicReferenceFieldUpdater</code> - 原子更新引用类型里的字段。</li>
 </ul>
-<h3 id="6、对-List-操作的命令"><a href="#6、对-List-操作的命令" class="headerlink" title="6、对 List 操作的命令"></a>6、对 List 操作的命令</h3><ul>
-<li>rpush(key, value)：在名称为 key 的 list 尾添加一个值为 value 的元素</li>
-<li>lpush(key, value)：在名称为 key 的 list 头添加一个值为 value 的元素</li>
-<li>llen(key)：返回名称为 key 的 list 的长度</li>
-<li>lrange(key, start, end)：返回名称为 key 的 list 中 start 至 end 之间的元素</li>
-<li>ltrim(key, start, end)：截取名称为 key 的 list</li>
-<li>lindex(key, index)：返回名称为 key 的 list 中 index 位置的元素</li>
-<li>lset(key, index, value)：给名称为 key 的 list 中 index 位置的元素赋值</li>
-<li>lrem(key, count, value)：删除 count 个 key 的 list 中值为 value 的元素</li>
-<li>lpop(key)：返回并删除名称为 key 的 list 中的首元素</li>
-<li>rpop(key)：返回并删除名称为 key 的 list 中的尾元素</li>
-<li>blpop(key1, key2,… key N, timeout)：lpop 命令的 block 版本。</li>
-<li>brpop(key1, key2,… key N, timeout)：rpop 的 block 版本。</li>
-<li>rpoplpush(srckey, dstkey)：返回并删除名称为 srckey 的 list 的尾元素，并将该元素添加到名称为 dstkey 的 list 的头部</li>
-</ul>
-<h3 id="7、对-Set-操作的命令"><a href="#7、对-Set-操作的命令" class="headerlink" title="7、对 Set 操作的命令"></a>7、对 Set 操作的命令</h3><ul>
-<li>sadd(key, member)：向名称为 key 的 set 中添加元素 member</li>
-<li>srem(key, member) ：删除名称为 key 的 set 中的元素 member</li>
-<li>spop(key) ：随机返回并删除名称为 key 的 set 中一个元素</li>
-<li>smove(srckey, dstkey, member) ：移到集合元素</li>
-<li>scard(key) ：返回名称为 key 的 set 的基数</li>
-<li>sismember(key, member) ：member 是否是名称为 key 的 set 的元素</li>
-<li>sinter(key1, key2,…key N) ：求交集</li>
-<li>sinterstore(dstkey, (keys)) ：求交集并将交集保存到 dstkey 的集合</li>
-<li>sunion(key1, (keys)) ：求并集</li>
-<li>sunionstore(dstkey, (keys)) ：求并集并将并集保存到 dstkey 的集合</li>
-<li>sdiff(key1, (keys)) ：求差集</li>
-<li>sdiffstore(dstkey, (keys)) ：求差集并将差集保存到 dstkey 的集合</li>
-<li>smembers(key) ：返回名称为 key 的 set 的所有元素</li>
-<li>srandmember(key) ：随机返回名称为 key 的 set 的一个元素</li>
-</ul>
-<h3 id="8、-Hash-操作的命令"><a href="#8、-Hash-操作的命令" class="headerlink" title="8、 Hash 操作的命令"></a>8、 Hash 操作的命令</h3><ul>
-<li>hset(key, field, value)：向名称为 key 的 hash 中添加元素 field</li>
-<li>hget(key, field)：返回名称为 key 的 hash 中 field 对应的 value</li>
-<li>hmget(key, (fields))：返回名称为 key 的 hash 中 field i 对应的 value</li>
-<li>hmset(key, (fields))：向名称为 key 的 hash 中添加元素 field</li>
-<li>hincrby(key, field, integer)：将名称为 key 的 hash 中 field 的 value 增加 integer</li>
-<li>hexists(key, field)：名称为 key 的 hash 中是否存在键为 field 的域</li>
-<li>hdel(key, field)：删除名称为 key 的 hash 中键为 field 的域</li>
-<li>hlen(key)：返回名称为 key 的 hash 中元素个数</li>
-<li>hkeys(key)：返回名称为 key 的 hash 中所有键</li>
-<li>hvals(key)：返回名称为 key 的 hash 中所有键对应的 value</li>
-<li>hgetall(key)：返回名称为 key 的 hash 中所有的键（field）及其对应的 value</li>
-</ul>
-<h3 id="9、Redis-Sentinel"><a href="#9、Redis-Sentinel" class="headerlink" title="9、Redis Sentinel"></a>9、Redis Sentinel</h3><ul>
-<li>ping ：返回 pong</li>
-<li>sentinel masters ：列出所有被监视的主服务器，以及这些主服务器的当前状态。</li>
-<li>sentinel slaves：列出给定主服务器的所有从服务器，以及这些从服务器的当前状态。</li>
-<li>sentinel get-master-addr-by-name：返回给定名字的主服务器的 IP 地址和端口号。如果这个主服务器正在执行故障转移操作，或者针对这个主服务器的故障转移操作已经完成，那么这个命令返回新的主服务器的 IP 地址和端口号。</li>
-<li>sentinel reset：重置所有名字和给定模式 pattern 相匹配的主服务器。pattern 参数是一个 Glob 风格的模式 重置操作清楚主服务器目前的所有状态，包括正在执行中的故障转移，并移除目前已经发现和关联的，主服务器的所有从服务器和 Sentinel 。</li>
-<li>sentinel failover：当主服务器失效时，在不询问其他 Sentinel 意见的情况下，强制开始一次自动故障迁移（不过发起故障转移的 Sentinel 会向其他 Sentinel 发送一个新的配置，其他 Sentinel 会根据这个配置进行相应的更新）。</li>
-</ul>
+<h3 id="原子变量的使用"><a href="#原子变量的使用" class="headerlink" title="原子变量的使用"></a>原子变量的使用</h3><h4 id="利用AtomicReference-实现自旋锁"><a href="#利用AtomicReference-实现自旋锁" class="headerlink" title="利用AtomicReference 实现自旋锁"></a>利用<code>AtomicReference</code> 实现自旋锁</h4><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.util.concurrent.ExecutorService;
+<span class="hljs-keyword">import</span> java.util.concurrent.Executors;
+<span class="hljs-keyword">import</span> java.util.concurrent.atomic.AtomicReference;
+
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SpinLockDemo</span> </span>&#123;
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> ticket = <span class="hljs-number">10</span>;
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;
+        threadSafeDemo();
+    &#125;
+
+    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">threadSafeDemo</span><span class="hljs-params">()</span> </span>&#123;
+        VolatileTest.SpinLock lock = <span class="hljs-keyword">new</span> VolatileTest.SpinLock();
+        ExecutorService executorService = Executors.newFixedThreadPool(<span class="hljs-number">3</span>);
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">5</span>; i++) &#123;
+            executorService.execute(<span class="hljs-keyword">new</span> VolatileTest.MyThread(lock));
+        &#125;
+        executorService.shutdown();
+    &#125;
+
+    <span class="hljs-comment">/**</span>
+<span class="hljs-comment">     * 基于 &#123;<span class="hljs-doctag">@link</span> AtomicReference&#125; 实现的简单自旋锁</span>
+<span class="hljs-comment">     */</span>
+    <span class="hljs-keyword">static</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SpinLock</span> </span>&#123;
+       
+        <span class="hljs-keyword">private</span> AtomicReference&lt;Thread&gt; atomicReference = <span class="hljs-keyword">new</span> AtomicReference&lt;&gt;();
+
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">lock</span><span class="hljs-params">()</span> </span>&#123;
+            Thread current = Thread.currentThread();
+            <span class="hljs-keyword">while</span> (!atomicReference.compareAndSet(<span class="hljs-keyword">null</span>, current)) &#123;&#125;
+        &#125;
+
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">unlock</span><span class="hljs-params">()</span> </span>&#123;
+            Thread current = Thread.currentThread();
+            atomicReference.compareAndSet(current, <span class="hljs-keyword">null</span>);
+        &#125;
+
+    &#125;
+
+    <span class="hljs-comment">/**</span>
+<span class="hljs-comment">     * 利用自旋锁 &#123;<span class="hljs-doctag">@link</span> VolatileTest.SpinLock&#125; 并发处理数据</span>
+<span class="hljs-comment">     */</span>
+    <span class="hljs-keyword">static</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyThread</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Runnable</span> </span>&#123;
+
+        <span class="hljs-keyword">private</span> VolatileTest.SpinLock lock;
+
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">MyThread</span><span class="hljs-params">(VolatileTest.SpinLock lock)</span> </span>&#123;
+            <span class="hljs-keyword">this</span>.lock = lock;
+        &#125;
+
+        <span class="hljs-meta">@Override</span>
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>&#123;
+            <span class="hljs-keyword">while</span> (ticket &gt; <span class="hljs-number">0</span>) &#123;
+                lock.lock();
+                <span class="hljs-keyword">if</span> (ticket &gt; <span class="hljs-number">0</span>) &#123;
+                    System.out.println(Thread.currentThread().getName() + <span class="hljs-string">&quot; 卖出了第 &quot;</span> + ticket + <span class="hljs-string">&quot; 张票&quot;</span>);
+                    ticket--;
+                &#125;
+                lock.unlock();
+            &#125;
+        &#125;
+    &#125;
+&#125;
+</code></pre></div>
+
+
 
             </div>
             <hr>
@@ -365,9 +346,11 @@
                   <div class="post-meta mr-3">
                     <i class="iconfont icon-category"></i>
                     
-                      <a class="hover-with-bg" href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/">中间件</a>
+                      <a class="hover-with-bg" href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a>
                     
-                      <a class="hover-with-bg" href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/redis/">redis</a>
+                      <a class="hover-with-bg" href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/%E5%A4%9A%E7%BA%BF%E7%A8%8B/">多线程</a>
                     
                   </div>
                 
@@ -375,7 +358,11 @@
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/tags/redis/">redis</a>
+                      <a class="hover-with-bg" href="/tags/java/">java</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/">多线程</a>
+                    
+                      <a class="hover-with-bg" href="/tags/volatile/">volatile</a>
                     
                   </div>
                 
@@ -388,18 +375,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2021/05/02/%E3%80%90%E9%AB%98%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E3%80%91%E5%8E%9F%E5%AD%90%E5%8F%98%E9%87%8F%E7%B1%BB/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">【高并发编程】原子变量类</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2021/04/15/%E3%80%90JVM%E5%AD%A6%E4%B9%A0%E3%80%91-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E7%A7%8D%E7%B1%BB%E4%BB%A5%E5%8F%8A%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/">
-                        <span class="hidden-mobile">【JVM学习】-类加载器种类以及类加载机制</span>
+                      <a href="/2021/04/16/%E3%80%90Redis%E5%AD%A6%E4%B9%A0%E3%80%91%E5%91%BD%E4%BB%A4%E6%B1%87%E6%80%BB/">
+                        <span class="hidden-mobile">【Redis学习】命令汇总</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -414,7 +395,7 @@
               <article class="comments" id="comments">
                 
                 
-  <div id="SOHUCS" sid='http://example.com/2021/04/16/%E3%80%90Redis%E5%AD%A6%E4%B9%A0%E3%80%91%E5%91%BD%E4%BB%A4%E6%B1%87%E6%80%BB/'></div>
+  <div id="SOHUCS" sid='http://example.com/2021/05/02/%E3%80%90%E9%AB%98%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E3%80%91%E5%8E%9F%E5%AD%90%E5%8F%98%E9%87%8F%E7%B1%BB/'></div>
   <script type="text/javascript">
     Fluid.utils.waitElementVisible('SOHUCS', function() {
       var appid = 'cyviJi7Eb';
