@@ -17,7 +17,7 @@
   <meta name="description" content="good good study,day day up">
   <meta name="author" content="何文垚">
   <meta name="keywords" content="">
-  <title>volatile 关键字与内存可见性 - hwyblog</title>
+  <title>【高并发编程】volatile 关键字与内存可见性 - hwyblog</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
 
@@ -162,7 +162,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="volatile 关键字与内存可见性">
+            <span class="h2" id="subtitle" title="【高并发编程】volatile 关键字与内存可见性">
               
             </span>
 
@@ -184,7 +184,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.4k 字
+      1.5k 字
     </span>
   
 
@@ -194,7 +194,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      14
+      15
        分钟
     </span>
   
@@ -232,16 +232,16 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">volatile 关键字与内存可见性</h1>
+            <h1 style="display: none">【高并发编程】volatile 关键字与内存可见性</h1>
             
               <p class="note note-info">
                 
-                  本文最后更新于：1 分钟前
+                  本文最后更新于：5 分钟前
                 
               </p>
             
             <div class="markdown-body">
-              <h2 id="volatile-关键字与内存可见性"><a href="#volatile-关键字与内存可见性" class="headerlink" title="volatile 关键字与内存可见性"></a>volatile 关键字与内存可见性</h2><h3 id="内存可见性问题的出现"><a href="#内存可见性问题的出现" class="headerlink" title="内存可见性问题的出现"></a>内存可见性问题的出现</h3><p>线程运行的代码对应的是一些指令，是由CPU执行的！CPU每次执行指令运算的时候，每次需要一个变量的值，都从主内存加载，性能会比较差。后来，就提出了线程工作内存的概念，类似于一个<strong>高速的本地缓存。</strong>这样一来，线程的代码在执行过程中，就可以直接从自己本地缓存里加载变量副本，不需要从主内存加载变量值，性能可以提升很多！</p>
+              <h2 id="【高并发编程】volatile-关键字与内存可见性"><a href="#【高并发编程】volatile-关键字与内存可见性" class="headerlink" title="【高并发编程】volatile 关键字与内存可见性"></a>【高并发编程】volatile 关键字与内存可见性</h2><h3 id="内存可见性问题的出现"><a href="#内存可见性问题的出现" class="headerlink" title="内存可见性问题的出现"></a>内存可见性问题的出现</h3><p>线程运行的代码对应的是一些指令，是由CPU执行的！CPU每次执行指令运算的时候，每次需要一个变量的值，都从主内存加载，性能会比较差。后来，就提出了线程工作内存的概念，类似于一个<strong>高速的本地缓存。</strong>这样一来，线程的代码在执行过程中，就可以直接从自己本地缓存里加载变量副本，不需要从主内存加载变量值，性能可以提升很多！</p>
 <p><img src="https://i.loli.net/2021/01/17/frxhGLzC8VTpwmg.png" srcset="/img/loading.gif" alt="内存模型"></p>
 <p>举个例子，比如说有两个线程，代码里都需要读取data这个变量的值，那么他们都会从主内存里加载data变量的值到自己的工作内存，然后才可以使用那个值。好了，现在大家从图里看到，每个线程都把data这个变量的副本加载到了自己的工作内存里了，所以每个线程都可以读到data = 0这个值。这样，在线程代码运行的过程中，对data的值都可以直接从工作内存里加载了，不需要再从主内存里加载了。</p>
 <p><strong>有得必有失，在性能提升的同时却带来了另外一个问题：</strong></p>
@@ -325,8 +325,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2021/01/16/%E6%B5%85%E6%9E%90volatile/">
-                        <span class="hidden-mobile">volatile 关键字与内存可见性</span>
+                      <a href="/2021/01/15/%E3%80%90%E9%AB%98%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E3%80%91%E5%A4%9A%E7%BA%BF%E7%A8%8B------%E5%88%9B%E5%BB%BA%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F/">
+                        <span class="hidden-mobile">【高并发编程】多线程------创建多线程的三种方式</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -341,7 +341,7 @@
               <article class="comments" id="comments">
                 
                 
-  <div id="SOHUCS" sid='http://example.com/2021/01/16/volatile%20%E5%85%B3%E9%94%AE%E5%AD%97%E4%B8%8E%E5%86%85%E5%AD%98%E5%8F%AF%E8%A7%81%E6%80%A7/'></div>
+  <div id="SOHUCS" sid='http://example.com/2021/01/16/%E3%80%90%E9%AB%98%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E3%80%91volatile%20%E5%85%B3%E9%94%AE%E5%AD%97%E4%B8%8E%E5%86%85%E5%AD%98%E5%8F%AF%E8%A7%81%E6%80%A7/'></div>
   <script type="text/javascript">
     Fluid.utils.waitElementVisible('SOHUCS', function() {
       var appid = 'cyviJi7Eb';
