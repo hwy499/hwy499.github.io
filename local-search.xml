@@ -4,6 +4,33 @@
   
   
   <entry>
+    <title>【网络协议】HTTP协议</title>
+    <link href="/2021/05/03/%E3%80%90%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E3%80%91HTTP%E5%8D%8F%E8%AE%AE/"/>
+    <url>/2021/05/03/%E3%80%90%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E3%80%91HTTP%E5%8D%8F%E8%AE%AE/</url>
+    
+    <content type="html"><![CDATA[<h2 id="【网络协议】HTTP协议"><a href="#【网络协议】HTTP协议" class="headerlink" title="【网络协议】HTTP协议"></a>【网络协议】HTTP协议</h2><h3 id="HTTP协议简介"><a href="#HTTP协议简介" class="headerlink" title="HTTP协议简介"></a>HTTP协议简介</h3><p>超文本传输协议（英文：Hyper Text  Transfer Protocol，缩写：HTTP）是一种用于分布式、协作式和超媒体信息系统的应用层协议，建立在传输层协议TCP之上，是万维网的数据通信的基础。客户端通过与服务器建立TCP连接，之后发送HTTP请求与接收HTTP响应都是通过访问Socket接口来调用TCP协议实现。（客户端与服务器的角色不是固定的，一端充当客户端，也可能在某次请求中充当服务器。）</p><h3 id="HTTP协议特点"><a href="#HTTP协议特点" class="headerlink" title="HTTP协议特点"></a>HTTP协议特点</h3>]]></content>
+    
+    
+    <categories>
+      
+      <category>网络协议</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>网络协议</tag>
+      
+      <tag>HTTP协议</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>【高并发编程】悲观锁与乐观锁</title>
     <link href="/2021/05/03/%E3%80%90%E9%AB%98%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E3%80%91%E6%82%B2%E8%A7%82%E9%94%81%E4%B8%8E%E4%B9%90%E8%A7%82%E9%94%81/"/>
     <url>/2021/05/03/%E3%80%90%E9%AB%98%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E3%80%91%E6%82%B2%E8%A7%82%E9%94%81%E4%B8%8E%E4%B9%90%E8%A7%82%E9%94%81/</url>
