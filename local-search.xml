@@ -4,6 +4,43 @@
   
   
   <entry>
+    <title>【高并发编程】悲观锁与乐观锁</title>
+    <link href="/2021/05/03/%E3%80%90%E9%AB%98%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E3%80%91%E6%82%B2%E8%A7%82%E9%94%81%E4%B8%8E%E4%B9%90%E8%A7%82%E9%94%81/"/>
+    <url>/2021/05/03/%E3%80%90%E9%AB%98%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E3%80%91%E6%82%B2%E8%A7%82%E9%94%81%E4%B8%8E%E4%B9%90%E8%A7%82%E9%94%81/</url>
+    
+    <content type="html"><![CDATA[<h2 id="【高并发编程】悲观锁与乐观锁"><a href="#【高并发编程】悲观锁与乐观锁" class="headerlink" title="【高并发编程】悲观锁与乐观锁"></a>【高并发编程】悲观锁与乐观锁</h2><h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><h4 id="悲观锁（Pessimistic-Lock）"><a href="#悲观锁（Pessimistic-Lock）" class="headerlink" title="悲观锁（Pessimistic  Lock）"></a>悲观锁（Pessimistic  Lock）</h4><p><strong>悲观锁（Pessimistic  Lock）</strong>：正如其名字一样，悲观锁对共享数据处理持有一种悲观的态度，它认为被它处理的共享数据是极其不安全的，每时每刻都会被其它线程修改，因此在某个线程进行共享数据处理之前先上锁，阻塞其他进程，这样其它线程想处理这个数据就只能等到当前线程释放锁，（<strong>共享资源每次只给一个线程使用，其它线程阻塞，用完后再把资源转让给其它线程</strong>）。</p><p>传统的关系型数据库里边就用到了很多这种锁机制，比如行锁，表锁等，读锁，写锁等，都是在做操作之前先上锁。Java中<code>synchronized</code>和<code>ReentrantLock</code>等独占锁就是悲观锁思想的实现。</p><h4 id="乐观锁（-Optimistic-Locking）"><a href="#乐观锁（-Optimistic-Locking）" class="headerlink" title="乐观锁（ Optimistic Locking）"></a>乐观锁（ Optimistic Locking）</h4><p><strong>乐观锁（ Optimistic Locking）：</strong>顾名思义，乐观锁对共享数据的处理总是持有一种乐观的态度，它认为被它处理的共享数据是安全的，不会被其他线程进行修改，所以不会上锁，但是在最后更新数据的时候会判断一下在此期间有没有其他线程去更新这个数据，如果其他线程更改了就放弃修改，如果其它线程修改，就更新数据。</p><p>像数据库提供的类似于write_condition机制，其实都是提供的乐观锁。在Java中java.util.concurrent.atomic包下面的原子变量类就是使用了乐观锁的一种实现方式CAS实现的。</p><p>　　</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>编程语言</category>
+      
+      <category>Java</category>
+      
+      <category>多线程</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>java</tag>
+      
+      <tag>多线程</tag>
+      
+      <tag>volatile</tag>
+      
+      <tag>悲观锁</tag>
+      
+      <tag>乐观锁</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>【高并发编程】原子变量类</title>
     <link href="/2021/05/02/%E3%80%90%E9%AB%98%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E3%80%91%E5%8E%9F%E5%AD%90%E5%8F%98%E9%87%8F%E7%B1%BB/"/>
     <url>/2021/05/02/%E3%80%90%E9%AB%98%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E3%80%91%E5%8E%9F%E5%AD%90%E5%8F%98%E9%87%8F%E7%B1%BB/</url>
@@ -999,11 +1036,11 @@
     
     <tags>
       
+      <tag>源码</tag>
+      
       <tag>框架</tag>
       
       <tag>IOC</tag>
-      
-      <tag>源码</tag>
       
       <tag>Spring</tag>
       
