@@ -236,7 +236,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：1 天前
+                  本文最后更新于：几秒前
                 
               </p>
             
@@ -281,12 +281,10 @@
 &#125;
 <span class="hljs-comment">// 输出 ：线程名字：Thread-0	线程ID：10</span>
 <span class="hljs-number">1234567891011121314151617181920</span></code></pre></div>
-<blockquote>
 <ol>
 <li>这两种方式实现多线程的方式都是围绕着Thread类展开的，第一种方式实现线程是继承于java.lang.Thread类，然后实现run方法，最终调用Thread类中的start方法启动线程。而实现Runnable接口，则是把run写到了接口中，并由实现类实现run方法，然后再用Thread类对Runnable接口进行包装，然后在调用Thread中start方法启动线程。①②两种方式都是最终都是调用Thread中start方法进行启动线程。</li>
 <li>两种方式在本质上没有明显的区别，但是在外观上有很大的区别，第一种方式是继承Thread类，由于Java是单继承，如果一个类继承了Thread类，那么就没办法继承其它的类了，在继承上有一点受制，有一点不灵活，第二种方式就是为了解决第一种方式的单继承不灵活的问题，所以平常使用就建议使用第二种方式。</li>
 </ol>
-</blockquote>
 <h3 id="三、实现-java-util-concurrent-Callable，用java-util-concurrent-FutureTask类对其包装，然后再用java-lang-Thread类对java-util-concurrent-FutureTask的实现类进行包装"><a href="#三、实现-java-util-concurrent-Callable，用java-util-concurrent-FutureTask类对其包装，然后再用java-lang-Thread类对java-util-concurrent-FutureTask的实现类进行包装" class="headerlink" title="三、实现 java.util.concurrent.Callable，用java.util.concurrent.FutureTask类对其包装，然后再用java.lang.Thread类对java.util.concurrent.FutureTask的实现类进行包装"></a>三、实现 java.util.concurrent.Callable，用java.util.concurrent.FutureTask类对其包装，然后再用java.lang.Thread类对java.util.concurrent.FutureTask的实现类进行包装</h3><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyCallable</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Callable</span>&lt;<span class="hljs-title">Integer</span>&gt;</span>&#123;
    <span class="hljs-meta">@Override</span>
    <span class="hljs-function"><span class="hljs-keyword">public</span> Integer <span class="hljs-title">call</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception </span>&#123;
