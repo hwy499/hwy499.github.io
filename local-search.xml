@@ -4,6 +4,33 @@
   
   
   <entry>
+    <title>【网络协议】DNS协议</title>
+    <link href="/2021/05/03/%E3%80%90%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E3%80%91DNS%E5%8D%8F%E8%AE%AE/"/>
+    <url>/2021/05/03/%E3%80%90%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E3%80%91DNS%E5%8D%8F%E8%AE%AE/</url>
+    
+    <content type="html"><![CDATA[<h2 id="DNS"><a href="#DNS" class="headerlink" title="DNS"></a>DNS</h2><h3 id="DNS简介"><a href="#DNS简介" class="headerlink" title="DNS简介"></a>DNS简介</h3><p>域名系统（ Domain Name System 简称 DNS） 是一个应用层协议，DNS 的作用是将人类可读的域名 <a href="http://www.example.com/">www.example.com</a> 转换为机器可读的 IP 地址 (如，192.0.2.44)。DNS 协议建立在 UDP 或 TCP 协议之上，默认使用 53 号端口。客户端默认通过 UDP 协议进行通讯，但是由于广域网中不适合传输过大的 UDP 数据包，因此规定当报文长度超过了 512 字节时，应转换为使用 TCP 协议进行数据传输。<br> 可能会出现如下的两种情况：</p><ul><li><p>客户端认为 UDP 响应包长度可能超过 512 字节，主动使用 TCP 协议；</p></li><li><p>客户端使用 UDP 协议发送 DNS 请求，服务端发现响应报文超过了 512 字节，在截断的 UDP 响应报文中将 TC 设置为 1 ，以通知客户端该报文已经被截断，客户端收到之后再发起一次 TCP 请求。</p></li></ul><p>DNS 是一种可以将域名和IP地址相互映射的以层次结构分布的数据库系统。DNS系统采用递归查询请求的方式来响应用户的查询，为互联网的运行提供关键性的基础服务。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>网络协议</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>网络协议</tag>
+      
+      <tag>DNS协议</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>【网络协议】HTTP协议</title>
     <link href="/2021/05/03/%E3%80%90%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E3%80%91HTTP%E5%8D%8F%E8%AE%AE/"/>
     <url>/2021/05/03/%E3%80%90%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E3%80%91HTTP%E5%8D%8F%E8%AE%AE/</url>
