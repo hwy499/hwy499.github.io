@@ -252,7 +252,7 @@
 
 
 
-<p>队列的源码实现（Node节点实现省略）用volatile保证队列的可见性：</p>
+<p>队列的源码实现,用volatile保证队列以及节点内部属性的可见性：</p>
 <div class="hljs code-wrapper"><pre><code class="hljs java">
 <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Node</span> </span>&#123;
     <span class="hljs-comment">/** 共享节点 */</span>
