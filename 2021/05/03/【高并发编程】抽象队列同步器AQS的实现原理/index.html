@@ -184,7 +184,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      6.9k 字
+      4.5k 字
     </span>
   
 
@@ -194,7 +194,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      76
+      54
        分钟
     </span>
   
@@ -241,107 +241,152 @@
               </p>
             
             <div class="markdown-body">
-              <h2 id="【高并发编程】抽象队列同步器AQS的实现原理"><a href="#【高并发编程】抽象队列同步器AQS的实现原理" class="headerlink" title="【高并发编程】抽象队列同步器AQS的实现原理"></a>【高并发编程】抽象队列同步器AQS的实现原理</h2><h3 id="什么是AQS"><a href="#什么是AQS" class="headerlink" title="什么是AQS"></a>什么是AQS</h3><p>  <code>AQS</code>全称抽象队列同步器（Abstract Queued Synchronizer），它是一个可以用来实现线程同步的基础框架。当然，它不是我们理解的<code>Spring</code>这种框架，它是一个类，类名就是<code>AbstractQuenedSynchronizer</code>，如果我们想要实现一个能够完成线程同步的锁或者类似的同步组件，就可以在使用<code>AQS</code>来实现，因为它封装了线程同步的方式，我们在自己的类中使用它，就可以很方便的实现一个我们自己的锁。</p>
-<h3 id="AQS的大致实现思路"><a href="#AQS的大致实现思路" class="headerlink" title="AQS的大致实现思路"></a>AQS的大致实现思路</h3><p>AQS 实现了一个<strong>FIFO</strong>(FirstIn、FisrtOut先进先出)的队列。底层实现的数据结构是一个<strong>双向链表</strong>。</p>
+              <h2 id="【高并发编程】抽象队列同步器AQS的实现原理"><a href="#【高并发编程】抽象队列同步器AQS的实现原理" class="headerlink" title="【高并发编程】抽象队列同步器AQS的实现原理"></a>【高并发编程】抽象队列同步器AQS的实现原理</h2><h3 id="什么是AQS"><a href="#什么是AQS" class="headerlink" title="什么是AQS"></a>什么是AQS</h3><p>  <code>AQS</code>全称抽象队列同步器（Abstract Queued Synchronizer）,是Java并发包里面一个基础类，我们熟悉的很多并发工具同时通过继承它来实现的，譬如ReentrantLock, Semaphore, CountDownLatch等等。类如其名，抽象的队列式同步器，AQS定义了一套多线程访问共享资源的框架，使用它能够简单且高效的构造出应用广泛的同步器。</p>
+<h3 id="AQS底层实现"><a href="#AQS底层实现" class="headerlink" title="AQS底层实现"></a>AQS底层实现</h3><p><img src="https://i.loli.net/2021/05/04/EXIhaxTC8LZKz7j.jpg" srcset="/img/loading.gif" alt="aqs_data_struct.jpg"></p>
+<p>AQS名为队列同步器，内部就是通过维护了一个FIFO队列来完成获取资源线程的排队工作，即如果同时有多个线程想获取共享资源，等待的线程将会进入此队列。</p>
 <img src="https://i.loli.net/2021/05/03/aIrvgcfD1B6MoEW.png" srcset="/img/loading.gif" alt="aqs.png" style="zoom: 80%;">
 
-<p>Sync queue：同步队列，是一个双向链表。包括head节点和tail节点。head节点主要用作后续的调度。 Condition queue：非必须，单向链表。当程序中存在cindition的时候才会存在此列表。</p>
-<p>AQS核心思想是，如果被请求的共享资源空闲，则将当前请求资源的线程设置为有效的工作线程，并且将共享资源设置为锁定状态。如果被请求的共享资源被占用，那么就需要一套线程阻塞等待以及被唤醒时锁分配的机制，这个机制AQS是用CLH队列锁实现的，即将暂时获取不到锁的线程加入到队列中。</p>
-<h3 id="如何使用AQS"><a href="#如何使用AQS" class="headerlink" title="如何使用AQS"></a>如何使用AQS</h3><p>  <code>AQS</code>封装了很多方法，如获取独占锁，释放独占锁，获取共享锁，释放共享锁……我们可以通过在自己的实现的同步组件中调用<code>AQS</code>的这些方法来实现一个线程同步的功能。但是，根据<code>AQS</code>的名称也能够想到，我们不能直接创建<code>AQS</code>的对象，调用这些方法，因为<code>AQS</code>是一个抽象类，我们需要继承<code>AQS</code>，创建它的子类对象来使用它。在实际使用中，一般是在我们自己的类中，以内部类的方式继承<code>AQS</code>，然后在内部创建一个对象，在这个类内部使用，比如<code>ReentrantLock</code>中就是定义了一个抽象内部类<code>Sync</code>，继承<code>AQS</code>，然后定义了一个<code>NonfairSync</code>类，继承<code>Sync</code>，<code>NonfairSync</code>是一个<strong>非公平锁</strong>；同时又定义了一个<code>FairSync</code>类继承<code>Sync</code>，<code>FairSync</code>是一个<strong>公平锁</strong>。</p>
-<blockquote>
-<p><strong>公平锁</strong>：多个线程按照申请锁的顺序去获得锁，后申请锁的线程需要排队，等它之前的线程获得锁并释放后，它才能获得锁；</p>
-<p><strong>非公平锁</strong>：线程获得锁的顺序于申请锁的顺序无关，申请锁的线程可以直接尝试获得锁，谁抢到就是谁的；</p>
-</blockquote>
-<p>  我们继承了<code>AQS</code>，就可以直接调用它的方法了吗？当然不是。<code>Java</code>中提供的抽象组件，都是帮我们写好了通用的部分，但是一些具体的部分，还需要我们自己实现。举个比较简单的例子，<code>Java</code>中对自定义类型数组的排序，可以直接调用工具类的<code>sort</code>方法，<code>sort</code>方法已经实现了排序的算法，但是其中的比较过程是抽象的，需要我们自己实现，所以我们一般需要提供一个比较器（Comparator），或者让自定义类实现<code>Comparable</code>接口。这就是<strong>模板方法</strong>设计模式。</p>
-<blockquote>
-<p><strong>模板方法</strong>：在一个方法中实现了一个算法的流程，但是其中的一些步骤是抽象的，需要在子类中实现，或者具体使用时实现。模板方法可以提高算法的复用性，提供了算法的弹性，对于不同的需求，可以通用同一份代码。</p>
-</blockquote>
-<p>  而<code>AQS</code>的实现就是封装了一系列的模板方法，包括获取锁、释放锁等，这些都是模板方法。这些方法中调用的一些方法并没有具体实现，需要使用者根据自己的需求，在子类中进行实现。下面我们就来看看<code>AQS</code>中的这些方法。</p>
-<h3 id="AQS源码解读"><a href="#AQS源码解读" class="headerlink" title="AQS源码解读"></a>AQS源码解读</h3><p>  <strong>AQS底层维护一个int类型的变量state来表示当前的同步状态，根据当前state的值，来判断当前释放处于锁定状态，或者是其他状态</strong>。而<code>state</code>的每一个值具体是什么含义，是由我们自己实现的。我们继承<code>AQS</code>时，根据自己的需求，实现一些方法，其中就是通过修改<code>state</code>的值来维持同步状态。而关于<code>state</code>，主要有以下三个方法：</p>
-<ul>
-<li>**int getState() **：获取当前同步状态<code>state</code>的值；</li>
-<li>**void setState(int newState) **：设置当前同步状态<code>state</code>的值；</li>
-<li>**boolean compareAndSetState(int expect, int update) **：使用<code>CAS</code>设置当前同步状态的值，方法能够保证设置同步状态时的原子性；参数<code>expect</code>为<code>state</code>的预期旧值，而<code>update</code>是需要修改的新值，若设置成功，方法返回<code>true</code>，否则<code>false</code>；</li>
-</ul>
-<p>接下来我们再看一看在继承<code>AQS</code>时，我们可以重写的方法：</p>
-<p><a target="_blank" rel="noopener" href="https://img2020.cnblogs.com/blog/1324014/202004/1324014-20200409221307219-647175220.png"><img src="https://img2020.cnblogs.com/blog/1324014/202004/1324014-20200409221307219-647175220.png" srcset="/img/loading.gif" alt="img"></a></p>
-<p><a target="_blank" rel="noopener" href="https://img2020.cnblogs.com/blog/1324014/202004/1324014-20200409221316455-184372984.png"><img src="https://img2020.cnblogs.com/blog/1324014/202004/1324014-20200409221316455-184372984.png" srcset="/img/loading.gif" alt="img"></a></p>
-<p>  以上这些方法将会在<code>AQS</code>的模板方法中被调用，我们根据自己的需求，重写上述方法，控制同步状态<code>state</code>的值，即可控制线程同步的方式。下面再来看看<code>AQS</code>提供的模板方法：</p>
-<p><a target="_blank" rel="noopener" href="https://img2020.cnblogs.com/blog/1324014/202004/1324014-20200409221327546-1654915227.png"><img src="https://img2020.cnblogs.com/blog/1324014/202004/1324014-20200409221327546-1654915227.png" srcset="/img/loading.gif" alt="img"></a></p>
-<p>  <code>AQS</code>提供的模板方法主要分为三类：</p>
-<ul>
-<li>独占式地获取和释放锁；</li>
-<li>共享式地获取和释放锁；</li>
-<li>查询<code>AQS</code>的同步队列中正在等待的线程情况；</li>
-</ul>
-<p>  下面我们就来具体说一说<code>AQS</code>是如何实现线程同步的。</p>
-<h3 id="AQS如何实现线程同步"><a href="#AQS如何实现线程同步" class="headerlink" title="AQS如何实现线程同步"></a>AQS如何实现线程同步</h3><p>  前面提过，<code>AQS</code>通过一个<code>int</code>类型的变量<code>state</code>来记录当前的同步状态，也可以理解为锁的状态，根据<code>state</code>的值的不同，可以判断当前锁是否已经被获取。就拿独占锁来说，若我们要实现的是一个独占锁，则锁被获取后，其他线程将无法获取锁，需要进入阻塞状态，等待锁被释放。而线程获取锁就是通过修改<code>state</code>的值来实现的，一个线程修改<code>state</code>成功，则表示它成功获得了锁；若失败，则表示已经有其他线程获得了锁，则它需要进入阻塞状态。下面我们就来聊一聊<code>AQS</code>如何实现维持多个线程等待的。</p>
-<p>  首先说明结论：<strong>AQS通过一个同步队列来维护当前获取锁失败，进入阻塞状态的线程</strong>。这个同步队列是一个双向链表，获取锁失败的线程会被封装成一个链表节点，加入链表的尾部排队，而<code>AQS</code>保存了链表的头节点的引用<code>head</code>以及链表的尾节点引用<code>tail</code>。这个同步队列如下所示：</p>
-<img src="https://i.loli.net/2021/05/03/aIrvgcfD1B6MoEW.png" srcset="/img/loading.gif" alt="aqs.png" style="zoom: 80%;">
 
-<p>  在这个同步队列中，每个节点对应一个线程，每个节点都有一个<code>next</code>指针指向它的下一个节点，以及一个<code>prev</code>指针指向它的上一个节点。队列中的头节点<code>head</code>就是当前已经获取了锁，正在执行的线程对应的节点；而之后的这些节点，则对应着获取锁失败，正在排队的线程（当然，直接就获取锁成功的线程， 不会加入到队列中，而是直接执行）。</p>
-<p>  当一个线程获取锁失败，它会被封装成一个<code>Node</code>，加入同步队列的尾部排队，同时线程会进入阻塞状态。也就是说，在同步队列中，除了头节点对应的线程是运行状态，其余的线程都是等待睡眠状态。而当头节点对应的线程释放锁时，它会唤醒它的下一个节点（也就是上图中的第二个节点），被唤醒的节点对应的线程开始尝试获取锁，若获取成功，它就会将自己置为<code>head</code>，然后将原来的<code>head</code>移出队列。接下来我们就通过源码，具体分析一下<code>AQS</code>的实现过程。</p>
-<h4 id="独占锁的获取与释放过程"><a href="#独占锁的获取与释放过程" class="headerlink" title="独占锁的获取与释放过程"></a>独占锁的获取与释放过程</h4><h5 id="（1）获取锁的实现"><a href="#（1）获取锁的实现" class="headerlink" title="（1）获取锁的实现"></a>（1）获取锁的实现</h5><p>  <code>AQS</code>的锁功能齐全，它既可以用来实现独占锁，也可以用来实现共享锁。</p>
-<blockquote>
+
+
+
+
+
+<p>队列的源码实现（Node节点实现省略）用volatile保证队列的可见性：</p>
+<div class="hljs code-wrapper"><pre><code class="hljs java">
+<span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Node</span> </span>&#123;
+    <span class="hljs-comment">/** 共享节点 */</span>
+    <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> Node SHARED = <span class="hljs-keyword">new</span> Node();
+
+    <span class="hljs-comment">/** 独占节点 */</span>
+    <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> Node EXCLUSIVE = <span class="hljs-keyword">null</span>;
+
+    <span class="hljs-comment">/** 因为超时或者中断，节点会被设置成取消状态，被取消的节点不会参与到竞争中，会一直是取消，状态不会改变 */</span>
+    <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">int</span> CANCELLED =  <span class="hljs-number">1</span>;
+
+    <span class="hljs-comment">/** 后继节点处于等待状态，如果当前节点释放了同步状态或者被取消，会通知后继节点，使其得以运行 */</span>
+    <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">int</span> SIGNAL = -<span class="hljs-number">1</span>;
+
+    <span class="hljs-comment">/** 节点在等待条件队列中，节点线程等待在condition上，当其他线程对condition调用了signal后，该节点将会从等待队列中进入同步队列中，获取同步状态 */</span>
+    <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">int</span> CONDITION = -<span class="hljs-number">2</span>;
+
+    <span class="hljs-comment">/** 下一次共享式同步状态获取会无条件的传播下去 */</span>
+    <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">int</span> PROPAGATE = -<span class="hljs-number">3</span>;
+
+    <span class="hljs-comment">/** 等待状态 */</span>
+    <span class="hljs-keyword">volatile</span> <span class="hljs-keyword">int</span> waitStatus;
+
+    <span class="hljs-comment">/** 前驱节点 */</span>        
+    <span class="hljs-keyword">volatile</span> Node prev;
+
+    <span class="hljs-comment">/** 后继节点 */</span>
+    <span class="hljs-keyword">volatile</span> Node next;
+
+    <span class="hljs-comment">/** 获取同步状态的线程 */</span>
+    <span class="hljs-keyword">volatile</span> Thread thread;
+
+    <span class="hljs-comment">/** 下一个条件队列等待节点 */</span>
+    Node nextWaiter;
+    
+    <span class="hljs-function"><span class="hljs-keyword">final</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">isShared</span><span class="hljs-params">()</span> </span>&#123;
+        <span class="hljs-keyword">return</span> nextWaiter == SHARED;
+    &#125;
+
+    <span class="hljs-function"><span class="hljs-keyword">final</span> Node <span class="hljs-title">predecessor</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> NullPointerException </span>&#123;
+        Node p = prev;
+        <span class="hljs-keyword">if</span> (p == <span class="hljs-keyword">null</span>)
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> NullPointerException();
+        <span class="hljs-keyword">else</span>
+            <span class="hljs-keyword">return</span> p;
+    &#125;
+
+    Node() &#123;    <span class="hljs-comment">// Used to establish initial head or SHARED marker</span>
+    &#125;
+
+    Node(Thread thread, Node mode) &#123;     <span class="hljs-comment">// Used by addWaiter</span>
+        <span class="hljs-keyword">this</span>.nextWaiter = mode;
+        <span class="hljs-keyword">this</span>.thread = thread;
+    &#125;
+
+    Node(Thread thread, <span class="hljs-keyword">int</span> waitStatus) &#123; <span class="hljs-comment">// Used by Condition</span>
+        <span class="hljs-keyword">this</span>.waitStatus = waitStatus;
+        <span class="hljs-keyword">this</span>.thread = thread;
+    &#125;
+&#125;
+
+
+<span class="hljs-comment">/**</span>
+<span class="hljs-comment"> * Head of the wait queue, lazily initialized.  Except for</span>
+<span class="hljs-comment"> * initialization, it is modified only via method setHead.  Note:</span>
+<span class="hljs-comment"> * If head exists, its waitStatus is guaranteed not to be</span>
+<span class="hljs-comment"> * CANCELLED.</span>
+<span class="hljs-comment"> */</span>      
+<span class="hljs-keyword">private</span> <span class="hljs-keyword">transient</span> <span class="hljs-keyword">volatile</span> Node head;
+<span class="hljs-comment">/**</span>
+<span class="hljs-comment"> * Tail of the wait queue, lazily initialized.  Modified only via</span>
+<span class="hljs-comment"> * method enq to add new wait node.</span>
+<span class="hljs-comment"> */</span>
+<span class="hljs-keyword">private</span> <span class="hljs-keyword">transient</span> <span class="hljs-keyword">volatile</span> Node tail;</code></pre></div>
+<p>AQS无法确定共享的资源到底是什么，但是可以需要维护共享资源的同步状态。实际上，AQS内部用一个int变量state来代表同步状态, 用volatile修饰来保证线程可见性。如果一个线程获取同步状态state失败时，会将当前线程及等待信息等构建成一个Node，将Node放到FIFO队列里，同时阻塞当前线程，当线程将同步状态state释放时，会把FIFO队列中的首节的唤醒，使其获取同步状态state。</p>
+<div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">/**</span>
+<span class="hljs-comment"> * The synchronization state.</span>
+<span class="hljs-comment"> */</span>
+<span class="hljs-keyword">private</span> <span class="hljs-keyword">volatile</span> <span class="hljs-keyword">int</span> state;</code></pre></div>
+
+
+
+<h3 id="AQS对于同步状态的锁获取和释放"><a href="#AQS对于同步状态的锁获取和释放" class="headerlink" title="AQS对于同步状态的锁获取和释放"></a>AQS对于同步状态的锁获取和释放</h3><p><code>AQS</code>对于同步状态的锁分为两类，分为独占锁和共享锁</p>
 <p><strong>独占锁</strong>：也叫排他锁，即锁只能由一个线程获取，若一个线程获取了锁，则其他想要获取锁的线程只能等待，直到锁被释放。比如说写锁，对于写操作，每次只能由一个线程进行，若多个线程同时进行写操作，将很可能出现线程安全问题；</p>
 <p><strong>共享锁</strong>：锁可以由多个线程同时获取，锁被获取一次，则锁的计数器+1。比较典型的就是读锁，读操作并不会产生副作用，所以可以允许多个线程同时对数据进行读操作，而不会有线程安全问题，当然，前提是这个过程中没有线程在进行写操作；</p>
-</blockquote>
-<p>我们首先分析一下独占锁。在<code>AQS</code>中，通过方法<code>acquire</code>来获取独占锁，<code>acquire</code>方法的代码如下：</p>
-<div class="hljs code-wrapper"><pre><code class="hljs reasonml">public final void acquire(<span class="hljs-built_in">int</span> arg) &#123;
-    <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">try</span><span class="hljs-constructor">Acquire(<span class="hljs-params">arg</span>)</span> &amp;&amp;
-        acquire<span class="hljs-constructor">Queued(<span class="hljs-params">addWaiter</span>(Node.EXCLUSIVE)</span>, arg))
-        self<span class="hljs-constructor">Interrupt()</span>;
+<h4 id="独占锁的获取与释放过程"><a href="#独占锁的获取与释放过程" class="headerlink" title="独占锁的获取与释放过程"></a>独占锁的获取与释放过程</h4><h5 id="（1）获取锁的实现"><a href="#（1）获取锁的实现" class="headerlink" title="（1）获取锁的实现"></a>（1）获取锁的实现</h5><p>我们首先分析一下独占锁。在<code>AQS</code>中，通过方法<code>acquire</code>来获取独占锁，<code>acquire</code>方法的代码如下：</p>
+<div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">void</span> <span class="hljs-title">acquire</span><span class="hljs-params">(<span class="hljs-keyword">int</span> arg)</span> </span>&#123;
+    <span class="hljs-keyword">if</span> (!tryAcquire(arg) &amp;&amp; acquireQueued(addWaiter(Node.EXCLUSIVE), arg))
+        selfInterrupt();
 &#125;</code></pre></div>
 <p>上面的方法执行流程如下：</p>
 <ol>
-<li>首先调用<code>tryAcquire</code>尝试获取一次锁，若返回<code>true</code>，表示获取成功，则<code>acquire</code>方法将直接返回；若返回<code>false</code>，则会继续向后执行<code>acquireQueued</code>方法；</li>
+<li>首先调用<code>tryAcquire</code>尝试获取一次锁，若返回<code>true</code>，表示获取成功，则<code>acquire</code>方法将直接返回；若返回<code>false</code>，则会继续向后执行<code>acquireQueued</code>方法。（该方法由自定的同步组件实现，该方法的实现必须保证线程安全的获取同步状态。）</li>
 <li><code>tryAcquire</code>返回<code>false</code>后，将执行<code>acquireQueued</code>，但是这个方法传入的参数调用了<code>addWaiter</code>方法；</li>
-<li><code>addWaiter</code>方法的作用是将当前线封装成同步队列的节点，然后加入到同步队列的尾部进行排队，并返回此节点；</li>
-<li><code>addWaiter</code>方法执行完成后，将它的返回值作为参数，调用<code>acquireQueued</code>方法。<code>acquireQueued</code>方法的作用是让当前线程在同步队列中阻塞，然后在被其他线程唤醒时去获取锁；</li>
-<li>若线程被唤醒并成功获取锁后，将从<code>acquireQueued</code>方法中退出，同时返回一个<code>boolean</code>值表示当前线程是否被中断，若被中断，则会执行下面的<code>selfInterrupt</code>方法，响应中断；</li>
+<li><code>addWaiter</code>:如果<code>tryAcquire</code>返回false（获取锁失败），则调用该方法将当前线程封装成节点加入到同步队列尾部，并标记为独占模式。<code>addWaiter(Node.EXCLUSIVE))</code>，<code>Node.EXCLUSIV</code>既为独占模式。</li>
+<li><code>addWaiter</code>方法执行完成后，将它的返回值作为参数，调用<code>acquireQueued</code>方法。当前线程获取锁失败后，就进入了一个自旋的状态，如果在等待过程中被中断过（如timeout），就返回true（接着自我中断），否则返回false。也就是说当前线程进入同步队列后进入自旋状态，每个节点会自我观察，当条件满足时，获取到同步状态后，就可以从这个自旋过程中退出，否则一直执行下去。</li>
+<li>如果线程在等待过程中被中断过，它是不响应的。只是获取资源后才再进行自我中断selfInterrupt()，将中断补上。因为在等待队列中自旋状态的线程是不会响应中断的，它会把中断记录下来，如果在自旋时发生过中断，就返回true。然后就会执行selfInterrupt()方法，而这个方法就是简单的中断当前线程Thread.currentThread().interrupt();其作用就是补上在自旋时没有响应的中断。</li>
 </ol>
-<p>下面我们就来具体分析这个方法中调用的几个方法的执行流程。首先第一个<code>tryAcquire</code>方法：</p>
+<p>下面我们就来具体分析这个方法中调用的几个方法的执行流程。</p>
+<p><strong>首先第一个<code>tryAcquire</code>方法：</strong></p>
 <div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">tryAcquire</span><span class="hljs-params">(<span class="hljs-keyword">int</span> arg)</span> </span>&#123;
     <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> UnsupportedOperationException();
 &#125;</code></pre></div>
-<p>  可以看到，这个方法的实现仅仅只是抛出了一个异常。我们之前提过，<code>AQS</code>是基于模板方法设计模式实现的，在其中定义了许多模板方法，在模板方法中会调用一些没有实现的方法，这些方法需要使用者根据自己的需求实现。而<code>acquire</code>方法就是一个模板方法，其中调用的<code>tryAcquire</code>方法就是需要我们自己实现的方法。<code>tryAcquire</code>的作用就是尝试修改<code>state</code>值，也就是获取锁，若修改成功，则返回<code>true</code>，否则返回<code>false</code>。它的实现需要根据<code>AQS</code>的子类具体分析，比如<code>ReentrantLock</code>中的<code>Sync</code>，这里就不过多描述了。</p>
-<p>下面来看看<code>addWaiter</code>的源码：</p>
-<div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">// 将线程封装成一个节点，放入同步队列的尾部</span>
-<span class="hljs-function"><span class="hljs-keyword">private</span> Node <span class="hljs-title">addWaiter</span><span class="hljs-params">(Node mode)</span> </span>&#123;
-    <span class="hljs-comment">// 当前线程封装成同步队列的一个节点Node</span>
+<p>  可以看到，这个方法的实现仅仅只是抛出了一个异常。<code>AQS</code>是基于模板方法设计模式实现的，在其中定义了许多模板方法，在模板方法中会调用一些没有实现的方法，这些方法需要使用者根据自己的需求实现。而<code>acquire</code>方法就是一个模板方法，其中调用的<code>tryAcquire</code>方法就是需要我们自己实现的方法。<code>tryAcquire</code>的作用就是尝试修改<code>state</code>值，也就是获取锁，若修改成功，则返回<code>true</code>，否则返回<code>false</code>。它的实现需要根据<code>AQS</code>的子类具体分析，比如<code>ReentrantLock</code>中的<code>Sync</code>，Sync的子类NonfairSync和FairSync。</p>
+<p><strong>下面来看看<code>addWaiter</code>的源码：</strong></p>
+<div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">private</span> Node <span class="hljs-title">addWaiter</span><span class="hljs-params">(Node mode)</span> </span>&#123;
+    <span class="hljs-comment">// 新建Node节点</span>
     Node node = <span class="hljs-keyword">new</span> Node(Thread.currentThread(), mode);
-    <span class="hljs-comment">// 这个节点需要插入到原尾节点的后面，所以我们在这里先记下原来的尾节点</span>
+    <span class="hljs-comment">// 尝试快速添加尾结点</span>
     Node pred = tail;
-    <span class="hljs-comment">// 判断尾节点是否为空，若为空表示队列中还没有节点，则不执行以下步骤</span>
     <span class="hljs-keyword">if</span> (pred != <span class="hljs-keyword">null</span>) &#123;
-        <span class="hljs-comment">// 记录新节点的前一个节点为原尾节点</span>
         node.prev = pred;
-        <span class="hljs-comment">// 将新节点设置为新尾节点，使用CAS操作保证了原子性</span>
+        <span class="hljs-comment">// CAS方式设置尾结点,保证操作的原子性</span>
         <span class="hljs-keyword">if</span> (compareAndSetTail(pred, node)) &#123;
-            <span class="hljs-comment">// 若设置成功，则让原来的尾节点的next指向新尾节点</span>
             pred.next = node;
             <span class="hljs-keyword">return</span> node;
         &#125;
     &#125;
-    <span class="hljs-comment">// 若以上操作失败，则调用enq方法继续尝试(enq方法见下面)</span>
+    <span class="hljs-comment">// 如果上面添加失败，这里循环尝试添加，直到添加成功为止</span>
     enq(node);
     <span class="hljs-keyword">return</span> node;
-&#125;
-
-<span class="hljs-function"><span class="hljs-keyword">private</span> Node <span class="hljs-title">enq</span><span class="hljs-params">(<span class="hljs-keyword">final</span> Node node)</span> </span>&#123;
-    <span class="hljs-comment">// 使用死循环不断尝试</span>
+&#125;</code></pre></div>
+<p><strong><code>enq(node)</code> 采用自旋的方式将节点加入到队列中</strong></p>
+<div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">private</span> Node <span class="hljs-title">enq</span><span class="hljs-params">(<span class="hljs-keyword">final</span> Node node)</span> </span>&#123;
+    <span class="hljs-comment">// 一直for循环，直到插入Node成功为止</span>
     <span class="hljs-keyword">for</span> (;;) &#123;
-        <span class="hljs-comment">// 记录原尾节点</span>
         Node t = tail;
-        <span class="hljs-comment">// 若原尾节点为空，则必须先初始化同步队列，初始化之后，下一次循环会将新节点加入队列</span>
-        <span class="hljs-keyword">if</span> (t == <span class="hljs-keyword">null</span>) &#123; 
-            <span class="hljs-comment">// 使用CAS设置创建一个默认的节点作为首届点</span>
+        <span class="hljs-keyword">if</span> (t == <span class="hljs-keyword">null</span>) &#123;
+            <span class="hljs-comment">// CAS设置首节点</span>
             <span class="hljs-keyword">if</span> (compareAndSetHead(<span class="hljs-keyword">new</span> Node()))
-                <span class="hljs-comment">// 首尾指向同一个节点</span>
                 tail = head;
         &#125; <span class="hljs-keyword">else</span> &#123;
-            <span class="hljs-comment">// 以下操作与addWaiter方法中的if语句块内一致</span>
             node.prev = t;
+            <span class="hljs-comment">// CAS设置尾结点</span>
             <span class="hljs-keyword">if</span> (compareAndSetTail(t, node)) &#123;
                 t.next = node;
                 <span class="hljs-keyword">return</span> t;
@@ -349,43 +394,34 @@
         &#125;
     &#125;
 &#125;</code></pre></div>
-<p>  以上就是<code>addWaiter</code>方法的实现过程，我在代码中使用注释对每一步进行了详细的解析，它的执行过程大致可以总结为：<strong>将新线程封装成一个节点，加入到同步队列的尾部，若同步队列为空，则先在其中加入一个默认的节点，再进行加入；若加入失败，则使用死循环（也叫自旋）不断尝试，直到成功为止</strong>。这个过程中使用<code>CAS</code>保证了添加节点的原子性。</p>
-<p>下面看看<code>acquireQueued</code>方法的源码：</p>
+<p>以上就是<code>addWaiter</code>方法的实现过程，它的作用就是，将当前线程包装成Node节点，加入到同步队列的队尾。如果添加失败则采用自旋的方式添加节点（也就时死循环的方式），确保节点加入队列。需要注意的是，如果当前队列为空需要添加一个空节点（默认节点）。</p>
+<p><strong>接下来看看<code>acquireQueued</code>方法的源码：</strong></p>
 <div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">/**</span>
 <span class="hljs-comment"> * 让线程不间断地获取锁，若线程对应的节点不是头节点的下一个节点，则会进入等待状态</span>
 <span class="hljs-comment"> * <span class="hljs-doctag">@param</span> node the node</span>
 <span class="hljs-comment"> */</span>
 <span class="hljs-function"><span class="hljs-keyword">final</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">acquireQueued</span><span class="hljs-params">(<span class="hljs-keyword">final</span> Node node, <span class="hljs-keyword">int</span> arg)</span> </span>&#123;
-    <span class="hljs-comment">// 记录失败标志</span>
+    <span class="hljs-comment">// 操作是否成功标志</span>
     <span class="hljs-keyword">boolean</span> failed = <span class="hljs-keyword">true</span>;
     <span class="hljs-keyword">try</span> &#123;
-        <span class="hljs-comment">// 记录中断标志，初始为true</span>
+        <span class="hljs-comment">// 线程中断标志</span>
         <span class="hljs-keyword">boolean</span> interrupted = <span class="hljs-keyword">false</span>;
-        <span class="hljs-comment">// 循环执行，因为线程在被唤醒后，可能再次获取锁失败，需要重写进入等待</span>
+        <span class="hljs-comment">// 不断的自旋循环</span>
         <span class="hljs-keyword">for</span> (;;) &#123;
-            <span class="hljs-comment">// 获取当前线程节点的前一个节点</span>
+            <span class="hljs-comment">// 当前节点的prev节点</span>
             <span class="hljs-keyword">final</span> Node p = node.predecessor();
-            <span class="hljs-comment">// 若前一个节点是头节点，则tryAcquire尝试获取锁，若获取成功，则执行if中的代码</span>
+            <span class="hljs-comment">// 判断prev是否是头结点 &amp;&amp; 是否获取到同步状态</span>
             <span class="hljs-keyword">if</span> (p == head &amp;&amp; tryAcquire(arg)) &#123;
-                <span class="hljs-comment">// 将当前节点设置为头节点</span>
+                <span class="hljs-comment">// 以上条件成立，将当前节点设置成头结点</span>
                 setHead(node);
-                <span class="hljs-comment">// 将原来的头节点移出同步队列</span>
+                <span class="hljs-comment">// 将prev节点移除队列中</span>
                 p.next = <span class="hljs-keyword">null</span>; <span class="hljs-comment">// help GC</span>
-                <span class="hljs-comment">// 失败标志置为false</span>
                 failed = <span class="hljs-keyword">false</span>;
                 <span class="hljs-comment">// 返回中断标志，acquire方法可以根据返回的中断标志，判断当前线程是否被中断</span>
                 <span class="hljs-keyword">return</span> interrupted;
             &#125;
-            <span class="hljs-comment">// shouldParkAfterFailedAcquire方法判断当前线程是否能够进入等待状态，</span>
-            <span class="hljs-comment">// 若当前线程的节点不是头节点的下一个节点，则需要进入等待状态，</span>
-            <span class="hljs-comment">// 在此方法内部，当前线程会找到它的前驱节点中，第一个还在正常等待或执行的节点，</span>
-            <span class="hljs-comment">// 让其作为自己的直接前驱，然后在需要时将自己唤醒（因为其中有些线程可能被中断），</span>
-            <span class="hljs-comment">// 若找到，则返回true，表示自己可以进入等待状态了；</span>
-            <span class="hljs-comment">// 则继续调用parkAndCheckInterrupt方法，当前线程在这个方法中等待，</span>
-            <span class="hljs-comment">// 直到被其他线程唤醒，或者被中断后返回，返回时将返回一个boolean值，</span>
-            <span class="hljs-comment">// 表示这个线程是否被中断，若为true，则将执行下面一行代码，将中断标志置为true</span>
-            <span class="hljs-keyword">if</span> (shouldParkAfterFailedAcquire(p, node) &amp;&amp;
-                parkAndCheckInterrupt())
+            <span class="hljs-comment">// 自旋过程中，判断当前线程是否需要阻塞 &amp;&amp; 阻塞当前线程并且检验线程中断状态</span>
+            <span class="hljs-keyword">if</span> (shouldParkAfterFailedAcquire(p, node) &amp;&amp; parkAndCheckInterrupt())
                 interrupted = <span class="hljs-keyword">true</span>;
         &#125;
     &#125; <span class="hljs-keyword">finally</span> &#123;
@@ -395,14 +431,55 @@
         <span class="hljs-comment">// 比如我们自己实现的tryAcquire方法</span>
         <span class="hljs-comment">// 此时将取消线程获取锁的动作，将它从同步队列中移除</span>
         <span class="hljs-keyword">if</span> (failed)
+            <span class="hljs-comment">// 取消获取同步状态</span>
             cancelAcquire(node);
     &#125;
 &#125;</code></pre></div>
-<p>  以上就是<code>acquireQueued</code>方法的源码分析。这个方法的作用可以概括为：<strong>让线程在同步队列中阻塞，直到它成为头节点的下一个节点，被头节点对应的线程唤醒，然后开始获取锁，若获取成功才会从方法中返回</strong>。这个方法会返回一个<code>boolean</code>值，表示这个正在同步队列中的线程是否被中断。</p>
+<p><strong><code>shouldParkAfterFailedAcquire(Node pred,Node node)</code>：判断一个线程是否阻塞</strong></p>
+<div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">shouldParkAfterFailedAcquire</span><span class="hljs-params">(Node pred, Node node)</span> </span>&#123;
+    <span class="hljs-comment">// 拿到当前节点的prev节点的等待状态</span>
+    <span class="hljs-keyword">int</span> ws = pred.waitStatus;
+
+    <span class="hljs-keyword">if</span> (ws == Node.SIGNAL)
+        <span class="hljs-comment">/*</span>
+<span class="hljs-comment">         * 如果prev的status是signal，表示当prev释放了同步状态或者取消了，会通知当前节        </span>
+<span class="hljs-comment">         * 点，所以当前节点可以安心的阻塞了（相当睡觉会有人叫醒他）</span>
+<span class="hljs-comment">         */</span>
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">true</span>;
+    <span class="hljs-keyword">if</span> (ws &gt; <span class="hljs-number">0</span>) &#123;
+        <span class="hljs-comment">/*</span>
+<span class="hljs-comment">         * status &gt; 0，表示为取消状态，需要将取消状态的节点从队列中移除</span>
+<span class="hljs-comment">         * 直到找到一个状态不是取消的节点为止</span>
+<span class="hljs-comment">         */</span>
+        <span class="hljs-keyword">do</span> &#123;
+            node.prev = pred = pred.prev;
+        &#125; <span class="hljs-keyword">while</span> (pred.waitStatus &gt; <span class="hljs-number">0</span>);
+        pred.next = node;
+    &#125; <span class="hljs-keyword">else</span> &#123;
+        <span class="hljs-comment">/*</span>
+<span class="hljs-comment">         * 除了以上情况，通过CAS将prev的status设置成signal</span>
+<span class="hljs-comment">         */</span>
+        compareAndSetWaitStatus(pred, ws, Node.SIGNAL);
+    &#125;
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;
+&#125;</code></pre></div>
+<p><strong><code>parkAndCheckInterrupt</code>阻塞当前线程并且检验线程中断状态</strong></p>
+<div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">parkAndCheckInterrupt</span><span class="hljs-params">()</span> </span>&#123;
+    <span class="hljs-comment">// 阻塞当前线程</span>
+    LockSupport.park(<span class="hljs-keyword">this</span>);
+    <span class="hljs-comment">// 返回当前线程的中断状态</span>
+    <span class="hljs-keyword">return</span> Thread.interrupted();
+&#125;</code></pre></div>
+<p>以上就是<code>acquireQueued</code>方法的源码分析。这个方法的作用就是，让线程不间断地获取锁，若线程对应的节点不是头节点的下一个节点，则会进入等待状态，等待唤醒。这个方法会返回一个<code>boolean</code>值，表示这个正在同步队列中的线程是否被中断。</p>
+<p>最终未获取到同步状态 &amp;&amp; 线程中断状态是true，线程进行自我中断。</p>
+<div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">selfInterrupt</span><span class="hljs-params">()</span> </span>&#123;
+    <span class="hljs-comment">// 未获取到同步状态 &amp;&amp; 线程中断状态是true，中断当前线程</span>
+    Thread.currentThread().interrupt();
+&#125;</code></pre></div>
 <p>  到此，获取独占锁的实现就分析完毕了。需要注意的是，这些过程中使用的<code>compareAndSetXXX</code>这种形式的方法，都是基于<code>CAS</code>机制实现的，保证了这些操作的原子性。</p>
 <h5 id="（2）释放锁的实现"><a href="#（2）释放锁的实现" class="headerlink" title="（2）释放锁的实现"></a><strong>（2）释放锁的实现</strong></h5><p>  分析完获取独占锁的代码后，我们再来看看释放锁的实现。释放独占锁是通过<code>release</code>方法实现的：</p>
 <div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">release</span><span class="hljs-params">(<span class="hljs-keyword">int</span> arg)</span> </span>&#123;
-    <span class="hljs-comment">// 调用tryRelease尝试修改state释放锁，若成功，将返回true，否则false</span>
+    <span class="hljs-comment">// 调用tryRelease 尝试修改state释放锁，若成功，将返回true，否则false</span>
     <span class="hljs-keyword">if</span> (tryRelease(arg)) &#123;
         <span class="hljs-comment">// 若修改state成功，则表示释放锁成功，需要将当前线程移出同步队列</span>
         <span class="hljs-comment">// 当前线程在同步队列中的节点就是head，所以此处记录head</span>
@@ -419,54 +496,77 @@
     <span class="hljs-comment">// 释放锁失败</span>
     <span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;
 &#125;</code></pre></div>
-<p>  以上就是同步队列中头节点对应的线程释放锁的过程。<code>release</code>也是一个模板方法，其中通过调用<code>tryRelease</code>尝试释放锁，而<code>tryRelease</code>也需要使用者自己实现。在之前也说过，头节点释放锁时，需要唤醒它的下一个节点对应的线程，让这个线程不再等待，去获取锁，而这个过程就是通过<code>unparkSuccessor</code>方法实现的。</p>
-<h4 id="共享锁的获取与释放过程"><a href="#共享锁的获取与释放过程" class="headerlink" title="共享锁的获取与释放过程"></a>共享锁的获取与释放过程</h4><p>  前面提到过，<code>AQS</code>不仅仅可以用来实现独占锁，还可以用来实现共享锁，下面我们就来看看<code>AQS</code>中，有关共享锁的模板方法的实现。首先是获取共享锁的实现，在<code>AQS</code>中，定义了<code>acquireShared</code>方法用来获取共享锁：</p>
+<p>以上就是同步队列中头节点对应的线程释放锁的过程。<code>release</code>也是一个模板方法，其中通过调用<code>tryRelease</code>尝试释放锁，而<code>tryRelease</code>也需要使用者自己实现。</p>
+<div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">tryRelease</span><span class="hljs-params">(<span class="hljs-keyword">int</span> arg)</span> </span>&#123;
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> UnsupportedOperationException();
+&#125;</code></pre></div>
+<p>在之前也说过，头节点释放锁时，需要唤醒它的下一个节点对应的线程，让这个线程不再等待，去获取锁，而这个过程就是通过<code>unparkSuccessor</code>方法实现的。</p>
+<div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">unparkSuccessor</span><span class="hljs-params">(Node node)</span> </span>&#123;
+    <span class="hljs-comment">/*</span>
+<span class="hljs-comment">     * 获取当前节点状态</span>
+<span class="hljs-comment">     */</span>
+    <span class="hljs-keyword">int</span> ws = node.waitStatus;
+
+    <span class="hljs-comment">// 如果当前节点的状态小于0，那么用CAS设置成0</span>
+    <span class="hljs-keyword">if</span> (ws &lt; <span class="hljs-number">0</span>)
+        compareAndSetWaitStatus(node, ws, <span class="hljs-number">0</span>);
+
+    <span class="hljs-comment">/*</span>
+<span class="hljs-comment">     * 获取当前节点的后继节点</span>
+<span class="hljs-comment">     */</span>
+    Node s = node.next;
+
+    <span class="hljs-comment">// 如果后继节点为空 || 或者后继节点的状态 &gt; 0 (为取消状态)</span>
+    <span class="hljs-keyword">if</span> (s == <span class="hljs-keyword">null</span> || s.waitStatus &gt; <span class="hljs-number">0</span>) &#123;
+        s = <span class="hljs-keyword">null</span>;
+        <span class="hljs-comment">// 从尾结点查找状态不为取消的可用节点</span>
+        <span class="hljs-keyword">for</span> (Node t = tail; t != <span class="hljs-keyword">null</span> &amp;&amp; t != node; t = t.prev)
+            <span class="hljs-keyword">if</span> (t.waitStatus &lt;= <span class="hljs-number">0</span>)
+                s = t;
+    &#125;
+    <span class="hljs-keyword">if</span> (s != <span class="hljs-keyword">null</span>)
+        <span class="hljs-comment">// 唤醒后继节点</span>
+        LockSupport.unpark(s.thread);
+&#125;</code></pre></div>
+<p>总结：</p>
+<p>在AQS中维护着一个FIFO的同步队列，当线程获取同步状态失败后，则会加入到这个同步队列的对尾并一直保持着自旋。在同步队列中的线程在自旋时会判断其前驱节点是否为首节点，如果为首节点则不断尝试获取同步状态，获取成功则退出同步队列。当线程执行完逻辑后，会释放同步状态，释放后会唤醒其后继节点。 </p>
+<h4 id="共享锁的获取与释放过程"><a href="#共享锁的获取与释放过程" class="headerlink" title="共享锁的获取与释放过程"></a>共享锁的获取与释放过程</h4><h5 id="（1）-获取锁的实现"><a href="#（1）-获取锁的实现" class="headerlink" title="（1） 获取锁的实现"></a>（1） 获取锁的实现</h5><p>  前面提到过，<code>AQS</code>不仅仅可以用来实现独占锁，还可以用来实现共享锁，下面我们就来看看<code>AQS</code>中，有关共享锁的模板方法的实现。首先是获取共享锁的实现，在<code>AQS</code>中，定义了<code>acquireShared</code>方法用来获取共享锁：</p>
 <div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">void</span> <span class="hljs-title">acquireShared</span><span class="hljs-params">(<span class="hljs-keyword">int</span> arg)</span> </span>&#123;
     <span class="hljs-keyword">if</span> (tryAcquireShared(arg) &lt; <span class="hljs-number">0</span>)
+         <span class="hljs-comment">// 获取失败，自旋获取同步状态</span>
         doAcquireShared(arg);
 &#125;</code></pre></div>
-<p>  可以看到，这个方法比较简短。首先调用<code>tryAcquireShared</code>方法尝试获取一次共享锁，即修改<code>state</code>的值，若返回值<code>&gt;=0</code>，则表示获取成功，线程不受影响，继续向下执行；若返回值小于<code>0</code>，表示获取共享锁失败，则线程需要进入到同步队列中等待，调用<code>doAcquireShared</code>方法。<code>acquireShared</code>方法也是<code>AQS</code>的一个模板方法，而其中的<code>tryAcquireShared</code>方法就是需要使用者自己实现的方法。下面我们来看看<code>doAcquireShared</code>方法的实现：</p>
-<div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">/**</span>
-<span class="hljs-comment"> * 不间断地获取共享锁，若线程对应的节点不是头节点的下一个节点，将进入等待状态</span>
-<span class="hljs-comment"> * 实现与acquireQueued非常类似</span>
-<span class="hljs-comment"> * <span class="hljs-doctag">@param</span> arg the acquire argument</span>
-<span class="hljs-comment"> */</span>
-<span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">doAcquireShared</span><span class="hljs-params">(<span class="hljs-keyword">int</span> arg)</span> </span>&#123;
-    <span class="hljs-comment">// 往同步队列的尾部添加一个默认节点，Node.SHARED是一个Node常量，</span>
-    <span class="hljs-comment">// 它的值就是一个不带任何参数的Node对象，也就是new Node();</span>
-    <span class="hljs-keyword">final</span> Node node = addWaiter(Node.SHARED);
-    <span class="hljs-comment">// 失败标志，默认为true</span>
+<p>  可以看到，这个方法比较简短。首先调用<code>tryAcquireShared</code>方法尝试获取一次共享锁，即修改<code>state</code>的值，若返回值<code>&gt;=0</code>，则表示获取成功，线程不受影响，继续向下执行；若返回值小于<code>0</code>，表示获取共享锁失败，则线程需要进入到同步队列中等待，调用<code>doAcquireShared</code>方法。<code>acquireShared</code>方法也是<code>AQS</code>的一个模板方法，而其中的<code>tryAcquireShared</code>方法就是需要使用者自己实现的方法。</p>
+<div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">int</span> <span class="hljs-title">tryAcquireShared</span><span class="hljs-params">(<span class="hljs-keyword">int</span> arg)</span> </span>&#123;
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> UnsupportedOperationException();
+    
+&#125;</code></pre></div>
+<p>下面我们来看看<code>doAcquireShared</code>方法的实现：</p>
+<div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">doAcquireShared</span><span class="hljs-params">(<span class="hljs-keyword">int</span> arg)</span> </span>&#123;
+    <span class="hljs-comment">// 添加共享模式节点到队列中</span>
+    <span class="hljs-keyword">final</span> Node node = addWaiter(Node.SHARED); 
     <span class="hljs-keyword">boolean</span> failed = <span class="hljs-keyword">true</span>;
     <span class="hljs-keyword">try</span> &#123;
-        <span class="hljs-comment">// 中断标志，用来判断线程在等待的过程中释放被中断</span>
         <span class="hljs-keyword">boolean</span> interrupted = <span class="hljs-keyword">false</span>;
-        <span class="hljs-comment">// 死循环不断尝试获取共享锁</span>
+        <span class="hljs-comment">// 自旋获取同步状态</span>
         <span class="hljs-keyword">for</span> (;;) &#123;
-            <span class="hljs-comment">// 获取默认节点的前一个节点</span>
+            <span class="hljs-comment">// 当前节点的前驱</span>
             <span class="hljs-keyword">final</span> Node p = node.predecessor();
-            <span class="hljs-comment">// 判断当前节点的前一个节点是否为head节点</span>
+            <span class="hljs-comment">// 如果前驱节点是head节点</span>
             <span class="hljs-keyword">if</span> (p == head) &#123;
-                <span class="hljs-comment">// 尝试获取共享锁</span>
+                <span class="hljs-comment">// 尝试去获取共享同步状态</span>
                 <span class="hljs-keyword">int</span> r = tryAcquireShared(arg);
-                <span class="hljs-comment">// 若r&gt;0，表示获取成功</span>
                 <span class="hljs-keyword">if</span> (r &gt;= <span class="hljs-number">0</span>) &#123;
-                    <span class="hljs-comment">// 当前线程获取锁成功后，调用setHeadAndPropagate方法将当前线程设置为head</span>
-                    <span class="hljs-comment">// 同时，若共享锁还能被其他线程获取，则在这个方法中也会向后传递，唤醒后面的线程</span>
+                    <span class="hljs-comment">// 将当前节点设置为头结点，并且释放也是共享模式的后继节点</span>
                     setHeadAndPropagate(node, r);
-                    <span class="hljs-comment">// 将原来的head的next置为null</span>
                     p.next = <span class="hljs-keyword">null</span>; <span class="hljs-comment">// help GC</span>
-                    <span class="hljs-comment">// 判断当前线程是否中断，若被中断，则调用selfInterrupt方法响应中断</span>
                     <span class="hljs-keyword">if</span> (interrupted)
                         selfInterrupt();
-                    <span class="hljs-comment">// 失败标志置为false</span>
                     failed = <span class="hljs-keyword">false</span>;
                     <span class="hljs-keyword">return</span>;
                 &#125;
             &#125;
-            <span class="hljs-comment">// 以下代码和获取独占锁的acquireQueued方法相同，即让当前线程进入等待状态</span>
-            <span class="hljs-comment">// 具体解析可以看上面acquireQueued方法的解析</span>
-            <span class="hljs-keyword">if</span> (shouldParkAfterFailedAcquire(p, node) &amp;&amp;
-                parkAndCheckInterrupt())
+            <span class="hljs-keyword">if</span> (shouldParkAfterFailedAcquire(p, node) &amp;&amp; parkAndCheckInterrupt())
                 interrupted = <span class="hljs-keyword">true</span>;
         &#125;
     &#125; <span class="hljs-keyword">finally</span> &#123;
@@ -474,196 +574,60 @@
             cancelAcquire(node);
     &#125;
 &#125;</code></pre></div>
-<p>​        <code>doAcquireShared</code>方法的实现和获取独占锁中的<code>acquireQueued</code>方法很类似，但是主要有一点不同，那就是<strong>线程在被唤醒后，若成功获取到了共享锁，还需要判断共享锁是否还能被其他线程获取，若可以，则继续向后唤醒它的下一个节点对应的线程</strong>。下面再看看释放共享锁的代码，释放共享锁时通过方法<code>releaseShared</code>：</p>
+<p><code>setHeadAndPropagate(Node node, int propagate)</code>        </p>
+<div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setHeadAndPropagate</span><span class="hljs-params">(Node node, <span class="hljs-keyword">int</span> propagate)</span> </span>&#123;
+    Node h = head; <span class="hljs-comment">// Record old head for check below</span>
+    setHead(node);
+
+    <span class="hljs-keyword">if</span> (propagate &gt; <span class="hljs-number">0</span> || h == <span class="hljs-keyword">null</span> || h.waitStatus &lt; <span class="hljs-number">0</span> ||
+        (h = head) == <span class="hljs-keyword">null</span> || h.waitStatus &lt; <span class="hljs-number">0</span>) &#123;
+        Node s = node.next;
+        <span class="hljs-keyword">if</span> (s == <span class="hljs-keyword">null</span> || s.isShared())
+            <span class="hljs-comment">// 真正的释放共享同步状态，并唤醒下一个节点</span>
+            doReleaseShared();
+    &#125;
+&#125;</code></pre></div>
+<p><code>doReleaseShared</code></p>
+<div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">doReleaseShared</span><span class="hljs-params">()</span> </span>&#123;
+    <span class="hljs-comment">// 自旋释放共享同步状态</span>
+    <span class="hljs-keyword">for</span> (;;) &#123;
+        Node h = head;
+        <span class="hljs-comment">// 如果头结点不为空 &amp;&amp; 头结点不等于尾结点，说明存在有效的node节点</span>
+        <span class="hljs-keyword">if</span> (h != <span class="hljs-keyword">null</span> &amp;&amp; h != tail) &#123;
+            <span class="hljs-keyword">int</span> ws = h.waitStatus;
+            <span class="hljs-comment">// 如果头结点的状态为signal，说明存在需要唤醒的后继节点</span>
+            <span class="hljs-keyword">if</span> (ws == Node.SIGNAL) &#123;
+                <span class="hljs-comment">// 将头结点状态更新为0（初始值状态），因为此时头结点已经没用了</span>
+                <span class="hljs-comment">// continue为了保证替换成功</span>
+                <span class="hljs-keyword">if</span> (!compareAndSetWaitStatus(h, Node.SIGNAL, <span class="hljs-number">0</span>))
+                    <span class="hljs-keyword">continue</span>;            <span class="hljs-comment">// loop to recheck cases</span>
+                <span class="hljs-comment">// 唤醒后继节点</span>
+                unparkSuccessor(h); <span class="hljs-comment">// 上面已经提到过</span>
+            &#125;
+            <span class="hljs-comment">// 如果状态为初始值状态0，那么设置成PROPAGATE状态</span>
+            <span class="hljs-comment">// 确保在释放同步状态时能通知后继节点</span>
+            <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (ws == <span class="hljs-number">0</span> &amp;&amp; !compareAndSetWaitStatus(h, <span class="hljs-number">0</span>, Node.PROPAGATE))
+                <span class="hljs-keyword">continue</span>;                <span class="hljs-comment">// loop on failed CAS</span>
+        &#125;
+        <span class="hljs-keyword">if</span> (h == head)                   <span class="hljs-comment">// loop if head changed</span>
+            <span class="hljs-keyword">break</span>;
+    &#125;
+&#125;</code></pre></div>
+<p><code>doAcquireShared</code>方法的实现和获取独占锁中的<code>acquireQueued</code>方法很类似，但是主要有一点不同，那就是<strong>线程在被唤醒后，若成功获取到了共享锁，还需要判断共享锁是否还能被其他线程获取，若可以，则继续向后唤醒它的下一个节点对应的线程</strong>。</p>
+<h5 id="（2）-释放锁的实现"><a href="#（2）-释放锁的实现" class="headerlink" title="（2） 释放锁的实现"></a>（2） 释放锁的实现</h5><p>下面再看看释放共享锁的代码，释放共享锁时通过方法<code>releaseShared</code>：</p>
 <div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">releaseShared</span><span class="hljs-params">(<span class="hljs-keyword">int</span> arg)</span> </span>&#123;
     <span class="hljs-comment">// 尝试修改state的值释放锁</span>
     <span class="hljs-keyword">if</span> (tryReleaseShared(arg)) &#123;
         <span class="hljs-comment">// 若成功，则调用以下方法唤醒后继节点中的线程</span>
-        doReleaseShared();
+        doReleaseShared(); <span class="hljs-comment">// 上面提到过了</span>
         <span class="hljs-keyword">return</span> <span class="hljs-keyword">true</span>;
     &#125;
     <span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;
 &#125;</code></pre></div>
-<p>  <code>releaseShared</code>也是一个模板方法，它通过调用使用者自己实现的<code>tryReleaseShared</code>方法尝试释放锁，修改<code>state</code>的值，若返回<code>true</code>，表示修改成功，则继续向下调用<code>doReleaseShared</code>唤醒<code>head</code>的下一个节点对应的线程，让它开始尝试获取锁；若修改<code>state</code>失败，则返回<code>false</code>。</p>
-<h3 id="使用AQS实现一个锁"><a href="#使用AQS实现一个锁" class="headerlink" title="使用AQS实现一个锁"></a>使用AQS实现一个锁</h3><p>  介绍完上面的内容，下面我们就来基于<code>AQS</code>实现一个自己的同步器，或者说锁。我们需要实现的锁要求如下：</p>
-<blockquote>
-<p>  实现一个锁，它是一个共享锁，但是每次至多支持两个线程同时获取锁，若当前已经有两个线程获取了锁，则其他获取锁的线程需要等待。</p>
-</blockquote>
-<p>  实现代码如下：</p>
-<div class="hljs code-wrapper"><pre><code class="hljs axapta"><span class="hljs-comment">/**</span>
-<span class="hljs-comment"> * 抽象队列同步器（AQS）使用：</span>
-<span class="hljs-comment"> *      实现一个同一时刻至多只支持两个线程同时执行的同步器</span>
-<span class="hljs-comment"> */</span>
-
-<span class="hljs-comment">// 让当前类继承Lock接口</span>
-<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">TwinLock</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Lock</span> </span>&#123;
-
-    <span class="hljs-comment">// 定义锁允许的最大线程数</span>
-    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">int</span> DEFAULT_SYNC_COUNT = <span class="hljs-number">2</span>;
-    <span class="hljs-comment">// 创建一个锁对象，用以进行线程同步，Sync继承自AQS</span>
-    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> Sync sync = <span class="hljs-keyword">new</span> Sync(DEFAULT_SYNC_COUNT);
-
-    <span class="hljs-comment">// 以内部类的形式实现一个同步器类，也就是锁，这个锁继承自AQS</span>
-    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Sync</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">AbstractQueuedSynchronizer</span> </span>&#123;
-
-        <span class="hljs-comment">// 构造方法中指定锁支持的线程数量</span>
-        Sync(<span class="hljs-built_in">int</span> <span class="hljs-keyword">count</span>) &#123;
-            <span class="hljs-comment">// 若count小于0，则默认为2</span>
-            <span class="hljs-keyword">if</span> (<span class="hljs-keyword">count</span> &lt;= <span class="hljs-number">0</span>) &#123;
-                <span class="hljs-keyword">count</span> = DEFAULT_SYNC_COUNT;
-            &#125;
-            <span class="hljs-comment">// 设置初始同步状态</span>
-            setState(<span class="hljs-keyword">count</span>);
-        &#125;
-        
-        <span class="hljs-comment">/**</span>
-<span class="hljs-comment">         * 重写tryAcquireShared方法，这个方法用来修改同步状态state，也就是获取锁</span>
-<span class="hljs-comment">         */</span>
-        @Override
-        <span class="hljs-keyword">protected</span> <span class="hljs-built_in">int</span> tryAcquireShared(<span class="hljs-built_in">int</span> arg) &#123;
-            <span class="hljs-comment">// 循环尝试</span>
-            <span class="hljs-keyword">for</span> (; ; ) &#123;
-                <span class="hljs-comment">// 获取当前的同步状态</span>
-                <span class="hljs-built_in">int</span> nowState = getState();
-                <span class="hljs-comment">// 计算当前线程获取锁后，新的同步状态</span>
-                <span class="hljs-comment">// 注意这里使用了减法，因为此时的state表示的是还能支持多少个线程</span>
-                <span class="hljs-comment">// 而当前线程如果获得了锁，则state就要减小</span>
-                <span class="hljs-built_in">int</span> newState = nowState - arg;
-                
-                <span class="hljs-comment">// 如果newState小于0，表示当前已经没有剩余的资源了</span>
-                <span class="hljs-comment">// 则当前线程不能获取锁，此时将直接返回小于0的newState；</span>
-                <span class="hljs-comment">// 或者newState&gt;0，就会执行compareAndSetState方法修改state的值，</span>
-                <span class="hljs-comment">// 若修改成功将，将返回大于0的newState；</span>
-                <span class="hljs-comment">// 若修改失败，则表示有其他线程也在尝试修改state，此时循环一次后，再次尝试</span>
-                <span class="hljs-keyword">if</span> (newState &lt; <span class="hljs-number">0</span> || compareAndSetState(nowState, newState)) &#123;
-                    <span class="hljs-keyword">return</span> newState;
-                &#125;
-            &#125;
-        &#125;
-
-        <span class="hljs-comment">/**</span>
-<span class="hljs-comment">         * 尝试释放同步状态</span>
-<span class="hljs-comment">         */</span>
-        @Override
-        <span class="hljs-keyword">protected</span> <span class="hljs-built_in">boolean</span> tryReleaseShared(<span class="hljs-built_in">int</span> arg) &#123;
-            <span class="hljs-keyword">for</span> (; ; ) &#123;
-                <span class="hljs-comment">// 获取当前同步状态</span>
-                <span class="hljs-built_in">int</span> nowState = getState();
-                <span class="hljs-comment">// 计算释放后的新同步状态，这里使用加法，</span>
-                <span class="hljs-comment">// 表示有线程释放锁后，当前锁可以支持的线程数量增加了</span>
-                <span class="hljs-built_in">int</span> newState = nowState + arg;
-                <span class="hljs-comment">// 使用CAS修改同步状态，若成功则返回true，否则自旋</span>
-                <span class="hljs-keyword">if</span> (compareAndSetState(nowState, newState)) &#123;
-                    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
-                &#125;
-            &#125;
-        &#125;
-        
-    &#125;
-
-
-    <span class="hljs-comment">/**</span>
-<span class="hljs-comment">     * 获取锁的方法</span>
-<span class="hljs-comment">     */</span>
-    @Override
-    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> lock() &#123;
-        <span class="hljs-comment">// 这里调用的是AQS的模板方法acquireShared，</span>
-        <span class="hljs-comment">// 在acquireShared中将调用我们重写的tryAcquireShared方法</span>
-        <span class="hljs-comment">// 传入参数为1表示当前线程，当前线程获取锁后，state将-1</span>
-        sync.acquireShared(<span class="hljs-number">1</span>);
-    &#125;
-
-    <span class="hljs-comment">/**</span>
-<span class="hljs-comment">     * 解锁</span>
-<span class="hljs-comment">     */</span>
-    @Override
-    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> unlock() &#123;
-        <span class="hljs-comment">// 这里调用的是AQS的模板方法releaseShared，</span>
-        <span class="hljs-comment">// 在acquireShared中将调用我们重写的tryReleaseShared方法</span>
-        <span class="hljs-comment">// 传入参数为1表示当前线程，当前线程释放锁后，state将+1</span>
-        sync.releaseShared(<span class="hljs-number">1</span>);
-    &#125;
-
-    <span class="hljs-comment">/*******************其他需要实现的方法省略***************************/</span>
-
+<p>​        <code>releaseShared</code>也是一个模板方法，它通过调用使用者自己实现的<code>tryReleaseShared</code>方法尝试释放锁，修改<code>state</code>的值，若返回<code>true</code>，表示修改成功，则继续向下调用<code>doReleaseShared</code>唤醒<code>head</code>的下一个节点对应的线程，让它开始尝试获取锁；若修改<code>state</code>失败，则返回<code>false</code>。</p>
+<div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">tryReleaseShared</span><span class="hljs-params">(<span class="hljs-keyword">int</span> arg)</span> </span>&#123;
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> UnsupportedOperationException();
 &#125;</code></pre></div>
-<p>以上就实现了一个支持两个线程同时允许的共享锁，下面我们通过一个测试代码来测试效果：</p>
-<div class="hljs code-wrapper"><pre><code class="hljs reasonml">public static void main(String<span class="hljs-literal">[]</span> args) throws InterruptedException &#123;
-	<span class="hljs-comment">// 创建一个我们自定义的锁对象</span>
-    Lock lock = <span class="hljs-keyword">new</span> <span class="hljs-constructor">TwinLock()</span>;
-
-    <span class="hljs-comment">// 启动10个线程去尝试获取锁</span>
-    <span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">10</span>; i++) &#123;
-        Thread t = <span class="hljs-keyword">new</span> <span class="hljs-constructor">Thread(()</span>-&gt;&#123;
-            <span class="hljs-comment">// 循环执行</span>
-            <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) &#123;
-                <span class="hljs-comment">// 获取锁</span>
-                lock.lock<span class="hljs-literal">()</span>;
-                <span class="hljs-keyword">try</span> &#123;
-                    <span class="hljs-comment">// 休眠1秒</span>
-                    <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Thread</span>.</span></span>sleep(<span class="hljs-number">1000</span>);
-                    <span class="hljs-comment">// 输出线程名称</span>
-                    <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">System</span>.</span></span>out.println(<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Thread</span>.</span></span>current<span class="hljs-constructor">Thread()</span>.get<span class="hljs-constructor">Name()</span>);
-                    <span class="hljs-comment">// 再次休眠一秒</span>
-                    <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Thread</span>.</span></span>sleep(<span class="hljs-number">1000</span>);
-                &#125; catch (InterruptedException e) &#123;
-                    e.print<span class="hljs-constructor">StackTrace()</span>;
-                &#125; finally &#123;
-                    <span class="hljs-comment">// 释放锁</span>
-                    lock.unlock<span class="hljs-literal">()</span>;
-                &#125;
-            &#125;
-        &#125;);
-		<span class="hljs-comment">// 将线程设置为守护线程，主线程结束后，收获线程自动结束</span>
-        t.set<span class="hljs-constructor">Daemon(<span class="hljs-params">true</span>)</span>;
-        t.start<span class="hljs-literal">()</span>;
-    &#125;
-
-	<span class="hljs-comment">// 主线程每隔1秒输出一个分割行</span>
-    <span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">10</span>; i++) &#123;
-        <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Thread</span>.</span></span>sleep(<span class="hljs-number">1000</span>);
-        <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">System</span>.</span></span>out.println(<span class="hljs-string">&quot;********************************&quot;</span>);
-    &#125;
-&#125;</code></pre></div>
-<p>  以上测试代码运行后，在每两个分割行之间，最多不会输出超过两个线程的名称，线程名称的输出将会以两个一队出现。我的输出结果如下：</p>
-<div class="hljs code-wrapper"><pre><code class="hljs markdown"><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span>
-Thread-1
-Thread-0
-<span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span>
-<span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span>
-Thread-2
-Thread-1
-<span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span>
-<span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span>
-Thread-2
-Thread-1
-<span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span>
-<span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span>
-Thread-2
-Thread-3
-<span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span>
-<span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span>
-Thread-3
-Thread-4
-<span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span><span class="hljs-strong">****</span></code></pre></div>
-
-<h3 id="AQS如何实现线程等待"><a href="#AQS如何实现线程等待" class="headerlink" title="AQS如何实现线程等待"></a>AQS如何实现线程等待</h3><p>  在研究<code>AQS</code>的过程中，我一直有这个疑惑——<code>AQS</code>如何让线程阻塞，直到最后才知道有一个叫<code>LockSupport</code>的工具类。这个工具类定义了很多静态方法，当需要让一个阻塞，或者唤醒一个线程时，就可以调用这个类中的方法，它的底层实现是通过一个<code>sun.misc.Unsafe</code>类的对象，<code>unsafe</code>类的方法都是本地方法，由其他语言实现，这个类是给不支持地址操作的<code>Java</code>，提供的一个操作内存地址的后门。</p>
-<p>  <code>AQS</code>中通过以下两个方法来阻塞和唤醒线程：</p>
-<ul>
-<li>**LockSupport.park()**：阻塞当前线程；</li>
-<li>**LockSupport.unpark(Thread thread)**：将参数中传入的线程唤醒；</li>
-</ul>
-<p>  前面讲解<code>AQS</code>的代码中，用到了方法<code>unparkSuccessor</code>，它的主要作用就是唤醒当前节点的下一个节点对应的线程，我们可以看看它的部分实现：</p>
-<div class="hljs code-wrapper"><pre><code class="hljs typescript"><span class="hljs-keyword">private</span> <span class="hljs-built_in">void</span> <span class="hljs-function"><span class="hljs-title">unparkSuccessor</span>(<span class="hljs-params">Node node</span>)</span> &#123;
-
-    <span class="hljs-comment">// ...........省略其他代码............</span>
-    
-    <span class="hljs-comment">// 以下代码即为唤醒当前节点的下一个节点对应的线程</span>
-    Node s = node.next;
-    <span class="hljs-keyword">if</span> (s != <span class="hljs-literal">null</span>)
-        LockSupport.unpark(s.thread);	<span class="hljs-comment">// 使用LockSupport</span>
-&#125;</code></pre></div>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>  其实<code>AQS</code>还支持一些其他的方法，比如说在获取锁时设置超时时间等，这些方法的实现与上面介绍的几种大同小异，限于篇幅，这里就不进行叙述了。以上内容对<code>AQS</code>的实现原理以及主要方法的实现做了一个比较细致的介绍，相信看完之后会对<code>AQS</code>有一个比较深入的理解，但是想要理解以上内容，需要具备并发的一些基础知识，比如说线程的状态，<code>CAS</code>机制等。最后希望这篇博客对需要的人有所帮助吧。</p>
 
             </div>
             <hr>
