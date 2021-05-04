@@ -39,11 +39,11 @@
   
   
   <entry>
-    <title>【高并发编程】JUC同步工具类</title>
-    <link href="/2021/05/03/%E3%80%90%E9%AB%98%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E3%80%91JUC%E5%90%8C%E6%AD%A5%E5%B7%A5%E5%85%B7%E7%B1%BB/"/>
-    <url>/2021/05/03/%E3%80%90%E9%AB%98%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E3%80%91JUC%E5%90%8C%E6%AD%A5%E5%B7%A5%E5%85%B7%E7%B1%BB/</url>
+    <title>【高并发编程】JUC同步工具类之CountDownLatch</title>
+    <link href="/2021/05/03/%E3%80%90%E9%AB%98%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E3%80%91JUC%E5%90%8C%E6%AD%A5%E5%B7%A5%E5%85%B7%E7%B1%BB%E4%B9%8BCountDownLatch/"/>
+    <url>/2021/05/03/%E3%80%90%E9%AB%98%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E3%80%91JUC%E5%90%8C%E6%AD%A5%E5%B7%A5%E5%85%B7%E7%B1%BB%E4%B9%8BCountDownLatch/</url>
     
-    <content type="html"><![CDATA[<h2 id="【高并发编程】JUC同步工具类"><a href="#【高并发编程】JUC同步工具类" class="headerlink" title="【高并发编程】JUC同步工具类"></a>【高并发编程】JUC同步工具类</h2><h3 id="一、CountDownLatch"><a href="#一、CountDownLatch" class="headerlink" title="一、CountDownLatch"></a>一、CountDownLatch</h3><p>起名是一个艺术，CountDownLatch这个类我们初一看还不知道是什么,但是我们看CountDownLatch中单词的意思：CountDown-倒数计时，Latch-门闩，这合在一起我们就能明白这个类的作用了，当我们new 一个CountDownLatch对象时，就相当于弄了一个倒计时的锁头，CountDownLatch构造器要求传入的count参数就是倒计时的次数，当我们倒计时count到0时，门闩就会打开，此时处于门外的线程可以进入门内。</p>]]></content>
+    <content type="html"><![CDATA[<h2 id="【高并发编程】JUC同步工具类之CountDownLatch"><a href="#【高并发编程】JUC同步工具类之CountDownLatch" class="headerlink" title="【高并发编程】JUC同步工具类之CountDownLatch"></a>【高并发编程】JUC同步工具类之CountDownLatch</h2><h3 id="一、CountDownLatch简介"><a href="#一、CountDownLatch简介" class="headerlink" title="一、CountDownLatch简介"></a>一、CountDownLatch简介</h3><p>起名是一个艺术，CountDownLatch这个类我们初一看还不知道是什么,但是我们看CountDownLatch中单词的意思：CountDown-倒数计时，Latch-门闩，这合在一起我们就能明白这个类的作用了，当我们new 一个CountDownLatch对象时，就相当于弄了一个倒计时的锁头，CountDownLatch构造器要求传入的count参数就是倒计时的次数，当我们倒计时count到0时，门闩就会打开，此时处于门外的线程可以进入门内。</p><p><a href="https://imgtu.com/i/gnHQeJ"><img src="https://z3.ax1x.com/2021/05/04/gnHQeJ.png" alt="gnHQeJ.png"></a></p><p>举个简单的例子就是，你去超市买东西，虽然已经到了关门时间但是只有顾客都走了超市才能关门，至于你买不买东西，超市不关心。只要顾客都走完了，我就可以关门了。</p><h3 id="二、CountDownLatch的使用"><a href="#二、CountDownLatch的使用" class="headerlink" title="二、CountDownLatch的使用"></a>二、CountDownLatch的使用</h3><p>CountDownLatch 提供了一个构造方法，你必须指定其初始值。此外还指定了 countDown 方法，这个方法的作用主要用来减小计数器的值。await方法，调用此方法可以阻塞当前线程，当计数器变为 0 时，在 CountDownLatch 上 await 的线程就会被唤醒，当然也可以延迟唤醒，给 CountDownLatch 加一个延迟时间就可以实现。getCount方法，返回当前的计数count值。</p>]]></content>
     
     
     <categories>
@@ -62,8 +62,6 @@
       <tag>java</tag>
       
       <tag>多线程</tag>
-      
-      <tag>JUC同步工具</tag>
       
       <tag>CountDownLatch</tag>
       
@@ -1158,11 +1156,11 @@
     
     <tags>
       
+      <tag>源码</tag>
+      
       <tag>框架</tag>
       
       <tag>IOC</tag>
-      
-      <tag>源码</tag>
       
       <tag>Spring</tag>
       
