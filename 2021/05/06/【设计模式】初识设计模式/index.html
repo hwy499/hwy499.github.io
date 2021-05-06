@@ -17,7 +17,7 @@
   <meta name="description" content="good good study,day day up">
   <meta name="author" content="何文垚">
   <meta name="keywords" content="">
-  <title>【高并发编程】多线程------创建多线程的三种方式 - hwyblog</title>
+  <title>【设计模式】初识设计模式 - hwyblog</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
 
@@ -162,7 +162,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="【高并发编程】多线程------创建多线程的三种方式">
+            <span class="h2" id="subtitle" title="【设计模式】初识设计模式">
               
             </span>
 
@@ -172,8 +172,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2021-01-15 22:20" pubdate>
-        2021年1月15日 晚上
+      <time datetime="2021-05-06 10:57" pubdate>
+        2021年5月6日 上午
       </time>
     </span>
   
@@ -184,7 +184,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      948 字
+      2.3k 字
     </span>
   
 
@@ -194,7 +194,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      12
+      23
        分钟
     </span>
   
@@ -232,101 +232,62 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">【高并发编程】多线程------创建多线程的三种方式</h1>
+            <h1 style="display: none">【设计模式】初识设计模式</h1>
             
               <p class="note note-info">
                 
-                  本文最后更新于：3 天前
+                  本文最后更新于：几秒前
                 
               </p>
             
             <div class="markdown-body">
-              <h2 id="【高并发编程】多线程——创建多线程的三种方式"><a href="#【高并发编程】多线程——创建多线程的三种方式" class="headerlink" title="【高并发编程】多线程——创建多线程的三种方式"></a>【高并发编程】多线程——创建多线程的三种方式</h2><h3 id="一、创建一个继承于java-lang-Thread的类"><a href="#一、创建一个继承于java-lang-Thread的类" class="headerlink" title="一、创建一个继承于java.lang.Thread的类"></a>一、创建一个继承于java.lang.Thread的类</h3><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyThread1</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Thread</span></span>&#123;
-	<span class="hljs-comment">// 在run方法中实现此线程需要实现的功能</span>
-	<span class="hljs-meta">@Override</span>
-	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>&#123;
-		System.out.println(<span class="hljs-string">&quot;线程名字：&quot;</span>+Thread.currentThread().getName() + <span class="hljs-string">&quot;\t线程ID：&quot;</span> 
-					 + Thread.currentThread().getId());
-	&#125;
-&#125;
-<span class="hljs-comment">//测试类</span>
-<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyThreadTest</span> </span>&#123;
-	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;
-		<span class="hljs-comment">// 创建自定义线程</span>
-		MyThread1 myThread1 = <span class="hljs-keyword">new</span> MyThread1();
-		<span class="hljs-comment">// 开启线程</span>
-		myThread1.start();
-	&#125;
-&#125;
-<span class="hljs-comment">// 输出 ：线程名字：Thread-0	线程ID：10</span>
-<span class="hljs-number">123456789101112131415161718</span></code></pre></div>
-<h3 id="二、实现java-lang-Runnable接口，重写run-方法，然后使用Thread类来包装"><a href="#二、实现java-lang-Runnable接口，重写run-方法，然后使用Thread类来包装" class="headerlink" title="二、实现java.lang.Runnable接口，重写run()方法，然后使用Thread类来包装"></a>二、实现java.lang.Runnable接口，重写run()方法，然后使用Thread类来包装</h3><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyRunnable</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Runnable</span></span>&#123;
-   <span class="hljs-comment">// 在run方法中实现此线程需要实现的功能</span>
-   <span class="hljs-meta">@Override</span>
-   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>&#123;
-   	System.out.println(<span class="hljs-string">&quot;线程名字：&quot;</span>+Thread.currentThread().getName() + <span class="hljs-string">&quot;\t线程ID：&quot;</span> 
-   			 + Thread.currentThread().getId());
-   &#125;
-&#125;
-<span class="hljs-comment">//测试类</span>
-<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ThreadTest</span> </span>&#123;
-   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;
-   	<span class="hljs-comment">// 创建MyRunnable</span>
-   	MyRunnable myRunnable = <span class="hljs-keyword">new</span> MyRunnable();
-   	<span class="hljs-comment">// 用Thread 包装一下myRunnable</span>
-   	Thread thread = <span class="hljs-keyword">new</span> Thread(myRunnable);
-   	<span class="hljs-comment">// 开启线程</span>
-   	thread.start();
-   &#125;
-&#125;
-<span class="hljs-comment">// 输出 ：线程名字：Thread-0	线程ID：10</span>
-<span class="hljs-number">1234567891011121314151617181920</span></code></pre></div>
+              <h2 id="【设计模式】初识设计模式"><a href="#【设计模式】初识设计模式" class="headerlink" title="【设计模式】初识设计模式"></a>【设计模式】初识设计模式</h2><p>设计模式（Design Pattern）是前辈们对代码开发经验的总结，是解决特定问题的一系列套路。它不是语法规定，而是一套用来提高代码可复用性、可维护性、可读性、稳健性以及安全性的解决方案，设计模式能够让面向对象保持良好的结构。</p>
+<p>1995 年，GoF（Gang of Four，四人组/四人帮）合作出版了《设计模式：可复用面向对象软件的基础》一书，共收录了 23 种设计模式，从此树立了软件设计模式领域的里程碑，人称「GoF设计模式」。</p>
+<h3 id="设计模式的分类"><a href="#设计模式的分类" class="headerlink" title="设计模式的分类"></a>设计模式的分类</h3><p>设计模式有两种分类方法，即根据模式的目的来分和根据模式的作用的范围来分。</p>
+<h4 id="1-根据目的来分"><a href="#1-根据目的来分" class="headerlink" title="1. 根据目的来分"></a>1. 根据目的来分</h4><p>根据模式是用来完成什么工作来划分，这种方式可分为创建型模式、结构型模式和行为型模式 3 种。</p>
 <ol>
-<li>这两种方式实现多线程的方式都是围绕着Thread类展开的，第一种方式实现线程是继承于java.lang.Thread类，然后实现run方法，最终调用Thread类中的start方法启动线程。而实现Runnable接口，则是把run写到了接口中，并由实现类实现run方法，然后再用Thread类对Runnable接口进行包装，然后在调用Thread中start方法启动线程。①②两种方式都是最终都是调用Thread中start方法进行启动线程。</li>
-<li>两种方式在本质上没有明显的区别，但是在外观上有很大的区别，第一种方式是继承Thread类，由于Java是单继承，如果一个类继承了Thread类，那么就没办法继承其它的类了，在继承上有一点受制，有一点不灵活，第二种方式就是为了解决第一种方式的单继承不灵活的问题，所以平常使用就建议使用第二种方式。</li>
+<li>创建型模式：用于描述“怎样创建对象”，它的主要特点是“将对象的创建与使用分离”。GoF 中提供了单例、原型、工厂方法、抽象工厂、建造者等 5 种创建型模式。</li>
+<li>结构型模式：用于描述如何将类或对象按某种布局组成更大的结构，GoF 中提供了代理、适配器、桥接、装饰、外观、享元、组合等 7 种结构型模式。</li>
+<li>行为型模式：用于描述类或对象之间怎样相互协作共同完成单个对象都无法单独完成的任务，以及怎样分配职责。GoF 中提供了模板方法、策略、命令、职责链、状态、观察者、中介者、迭代器、访问者、备忘录、解释器等 11 种行为型模式。</li>
 </ol>
-<h3 id="三、实现-java-util-concurrent-Callable，用java-util-concurrent-FutureTask类对其包装，然后再用java-lang-Thread类对java-util-concurrent-FutureTask的实现类进行包装"><a href="#三、实现-java-util-concurrent-Callable，用java-util-concurrent-FutureTask类对其包装，然后再用java-lang-Thread类对java-util-concurrent-FutureTask的实现类进行包装" class="headerlink" title="三、实现 java.util.concurrent.Callable，用java.util.concurrent.FutureTask类对其包装，然后再用java.lang.Thread类对java.util.concurrent.FutureTask的实现类进行包装"></a>三、实现 java.util.concurrent.Callable，用java.util.concurrent.FutureTask类对其包装，然后再用java.lang.Thread类对java.util.concurrent.FutureTask的实现类进行包装</h3><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyCallable</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Callable</span>&lt;<span class="hljs-title">Integer</span>&gt;</span>&#123;
-   <span class="hljs-meta">@Override</span>
-   <span class="hljs-function"><span class="hljs-keyword">public</span> Integer <span class="hljs-title">call</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception </span>&#123;
-   	System.out.println(Thread.currentThread().getName() + <span class="hljs-string">&quot;\t&quot;</span> + Thread.currentThread().getId() + <span class="hljs-string">&quot;\t&quot;</span> + <span class="hljs-keyword">new</span> Date() + <span class="hljs-string">&quot; \tstarting...&quot;</span>);
-       <span class="hljs-keyword">int</span> sum = <span class="hljs-number">0</span>;
-       <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt;= <span class="hljs-number">100</span>; i++) &#123;
-           sum += i;
-       &#125;
-       Thread.sleep(<span class="hljs-number">5000</span>);
-       System.out.println(Thread.currentThread().getName() + <span class="hljs-string">&quot;\t&quot;</span> + Thread.currentThread().getId() + <span class="hljs-string">&quot;\t&quot;</span> + <span class="hljs-keyword">new</span> Date() + <span class="hljs-string">&quot; \tover...&quot;</span>);
-       <span class="hljs-keyword">return</span> sum;
-   &#125;
-&#125;
-
-<span class="hljs-comment">// 测试类</span>
-<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ThreadTest</span> </span>&#123;
-   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> InterruptedException, ExecutionException </span>&#123;
-   	MyCallable myCallable = <span class="hljs-keyword">new</span> MyCallable();
-   	<span class="hljs-comment">// 将Callable包装成FutureTask，FutureTask也是一种Runnable</span>
-   	FutureTask&lt;Integer&gt; futureTask = <span class="hljs-keyword">new</span> FutureTask&lt;&gt;(myCallable);
-   	Thread thread = <span class="hljs-keyword">new</span> Thread(futureTask);
-   	thread.start();
-   	<span class="hljs-comment">// get方法会阻塞调用的线程</span>
-   	Integer res = futureTask.get();
-   	System.out.println(<span class="hljs-string">&quot;线程执行结果：&quot;</span>+res);
-   &#125;
-&#125;
-<span class="hljs-comment">//Thread-0	10	Wed Apr 15 15:32:38 CST 2020 	starting...</span>
-<span class="hljs-comment">//Thread-0	10	Wed Apr 15 15:32:43 CST 2020 	over...</span>
-<span class="hljs-comment">//线程执行结果：5050</span>
-<span class="hljs-number">123456789101112131415161718192021222324252627282930</span></code></pre></div>
-<h3 id="三种方式比较："><a href="#三种方式比较：" class="headerlink" title="三种方式比较："></a>三种方式比较：</h3><ul>
-<li>Thread: 继承方式, 不建议使用, 因为Java是单继承的，继承了Thread就没办法继承其它类了，不够灵活</li>
-<li>Runnable: 实现接口，比Thread类更加灵活，没有单继承的限制</li>
-<li>Callable: Thread和Runnable都是重写的run()方法并且没有返回值，Callable是重写的call()方法并且有返回值并可以借助FutureTask类来判断线程是否已经执行完毕或者取消线程执行</li>
-</ul>
-<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><ul>
-<li>当线程不需要返回值时使用Runnable，需要返回值时就使用Callable，一般情况下不直接把线程体代码放到Thread类中，一般通过Thread类来启动线程</li>
-<li>Thread类是实现Runnable，</li>
-<li>Callable封装成FutureTask，FutureTask实现RunnableFuture，RunnableFuture继承Runnable，所以Callable也算是一种Runnable，</li>
-<li>所以三种实现方式本质上都是对Runnable实现</li>
-</ul>
+<h4 id="2-根据作用范围来分"><a href="#2-根据作用范围来分" class="headerlink" title="2. 根据作用范围来分"></a>2. 根据作用范围来分</h4><p>根据模式是主要用于类上还是主要用于对象上来分，这种方式可分为类模式和对象模式两种。</p>
+<ol>
+<li>类模式：用于处理类与子类之间的关系，这些关系通过继承来建立，是静态的，在编译时刻便确定下来了。GoF中的工厂方法、（类）适配器、模板方法、解释器属于该模式。</li>
+<li>对象模式：用于处理对象之间的关系，这些关系可以通过组合或聚合来实现，在运行时刻是可以变化的，更具动态性。GoF 中除了工厂方法、（类）适配器、模板方法、解释器 4 种，其他的都是对象模式。</li>
+</ol>
+<h3 id="23种设计模式介绍"><a href="#23种设计模式介绍" class="headerlink" title="23种设计模式介绍"></a>23种设计模式介绍</h3><ol>
+<li>单例（Singleton）模式：某个类只能生成一个实例，该类提供了一个全局访问点供外部获取该实例，其拓展是有限多例模式。</li>
+<li>原型（Prototype）模式：将一个对象作为原型，通过对其进行复制而克隆出多个和原型类似的新实例。</li>
+<li>工厂方法（Factory Method）模式：定义一个用于创建产品的接口，由子类决定生产什么产品。</li>
+<li>抽象工厂（AbstractFactory）模式：提供一个创建产品族的接口，其每个子类可以生产一系列相关的产品。</li>
+<li>建造者（Builder）模式：将一个复杂对象分解成多个相对简单的部分，然后根据不同需要分别创建它们，最后构建成该复杂对象。</li>
+<li>代理（Proxy）模式：为某对象提供一种代理以控制对该对象的访问。即客户端通过代理间接地访问该对象，从而限制、增强或修改该对象的一些特性。</li>
+<li>适配器（Adapter）模式：将一个类的接口转换成客户希望的另外一个接口，使得原本由于接口不兼容而不能一起工作的那些类能一起工作。</li>
+<li>桥接（Bridge）模式：将抽象与实现分离，使它们可以独立变化。它是用组合关系代替继承关系来实现，从而降低了抽象和实现这两个可变维度的耦合度。</li>
+<li>装饰（Decorator）模式：动态的给对象增加一些职责，即增加其额外的功能。</li>
+<li>外观（Facade）模式：为多个复杂的子系统提供一个一致的接口，使这些子系统更加容易被访问。</li>
+<li>享元（Flyweight）模式：运用共享技术来有效地支持大量细粒度对象的复用。</li>
+<li>组合（Composite）模式：将对象组合成树状层次结构，使用户对单个对象和组合对象具有一致的访问性。</li>
+<li>模板方法（TemplateMethod）模式：定义一个操作中的算法骨架，而将算法的一些步骤延迟到子类中，使得子类可以不改变该算法结构的情况下重定义该算法的某些特定步骤。</li>
+<li>策略（Strategy）模式：定义了一系列算法，并将每个算法封装起来，使它们可以相互替换，且算法的改变不会影响使用算法的客户。</li>
+<li>命令（Command）模式：将一个请求封装为一个对象，使发出请求的责任和执行请求的责任分割开。</li>
+<li>职责链（Chain of Responsibility）模式：把请求从链中的一个对象传到下一个对象，直到请求被响应为止。通过这种方式去除对象之间的耦合。</li>
+<li>状态（State）模式：允许一个对象在其内部状态发生改变时改变其行为能力。</li>
+<li>观察者（Observer）模式：多个对象间存在一对多关系，当一个对象发生改变时，把这种改变通知给其他多个对象，从而影响其他对象的行为。</li>
+<li>中介者（Mediator）模式：定义一个中介对象来简化原有对象之间的交互关系，降低系统中对象间的耦合度，使原有对象之间不必相互了解。</li>
+<li>迭代器（Iterator）模式：提供一种方法来顺序访问聚合对象中的一系列数据，而不暴露聚合对象的内部表示。</li>
+<li>访问者（Visitor）模式：在不改变集合元素的前提下，为一个集合中的每个元素提供多种访问方式，即每个元素有多个访问者对象访问。</li>
+<li>备忘录（Memento）模式：在不破坏封装性的前提下，获取并保存一个对象的内部状态，以便以后恢复它。</li>
+<li>解释器（Interpreter）模式：提供如何定义语言的文法，以及对语言句子的解释方法，即解释器。</li>
+</ol>
+<h3 id="面向对象设计原则"><a href="#面向对象设计原则" class="headerlink" title="面向对象设计原则"></a>面向对象设计原则</h3><p>在开始学习设计模式之前，我们有必要了解一下面向对象的7种设计原则。</p>
+<h4 id="单一职责原则"><a href="#单一职责原则" class="headerlink" title="单一职责原则"></a>单一职责原则</h4><p>定义：<br>一个对象应该只包含单一的职责，并且该职责被完整地封装在一个类中。<br>单一职责原则是实现高内聚、低耦合的指导方针，是最简单却最难运用的原则，需要设计人员发现类的不同职责并将其分离</p>
+<h4 id="开闭原则"><a href="#开闭原则" class="headerlink" title="开闭原则"></a>开闭原则</h4><p>定义：<br>软件实体应当对扩展开放，对修改关闭。<br>指软件实体应尽量在不修改原有代码的情况下进行扩展。</p>
+<h4 id="里氏替换原则"><a href="#里氏替换原则" class="headerlink" title="里氏替换原则"></a>里氏替换原则</h4><p>定义：<br>所有引用基类的地方必须能透明地使用其子类的对象。<br>里氏替换原则表明，在软件中将一个基类对象替换成它的子类对象，程序将不会产生任何错误和异常，反过来则不成立。<br>在运用里氏替换原则时，应该将父类设计为抽象类或者接口，让子类继承父类或实现父类接口，并实现在父类中声明的方法。</p>
+<h4 id="依赖倒转原则"><a href="#依赖倒转原则" class="headerlink" title="依赖倒转原则"></a>依赖倒转原则</h4><p>定义：<br>高层模块不应该依赖底层模块，它们都应该依赖抽象。抽象不应该依赖于细节，细节应该依赖于抽象。<br>依赖倒转原则要求：要针对接口编程，不要针对实现编程。</p>
+<h4 id="接口隔离原则"><a href="#接口隔离原则" class="headerlink" title="接口隔离原则"></a>接口隔离原则</h4><p>定义：<br>客户端不应该依赖那些它不需要的接口。<br>在使用接口隔离原则的时候，需要注意控制接口的粒度，接口不能太小，如果太小会导致系统中接口泛滥，不利于维护；接口也不能太大，太大的接口将违背接口隔离原则，灵活性较差，使用起来不方便。</p>
+<h4 id="合成复用原则"><a href="#合成复用原则" class="headerlink" title="合成复用原则"></a>合成复用原则</h4><p>定义：<br>优先使用对象组合，而不是继承来达到复用的目的。<br>一般而言，如果两个类之间是”Has-A”关系应使用组合或聚合，如果是”Is-A”关系可使用继承。</p>
+<h4 id="迪米特法则-又称最少知识原则"><a href="#迪米特法则-又称最少知识原则" class="headerlink" title="迪米特法则-又称最少知识原则"></a>迪米特法则-又称最少知识原则</h4><p>定义：<br>每一个软件单位对其他的单位都只有最少的知识，而且局限于那些与本单位密切相关的软件单位。</p>
 
             </div>
             <hr>
@@ -336,11 +297,7 @@
                   <div class="post-meta mr-3">
                     <i class="iconfont icon-category"></i>
                     
-                      <a class="hover-with-bg" href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a>
-                    
-                      <a class="hover-with-bg" href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/">Java</a>
-                    
-                      <a class="hover-with-bg" href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Java/%E5%A4%9A%E7%BA%BF%E7%A8%8B/">多线程</a>
+                      <a class="hover-with-bg" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>
                     
                   </div>
                 
@@ -348,11 +305,7 @@
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/tags/java/">java</a>
-                    
-                      <a class="hover-with-bg" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/">多线程</a>
-                    
-                      <a class="hover-with-bg" href="/tags/%E9%AB%98%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/">高并发编程</a>
+                      <a class="hover-with-bg" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>
                     
                   </div>
                 
@@ -365,18 +318,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2021/01/16/%E3%80%90%E9%AB%98%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E3%80%91volatile%20%E5%85%B3%E9%94%AE%E5%AD%97%E4%B8%8E%E5%86%85%E5%AD%98%E5%8F%AF%E8%A7%81%E6%80%A7/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">【高并发编程】volatile 关键字与内存可见性</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2021/01/13/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E3%80%90%E8%A7%A3%E8%80%A6%E3%80%81%E5%BC%82%E6%AD%A5%E3%80%81%E5%89%8A%E5%B3%B0%E3%80%91/">
-                        <span class="hidden-mobile">消息队列【解耦、异步、削峰】</span>
+                      <a href="/2021/05/04/%E3%80%90%E9%AB%98%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E3%80%91LockSupport%E7%BA%BF%E7%A8%8B%E9%98%BB%E5%A1%9E%E5%B7%A5%E5%85%B7%E7%B1%BB/">
+                        <span class="hidden-mobile">【高并发编程】LockSupport线程阻塞工具类</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -391,7 +338,7 @@
               <article class="comments" id="comments">
                 
                 
-  <div id="SOHUCS" sid='http://example.com/2021/01/15/%E3%80%90%E9%AB%98%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E3%80%91%E5%A4%9A%E7%BA%BF%E7%A8%8B------%E5%88%9B%E5%BB%BA%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F/'></div>
+  <div id="SOHUCS" sid='http://example.com/2021/05/06/%E3%80%90%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E3%80%91%E5%88%9D%E8%AF%86%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/'></div>
   <script type="text/javascript">
     Fluid.utils.waitElementVisible('SOHUCS', function() {
       var appid = 'cyviJi7Eb';

@@ -236,7 +236,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：几秒前
+                  本文最后更新于：1 天前
                 
               </p>
             
@@ -390,7 +390,7 @@
 <span class="hljs-keyword">import</span> java.util.concurrent.locks.LockSupport;
 
 <span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">FIFOMutexTest</span> </span>&#123;
-    <span class="hljs-comment">// 共20张票</span>
+
     <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> ticket = <span class="hljs-number">20</span>;
 
     <span class="hljs-keyword">static</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">FIFOMutex</span> </span>&#123;
@@ -430,19 +430,19 @@
     &#125;
 
     <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> InterruptedException </span>&#123;
-        SpinLockDemo.SpinLock lock = <span class="hljs-keyword">new</span> SpinLockDemo.SpinLock();
+        FIFOMutex lock = <span class="hljs-keyword">new</span> FIFOMutex();
         ExecutorService executorService = Executors.newFixedThreadPool(<span class="hljs-number">3</span>);
         <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">5</span>; i++) &#123;
-            executorService.execute(<span class="hljs-keyword">new</span> SpinLockDemo.MyThread(lock));
+            executorService.execute(<span class="hljs-keyword">new</span> MyThread(lock));
         &#125;
         executorService.shutdown();
     &#125;
 
     <span class="hljs-keyword">static</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyThread</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Runnable</span> </span>&#123;
 
-        <span class="hljs-keyword">private</span> SpinLockDemo.SpinLock lock;
+        <span class="hljs-keyword">private</span> FIFOMutex lock;
 
-        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">MyThread</span><span class="hljs-params">(SpinLockDemo.SpinLock lock)</span> </span>&#123;
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">MyThread</span><span class="hljs-params">(FIFOMutex lock)</span> </span>&#123;
             <span class="hljs-keyword">this</span>.lock = lock;
         &#125;
 
@@ -458,6 +458,7 @@
             &#125;
         &#125;
     &#125;
+
 &#125;</code></pre></div>
 
             </div>
@@ -496,6 +497,12 @@
                 <div class="post-prevnext">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2021/05/06/%E3%80%90%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E3%80%91%E5%88%9D%E8%AF%86%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">【设计模式】初识设计模式</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
