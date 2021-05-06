@@ -184,7 +184,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      2.1k 字
+      2.4k 字
     </span>
   
 
@@ -194,7 +194,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      24
+      27
        分钟
     </span>
   
@@ -236,7 +236,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：4 分钟前
+                  本文最后更新于：几秒前
                 
               </p>
             
@@ -468,7 +468,16 @@
 <h5 id="优缺点与总结："><a href="#优缺点与总结：" class="headerlink" title="优缺点与总结："></a>优缺点与总结：</h5><h6 id="优点："><a href="#优点：" class="headerlink" title="优点："></a>优点：</h6><p>这种实现方式还没有被广泛采用，但这是实现单例模式的最佳方法。它更简洁，自动支持序列化机制，绝对防止多次实例化。这种方式是 Effective Java 作者 Josh Bloch 提倡的方式，它不仅能避免多线程同步问题，而且还自动支持序列化机制，防止反序列化重新创建新的对象，绝对防止多次实例化。</p>
 <h6 id="缺点-3"><a href="#缺点-3" class="headerlink" title="缺点"></a>缺点</h6><p>枚举类型更好，但是枚举类型会造成更多的内存消耗。枚举会比使用静态变量多消耗两倍的内存</p>
 <h6 id="结论-7"><a href="#结论-7" class="headerlink" title="结论"></a>结论</h6><p>推荐使用</p>
-
+<h3 id="破坏单例模式的方法及解决办法"><a href="#破坏单例模式的方法及解决办法" class="headerlink" title="破坏单例模式的方法及解决办法"></a>破坏单例模式的方法及解决办法</h3><p>1、除枚举方式外，其他方法都会通过反射的方式破坏单例，反射是通过调用构造方法生成新的对象，所以如果我们想要阻止单例破坏，可以在构造方法中进行判断，若已有实例，则阻止生成新的实例，解决办法如下:</p>
+<div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-title">Singleton</span><span class="hljs-params">()</span></span>&#123;
+    <span class="hljs-keyword">if</span> (instance !=<span class="hljs-keyword">null</span>)&#123;
+        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> RuntimeException(<span class="hljs-string">&quot;实例已经存在，请通过 getInstance()方法获取&quot;</span>);
+    &#125;
+&#125;</code></pre></div>
+<p>2、如果单例类实现了序列化接口 <code>Serializable</code>, 就可以通过反序列化破坏单例，所以我们可以不实现序列化接口，如果非得实现序列化接口，可以重写反序列化方法<code> readResolve ()</code>, 反序列化时直接返回相关单例对象。</p>
+<div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">public</span> Object <span class="hljs-title">readResolve</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> ObjectStreamException </span>&#123;
+    <span class="hljs-keyword">return</span> instance;
+&#125;</code></pre></div>
             </div>
             <hr>
             <div>
