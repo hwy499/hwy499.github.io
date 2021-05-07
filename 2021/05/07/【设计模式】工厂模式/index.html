@@ -184,7 +184,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      2.2k 字
+      2.1k 字
     </span>
   
 
@@ -194,7 +194,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      25
+      24
        分钟
     </span>
   
@@ -236,7 +236,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：25 分钟前
+                  本文最后更新于：3 小时前
                 
               </p>
             
@@ -351,46 +351,46 @@
 
 </li>
 </ul>
-<h3 id="工厂方法模式"><a href="#工厂方法模式" class="headerlink" title="工厂方法模式"></a>工厂方法模式</h3><p><strong>工厂方法模式</strong>是对<strong>简单工厂模式</strong>的进一步<strong>抽象化</strong>，其好处是可以使系统在不修改原来代码的情况下引进新的产品，即<strong>满足开闭原则</strong>。</p>
-<h4 id="工厂方法模式的结构"><a href="#工厂方法模式的结构" class="headerlink" title="工厂方法模式的结构"></a>工厂方法模式的结构</h4><p>工厂方法模式由抽象工厂、具体工厂、抽象产品和具体产品等4个要素构成。本节来分析其基本结构和实现方法。</p>
-<img src="https://i.loli.net/2021/05/07/TJjs4o1L7rXZ9pl.png" srcset="/img/loading.gif" alt="factory02.png" style="zoom: 67%;">
+<h3 id="工厂方法模式"><a href="#工厂方法模式" class="headerlink" title="工厂方法模式"></a>工厂方法模式</h3><p>工厂方法模式：定义了一个创建对象的抽象方法，由其子类决定要实例化的对象，工厂方法模式将对象的实例化推迟到子类。</p>
+<h4 id="工厂方法模式的结构"><a href="#工厂方法模式的结构" class="headerlink" title="工厂方法模式的结构"></a>工厂方法模式的结构</h4><p>工厂方法模式由抽象工厂、具体工厂、抽象产品和具体产品等4个要素构成。UML类图</p>
+<img src="https://i.loli.net/2021/05/07/Wwir3KOoRGPTa29.jpg" srcset="/img/loading.gif" alt="factory_01.jpg" style="zoom:80%;">
 
 <p>工厂方法模式的主要角色如下。</p>
 <ol>
-<li>抽象工厂<code>（AbstractFactory）</code>：提供了创建产品的接口，调用者通过它访问具体工厂的工厂方法<code> newProduct()</code> 来创建产品。</li>
-<li>具体工厂<code>（ConcreteFactory）</code>：主要是实现抽象工厂中的抽象方法，完成具体产品的创建。</li>
-<li>抽象产品<code>（Product）</code>：定义了产品的规范，描述了产品的主要特性和功能。</li>
-<li>具体产品<code>（ConcreteProduct)</code>：实现了抽象产品角色所定义的接口，由具体工厂来创建，它同具体工厂之间一一对应。</li>
+<li>抽象工厂<code>（IFactory）</code>：提供了创建产品的接口，调用者通过它访问具体工厂的工厂方法<code> createProduct()</code> 来创建产品。</li>
+<li>具体工厂<code>（Facroty）</code>：主要是实现抽象工厂中的抽象方法，完成具体产品的创建。</li>
+<li>抽象产品<code>（IProduct）</code>：定义了产品的规范，描述了产品的主要特性和功能。</li>
+<li>具体产品<code>（Product)</code>：实现了抽象产品角色所定义的接口，由具体工厂来创建，它同具体工厂之间一一对应。</li>
 </ol>
 <h4 id="场景-1"><a href="#场景-1" class="headerlink" title="场景"></a>场景</h4><p>这里我们还用生产电脑来举例，假设有一个电脑的代工生产商，它目前已经可以代工生产联想电脑了，随着业务的拓展，这个代工生产商还要生产惠普和华硕的电脑，这样我们就需要用一个单独的类来专门生产电脑，这就用到了简单工厂模式。</p>
 <h4 id="代码实现-1"><a href="#代码实现-1" class="headerlink" title="代码实现"></a>代码实现</h4><h5 id="抽象产品类-1"><a href="#抽象产品类-1" class="headerlink" title="抽象产品类"></a>抽象产品类</h5><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">// 抽象产品类</span>
-<span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AbstractComputer</span> </span>&#123;
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">IComputer</span> </span>&#123;
     <span class="hljs-comment">/**</span>
 <span class="hljs-comment">     * 产品的抽象方法，由具体的产品类去实现 用于启动一台电脑</span>
 <span class="hljs-comment">     */</span>
-    <span class="hljs-function"><span class="hljs-keyword">abstract</span> <span class="hljs-keyword">void</span> <span class="hljs-title">start</span><span class="hljs-params">()</span></span>;
+    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">start</span><span class="hljs-params">()</span></span>;
 &#125;</code></pre></div>
-<h5 id="具体产品类-1"><a href="#具体产品类-1" class="headerlink" title="具体产品类"></a>具体产品类</h5><h6 id="惠普电脑-1"><a href="#惠普电脑-1" class="headerlink" title="惠普电脑"></a>惠普电脑</h6><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">// 惠普电脑</span>
-<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HpComputer</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">AbstractComputer</span> </span>&#123;
+<h5 id="具体产品类-1"><a href="#具体产品类-1" class="headerlink" title="具体产品类"></a>具体产品类</h5><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">// 惠普电脑</span>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HpComputer</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">IComputer</span> </span>&#123;
 
     <span class="hljs-meta">@Override</span>
-    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">start</span><span class="hljs-params">()</span> </span>&#123;
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">start</span><span class="hljs-params">()</span> </span>&#123;
         System.out.println(<span class="hljs-string">&quot;惠普电脑正在启动............&quot;</span>);
     &#125;
-&#125;</code></pre></div>
-<h6 id="联想电脑-1"><a href="#联想电脑-1" class="headerlink" title="联想电脑"></a>联想电脑</h6><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">// 联想电脑</span>
-<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">LenovoComputer</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">AbstractComputer</span> </span>&#123;
+&#125;
+<span class="hljs-comment">// 联想电脑</span>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">LenovoComputer</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">IComputer</span> </span>&#123;
 
     <span class="hljs-meta">@Override</span>
-    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">start</span><span class="hljs-params">()</span> </span>&#123;
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">start</span><span class="hljs-params">()</span> </span>&#123;
         System.out.println(<span class="hljs-string">&quot;联想电脑正在启动............&quot;</span>);
     &#125;
-&#125;</code></pre></div>
-<h6 id="华硕电脑-1"><a href="#华硕电脑-1" class="headerlink" title="华硕电脑"></a>华硕电脑</h6><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">// 华硕</span>
-<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AsusComputer</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">AbstractComputer</span> </span>&#123;
+&#125;
+<span class="hljs-comment">// 华硕电脑</span>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AsusComputer</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">IComputer</span> </span>&#123;
 
     <span class="hljs-meta">@Override</span>
-    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">start</span><span class="hljs-params">()</span> </span>&#123;
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">start</span><span class="hljs-params">()</span> </span>&#123;
         System.out.println(<span class="hljs-string">&quot;华硕电脑正在启动............&quot;</span>);
     &#125;
 &#125;</code></pre></div>
@@ -398,7 +398,7 @@
     <span class="hljs-comment">// 创建电脑接口</span>
     <span class="hljs-function">AbstractComputer <span class="hljs-title">create</span><span class="hljs-params">()</span></span>;
 &#125;</code></pre></div>
-<h5 id="具体工厂类"><a href="#具体工厂类" class="headerlink" title="具体工厂类"></a>具体工厂类</h5><h6 id="惠普电脑工厂"><a href="#惠普电脑工厂" class="headerlink" title="惠普电脑工厂"></a>惠普电脑工厂</h6><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">// 惠普电脑工厂 集成电脑工厂接口</span>
+<h5 id="具体工厂类"><a href="#具体工厂类" class="headerlink" title="具体工厂类"></a>具体工厂类</h5><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">// 惠普电脑工厂 集成电脑工厂接口</span>
 <span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HpComputerFactory</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">IComputerFactory</span> </span>&#123;
 
     <span class="hljs-meta">@Override</span>
@@ -407,8 +407,8 @@
         <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> HpComputer();
     &#125;
 
-&#125;</code></pre></div>
-<h6 id="联想电脑工厂"><a href="#联想电脑工厂" class="headerlink" title="联想电脑工厂"></a>联想电脑工厂</h6><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">// 联想电脑工厂 集成电脑工厂接口</span>
+&#125;
+<span class="hljs-comment">// 联想电脑工厂 集成电脑工厂接口</span>
 <span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">LenovoComputerFactory</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">IComputerFactory</span> </span>&#123;
     <span class="hljs-meta">@Override</span>
     <span class="hljs-function"><span class="hljs-keyword">public</span> AbstractComputer <span class="hljs-title">create</span><span class="hljs-params">()</span> </span>&#123;
@@ -416,13 +416,13 @@
         <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> LenovoComputer();
     &#125;
 &#125;
-</code></pre></div>
-<h6 id="华硕电脑工厂"><a href="#华硕电脑工厂" class="headerlink" title="华硕电脑工厂"></a>华硕电脑工厂</h6><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">// 华硕电脑工厂 集成电脑工厂接口</span>
+
+<span class="hljs-comment">// 华硕电脑工厂 集成电脑工厂接口</span>
 <span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AsusComputerFactory</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">IComputerFactory</span> </span>&#123;
     <span class="hljs-meta">@Override</span>
     <span class="hljs-function"><span class="hljs-keyword">public</span> AbstractComputer <span class="hljs-title">create</span><span class="hljs-params">()</span> </span>&#123;
         System.out.println(<span class="hljs-string">&quot;华硕电脑创建完成.....&quot;</span>);
-        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> LenovoComputer();
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> AsusComputer();
     &#125;
 &#125;</code></pre></div>
 <h5 id="工厂测试类-1"><a href="#工厂测试类-1" class="headerlink" title="工厂测试类"></a>工厂测试类</h5><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">// 工厂测试类</span>
@@ -430,11 +430,14 @@
 
     <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;
         IComputerFactory lenovoFactory = <span class="hljs-keyword">new</span> LenovoComputerFactory();
-        AbstractComputer lenovoComputer = lenovoFactory.create();
+        IComputer lenovoComputer = lenovoFactory.create();
+        lenovoComputer.start();
         IComputerFactory hpFactory = <span class="hljs-keyword">new</span> HpComputerFactory();
-        AbstractComputer hpComputer = lenovoFactory.create();
+        IComputer hpComputer = hpFactory.create();
+        hpComputer.start();
         IComputerFactory asusFactory = <span class="hljs-keyword">new</span> AsusComputerFactory();
-        AbstractComputer asusComputer = asusFactory.create();
+        IComputer asusComputer = asusFactory.create();
+        asusComputer.start();
     &#125;
 &#125;</code></pre></div>
 <h4 id="优缺点-1"><a href="#优缺点-1" class="headerlink" title="优缺点"></a>优缺点</h4><h5 id="优点："><a href="#优点：" class="headerlink" title="优点："></a>优点：</h5><ul>
