@@ -184,7 +184,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      2.1k 字
+      2.2k 字
     </span>
   
 
@@ -194,7 +194,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      24
+      25
        分钟
     </span>
   
@@ -236,7 +236,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：5 小时前
+                  本文最后更新于：20 分钟前
                 
               </p>
             
@@ -249,33 +249,33 @@
 <p><code>Product</code>：具体产品类，是简单工厂模式的创建目标。</p>
 <h4 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h4><p>这里我们用生产电脑来举例，假设有一个电脑的代工生产商，它目前已经可以代工生产联想电脑了，随着业务的拓展，这个代工生产商还要生产惠普和华硕的电脑，这样我们就需要用一个单独的类来专门生产电脑，这就用到了简单工厂模式。</p>
 <h4 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h4><h5 id="抽象产品类"><a href="#抽象产品类" class="headerlink" title="抽象产品类"></a>抽象产品类</h5><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">// 抽象产品类</span>
-<span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AbstractComputer</span> </span>&#123;
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">IComputer</span> </span>&#123;
     <span class="hljs-comment">/**</span>
 <span class="hljs-comment">     * 产品的抽象方法，由具体的产品类去实现 用于启动一台电脑</span>
 <span class="hljs-comment">     */</span>
     <span class="hljs-function"><span class="hljs-keyword">abstract</span> <span class="hljs-keyword">void</span> <span class="hljs-title">start</span><span class="hljs-params">()</span></span>;
 &#125;</code></pre></div>
 <h5 id="具体产品类"><a href="#具体产品类" class="headerlink" title="具体产品类"></a>具体产品类</h5><h6 id="惠普电脑"><a href="#惠普电脑" class="headerlink" title="惠普电脑"></a>惠普电脑</h6><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">// 惠普电脑</span>
-<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HpComputer</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">AbstractComputer</span> </span>&#123;
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HpComputer</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">IComputer</span> </span>&#123;
 
     <span class="hljs-meta">@Override</span>
-    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">start</span><span class="hljs-params">()</span> </span>&#123;
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">start</span><span class="hljs-params">()</span> </span>&#123;
         System.out.println(<span class="hljs-string">&quot;惠普电脑正在启动............&quot;</span>);
     &#125;
-&#125;</code></pre></div>
-<h6 id="联想电脑"><a href="#联想电脑" class="headerlink" title="联想电脑"></a>联想电脑</h6><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">// 联想电脑</span>
-<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">LenovoComputer</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">AbstractComputer</span> </span>&#123;
+&#125;
+<span class="hljs-comment">// 联想电脑</span>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">LenovoComputer</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">IComputer</span> </span>&#123;
 
     <span class="hljs-meta">@Override</span>
-    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">start</span><span class="hljs-params">()</span> </span>&#123;
+   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">start</span><span class="hljs-params">()</span> </span>&#123;
         System.out.println(<span class="hljs-string">&quot;联想电脑正在启动............&quot;</span>);
     &#125;
-&#125;</code></pre></div>
-<h6 id="华硕电脑"><a href="#华硕电脑" class="headerlink" title="华硕电脑"></a>华硕电脑</h6><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">// 华硕</span>
-<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AsusComputer</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">AbstractComputer</span> </span>&#123;
+&#125;
+<span class="hljs-comment">// 华硕</span>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AsusComputer</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">IComputer</span> </span>&#123;
 
     <span class="hljs-meta">@Override</span>
-    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">start</span><span class="hljs-params">()</span> </span>&#123;
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">start</span><span class="hljs-params">()</span> </span>&#123;
         System.out.println(<span class="hljs-string">&quot;华硕电脑正在启动............&quot;</span>);
     &#125;
 &#125;</code></pre></div>
@@ -439,7 +439,14 @@
         IComputer asusComputer = asusFactory.create();
         asusComputer.start();
     &#125;
-&#125;</code></pre></div>
+&#125;
+<span class="hljs-comment">// 输出</span>
+<span class="hljs-comment">//联想电脑创建完成.....</span>
+<span class="hljs-comment">//联想电脑正在启动............</span>
+<span class="hljs-comment">//惠普电脑创建完成.....</span>
+<span class="hljs-comment">//惠普电脑正在启动............</span>
+<span class="hljs-comment">//华硕电脑创建完成.....</span>
+<span class="hljs-comment">//华硕电脑正在启动............</span></code></pre></div>
 <h4 id="优缺点-1"><a href="#优缺点-1" class="headerlink" title="优缺点"></a>优缺点</h4><h5 id="优点："><a href="#优点：" class="headerlink" title="优点："></a>优点：</h5><ul>
 <li>用户只需要知道具体工厂的名称就可得到所要的产品，无须知道产品的具体创建过程。</li>
 <li>灵活性增强，对于新产品的创建，只需多写一个相应的工厂类。</li>
