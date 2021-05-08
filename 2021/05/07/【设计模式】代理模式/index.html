@@ -184,7 +184,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      8 字
+      1.7k 字
     </span>
   
 
@@ -194,7 +194,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      1
+      20
        分钟
     </span>
   
@@ -236,12 +236,119 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：20 小时前
+                  本文最后更新于：3 分钟前
                 
               </p>
             
             <div class="markdown-body">
-              <h2 id="【设计模式】代理模式"><a href="#【设计模式】代理模式" class="headerlink" title="【设计模式】代理模式"></a>【设计模式】代理模式</h2>
+              <h2 id="【设计模式】代理模式"><a href="#【设计模式】代理模式" class="headerlink" title="【设计模式】代理模式"></a>【设计模式】代理模式</h2><h3 id="代理模式的定义"><a href="#代理模式的定义" class="headerlink" title="代理模式的定义"></a>代理模式的定义</h3><p>代理模式给某一个对象提供一个代理对象，并由代理对象控制对原对象的引用。通俗的来讲代理模式就是我们生活中常见的中介。</p>
+<h3 id="为什么要使用代理模式"><a href="#为什么要使用代理模式" class="headerlink" title="为什么要使用代理模式"></a>为什么要使用代理模式</h3><ul>
+<li><strong>中介隔离作用：</strong>在某些情况下，一个客户类不想或者不能直接引用一个委托对象，而代理类对象可以在客户类和委托对象之间起到中介的作用，其特征是代理类和委托类实现相同的接口。</li>
+<li><strong>开闭原则，增加功能：</strong>代理类除了是客户类和委托类的中介之外，我们还可以通过给代理类增加额外的功能来扩展委托类的功能，这样做我们只需要修改代理类而不需要再修改委托类，符合代码设计的开闭原则。代理类主要负责为委托类预处理消息、过滤消息、把消息转发给委托类，以及事后对返回结果的处理等。代理类本身并不真正实现服务，而是同过调用委托类的相关方法，来提供特定的服务。真正的业务功能还是由委托类来实现，但是可以在业务功能执行的前后加入一些公共的服务。例如我们想给项目加入缓存、日志这些功能，我们就可以使用代理类来完成，而没必要打开已经封装好的委托类。</li>
+</ul>
+<h3 id="代理模式UML类图和组成"><a href="#代理模式UML类图和组成" class="headerlink" title="代理模式UML类图和组成"></a>代理模式UML类图和组成</h3><p><img src="https://i.loli.net/2021/05/08/8yxjohEwbJZniIL.png" srcset="/img/loading.gif" alt="proxy.png"></p>
+<ul>
+<li>抽象主题角色<code>（Subject）</code>：声明了目标对象和代理对象的共同接口，这样一来在任何可以使用目标对象的地方都可以使用代理对象。</li>
+<li>具体主题角色<code>（RealSubject)</code>：也称为委托角色或者被代理角色。定义了代理对象所代表的目标对象。</li>
+<li>代理主题角色<code>（Proxy)</code>：也叫委托类、代理类。代理对象内部含有目标对象的引用，从而可以在任何时候操作目标对象；代理对象提供一个与目标对象相同的接口，以便可以在任何时候替代目标对象。代理对象通常在客户端调用传递给目标对象之前或之后，执行某个操作，而不是单纯地将调用传递给目标对象。</li>
+</ul>
+<h3 id="代理模式实现"><a href="#代理模式实现" class="headerlink" title="代理模式实现"></a>代理模式实现</h3><p>代理模式又分为静态代理和动态代理。静态代理是由程序猿创建或特定工具自动生成源代码，再对其编译。在程序运行前，代理类的.class文件就已经存在了。动态代理是在程序运行时，通过运用反射机制动态的创建而成。</p>
+<h4 id="静态代理"><a href="#静态代理" class="headerlink" title="静态代理"></a>静态代理</h4><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">// 抽象的主题角色</span>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">ISubject</span> </span>&#123;
+    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">operate</span><span class="hljs-params">()</span></span>;
+&#125;
+<span class="hljs-comment">//  具体的主题</span>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RealSubject</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">ISubject</span> </span>&#123;
+    <span class="hljs-meta">@Override</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">operate</span><span class="hljs-params">()</span> </span>&#123;
+        System.out.println(<span class="hljs-string">&quot;I‘m real subject ....&quot;</span>);
+    &#125;
+&#125;
+<span class="hljs-comment">// proxy</span>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SubjectProxy</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">ISubject</span> </span>&#123;
+
+    <span class="hljs-keyword">private</span> RealSubject subject = <span class="hljs-keyword">new</span> RealSubject();
+
+    <span class="hljs-meta">@Override</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">operate</span><span class="hljs-params">()</span> </span>&#123;
+        System.out.println(<span class="hljs-string">&quot;start proxy ..., will invoking real operate of subject &quot;</span>);
+        subject.operate();
+        System.out.println(<span class="hljs-string">&quot;proxy end ...&quot;</span>);
+    &#125;
+
+&#125;
+<span class="hljs-comment">// 代理模式演示</span>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ProxyPatternDemo</span> </span>&#123;
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;
+        SubjectProxy proxy = <span class="hljs-keyword">new</span> SubjectProxy();
+        proxy.operate();
+    &#125;
+    
+&#125;
+<span class="hljs-comment">// 输出</span>
+<span class="hljs-comment">// start proxy ..., will invoking real operate of subject</span>
+<span class="hljs-comment">// I‘m real subject ....</span>
+<span class="hljs-comment">// proxy end ...</span></code></pre></div>
+<h4 id="动态代理"><a href="#动态代理" class="headerlink" title="动态代理"></a>动态代理</h4><p>动态代理有两种实现方式</p>
+<h5 id="JDK动态代理"><a href="#JDK动态代理" class="headerlink" title="JDK动态代理"></a><code>JDK</code>动态代理</h5><h6 id="实现原理及过程"><a href="#实现原理及过程" class="headerlink" title="实现原理及过程"></a>实现原理及过程</h6><p><code>Jdk</code>通过<code>java.lang.reflect.Proxy</code>包来支持动态代理，在Java中要创建一个代理对象，必须调用Proxy类的静态方法<code>newProxyInstance</code>，该方法的原型如下：<br><code>Object Proxy.newProxyInstance(ClassLoader loader, Class&lt;?&gt;[] interfaces, InvocationHandler handler) throws IllegalArgumentException</code></p>
+<p>参数解读：</p>
+<p><code>loader</code>，表示类加载器，对于不同来源（系统库或网络等）的类需要不同的类加载器来加载，这是Java安全模型的一部分。可以使用null来使用默认的加载器；<br><code>interfaces</code>，表示接口或对象的数组，它就是前述代理对象和真实对象都必须共有的父类或者接口；<br><code>handler</code>，表示调用处理器，它必须是实现了<code>InvocationHandler</code>接口的对象，其作用是定义代理对象中需要执行的具体操作。</p>
+<p><code>InvocationHandler</code>之于<code>Proxy</code>，就如<code>Runnable</code>之于<code>Thread</code>。<code>InvocationHandler</code>接口中只有一个方法invoke，它的作用就跟Runnable中的run方法类似，定义了代理对象在执行真实对象的方法时所希望执行的动作。其原型如下：<br><code>Object invoke(Object proxy, Method method, Object[] args) throws Throwable</code><br>参数解读：<br><code>proxy</code>，表示执行这个方法的代理对象；<br><code>method</code>，表示真实对象实际需要执行的方法（关于Method类参见Java的反射机制）；<br><code>args</code>，表示真实对象实际执行方法时所需的参数。<br>在实际的编程中，需要优先定义一个实现<code>InvocationHandler</code>接口的调用处理器对象，然后将它作为创建代理类实例的参数。（抑或在调用<code>newProxyInstance</code>方法时使用匿名内部类。）这样就得到了代理对象。真实对象本身的实例化在调用处理器对象内部完成，实例化时需要的参数也应该及时传入调用处理器对象中。这样一来就完成了代理对象对真实对象的包装，而代理对象需要执行的额外操作也在<code>invoke</code>方法中处理。其后，在客户端中，如果需要使用真实对象时，就可以用代理对象来替代它了（有时需要类型强制转化）。</p>
+<p><code>Jdk</code>的动态代理是基于接口的。现在想要为<code>RealSubject</code>这个类创建一个动态代理对象，<code>Jdk</code>主要会做一下工作：</p>
+<ul>
+<li>获取<code>RealSubject</code>上的所有接口列表</li>
+<li>确定要生成的代理类的类名，默认为：<code>com.sun.proxy.$ProxyXXXX</code>；</li>
+<li>根据需要实现的接口信息，在代码中动态创建该Proxy类的字节码；</li>
+<li>将对应的字节码转换为对于的class对象；</li>
+<li>创建<code>InvocationHandler</code>实例handler,用来处理Proxy所有方法的调用；</li>
+<li>Proxy的class对象以创建的handler对象为参数，实例化一个proxy对象；</li>
+</ul>
+<h6 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h6><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">// 抽象的主题角色</span>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">ISubject</span> </span>&#123;
+    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">operate</span><span class="hljs-params">()</span></span>;
+&#125;
+<span class="hljs-comment">//  具体的主题</span>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RealSubject</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">ISubject</span> </span>&#123;
+    <span class="hljs-meta">@Override</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">operate</span><span class="hljs-params">()</span> </span>&#123;
+        System.out.println(<span class="hljs-string">&quot;I‘m real subject ....&quot;</span>);
+    &#125;
+&#125;
+<span class="hljs-comment">// 基于JDK实现代理</span>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ProxyHandler</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">InvocationHandler</span> </span>&#123;
+
+    <span class="hljs-keyword">private</span> Object obj;
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> Object <span class="hljs-title">newProxyInstance</span><span class="hljs-params">(Object realObj)</span> </span>&#123;
+        <span class="hljs-keyword">this</span>.obj = realObj;
+        Class&lt;?&gt; classType = <span class="hljs-keyword">this</span>.obj.getClass();
+        <span class="hljs-keyword">return</span> Proxy.newProxyInstance(classType.getClassLoader(), classType.getInterfaces(), <span class="hljs-keyword">this</span>);
+    &#125;
+
+    <span class="hljs-meta">@Override</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> Object <span class="hljs-title">invoke</span><span class="hljs-params">(Object proxy, Method method, Object[] args)</span> <span class="hljs-keyword">throws</span> Throwable </span>&#123;
+        System.out.println(<span class="hljs-string">&quot;start proxy ..., will invoking real operate of subject &quot;</span>);
+        method.invoke(obj, args);
+        System.out.println(<span class="hljs-string">&quot;proxy end!&quot;</span>);
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">null</span>;
+    &#125;
+
+&#125;
+<span class="hljs-comment">// 代理模式演示</span>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ProxyPatternDemo</span> </span>&#123;
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;
+        ISubject subject = (ISubject) <span class="hljs-keyword">new</span> ProxyHandler().newProxyInstance(<span class="hljs-keyword">new</span> RealSubject());
+        subject.operate();
+    &#125;
+
+&#125;
+<span class="hljs-comment">// 输出</span>
+<span class="hljs-comment">//start proxy based jdk ..., will invoking real operate of subject</span>
+<span class="hljs-comment">//I‘m real subject ....</span>
+<span class="hljs-comment">//proxy end!</span></code></pre></div>
+
             </div>
             <hr>
             <div>
@@ -261,6 +368,8 @@
                       <a class="hover-with-bg" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>
                     
                       <a class="hover-with-bg" href="/tags/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/">代理模式</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F/">结构型模式</a>
                     
                   </div>
                 
