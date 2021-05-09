@@ -17,9 +17,25 @@
   <meta name="description" content="good good study,day day up">
   <meta name="author" content="何文垚">
   <meta name="keywords" content="">
-  <title>归档 - hwyblog</title>
+  <title>【Redis实战】基于Redis实现缓存机制 - hwyblog</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/a11y-dark.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
 
 
 
@@ -47,7 +63,7 @@
 
 
 <body>
-  <header style="height: 60vh;">
+  <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand"
@@ -146,9 +162,54 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="归档">
+            <span class="h2" id="subtitle" title="【Redis实战】基于Redis实现缓存机制">
               
             </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-05-09 17:12" pubdate>
+        2021年5月9日 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      543 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      5
+       分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- 不蒜子统计文章PV -->
+      <span id="busuanzi_container_page_pv" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> 次
+      </span>
+    
+  
+</div>
 
             
           </div>
@@ -161,106 +222,125 @@
 
   <main>
     
-      <div class="container nopadding-x-md">
-        <div class="py-5" id="board"
-          >
-          
-          <div class="container">
-            <div class="row">
-              <div class="col-12 col-md-10 m-auto">
-                
-
-<div class="list-group">
-  <p class="h4">共计 66 篇文章</p>
-  <hr>
-  
-  
-    
       
-      <p class="h5">2021</p>
-    
-    <a href="/2021/02/06/%E3%80%90%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98%E3%80%91leetcode-1423-%E5%8F%AF%E8%8E%B7%E5%BE%97%E7%9A%84%E6%9C%80%E5%A4%A7%E7%82%B9%E6%95%B0/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">【每日一题】leetcode-1423-可获得的最大点数</span>
-      <time style="float: right;">02-06</time>
-    </a>
-  
-    
-    <a href="/2021/02/05/%E3%80%90%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98%E3%80%91leetcode-547-%E7%9C%81%E4%BB%BD%E6%95%B0%E9%87%8F/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">【每日一题】leetcode-547-省份数量</span>
-      <time style="float: right;">02-05</time>
-    </a>
-  
-    
-    <a href="/2021/02/02/%E3%80%90nginx%E5%AD%A6%E4%B9%A0%E3%80%91%E7%AC%AC%E4%B8%80%E7%AB%A0-nginx%E5%85%A5%E9%97%A8/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">【nginx学习】第一章-nginx入门</span>
-      <time style="float: right;">02-02</time>
-    </a>
-  
-    
-    <a href="/2021/02/01/%E3%80%90Mybatis%E3%80%91%E5%9F%BA%E4%BA%8EXML%E7%9A%84%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">【Mybatis】基于XML的增删改查</span>
-      <time style="float: right;">02-01</time>
-    </a>
-  
-    
-    <a href="/2021/02/01/%E3%80%90SpringBoot%E3%80%91%E9%9B%86%E6%88%90WebSocket/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">【SpringBoot】整合WebSocket</span>
-      <time style="float: right;">02-01</time>
-    </a>
-  
-    
-    <a href="/2021/02/01/%E3%80%90JVM%E5%AD%A6%E4%B9%A0%E3%80%91-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E7%AE%97%E6%B3%95/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">【JVM学习】-垃圾回收算法</span>
-      <time style="float: right;">02-01</time>
-    </a>
-  
-    
-    <a href="/2021/02/01/%E3%80%90%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91JVM%E4%B8%93%E9%A2%98/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">【面试题】JVM专题</span>
-      <time style="float: right;">02-01</time>
-    </a>
-  
-    
-    <a href="/2021/01/31/%E3%80%90%E9%9D%A2%E8%AF%95%E9%A2%98%E3%80%91%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E9%97%AE%E9%A2%98/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">【面试题】海量数据处理问题</span>
-      <time style="float: right;">01-31</time>
-    </a>
-  
-    
-    <a href="/2021/01/26/Netty%E3%80%90HelloWorld%E3%80%91/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">Netty【HelloWorld】</span>
-      <time style="float: right;">01-26</time>
-    </a>
-  
-    
-    <a href="/2021/01/26/Spring%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E3%80%90IOC%E5%AE%B9%E5%99%A8%E3%80%91/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">Spring源码分析【IOC容器】</span>
-      <time style="float: right;">01-26</time>
-    </a>
-  
-</div>
 
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">【Redis实战】基于Redis实现缓存机制</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：2 分钟前
+                
+              </p>
+            
+            <div class="markdown-body">
+              <h2 id="【Redis实战】基于Redis实现缓存机制"><a href="#【Redis实战】基于Redis实现缓存机制" class="headerlink" title="【Redis实战】基于Redis实现缓存机制"></a>【Redis实战】基于Redis实现缓存机制</h2><p>redis里面存放的就是一大堆的key-value对，set key value，往里面放一堆数据，然后通过get key，从里面获取一堆数据。基于此我们可以利用其实现缓存机制，redis缓存机制最经典的两个场景：1、高并发。2、高性能</p>
+<h3 id="Redis缓存应对高并发和高性能"><a href="#Redis缓存应对高并发和高性能" class="headerlink" title="Redis缓存应对高并发和高性能"></a>Redis缓存应对高并发和高性能</h3><h4 id="高性能"><a href="#高性能" class="headerlink" title="高性能"></a>高性能</h4><p>高性能，你有一些很复杂的查询，或者是一些很大的数据资源（比如说图片之类的东西，超长文本之类的东西），可能平时执行的话呢是很慢的，复杂查询，上百行的SQL语句，从数据库里出，可能很慢，或者是一个大html页面，从磁盘上加载的时间也很慢。</p>
+<p>这时你就可以把复杂查询以后的结果放入redis里作为缓存，下次再查询的时候就直接从redis缓存里出，不需要再次从数据库里执行上百行的SQL语句去查询了，只要10毫秒就可以做到了。我们只缓存查询结果，如果设计到删、改需要将对应的缓存数据修改或删除。</p>
+<p>同样html页面，可以放在缓存里，每次就直接从缓存里出就可以了，不需要每次都做动态的渲染，比如说基于jsp动态渲染页面，再从磁盘上读取出来返回给浏览器，其实你也可以把一些静态资源放到redis缓存里去。</p>
+<h4 id="高并发"><a href="#高并发" class="headerlink" title="高并发"></a>高并发</h4><p>高并发，假设你每次都查询数据库，数据库最多每秒抗4000个请求，但是你每秒有1万次请求，此时你可以把一些<strong>查询结果</strong>放在缓存里，但是对于<strong>删除和修改</strong>的请求我们要及时的<strong>更新redis缓存</strong>。后续可能每秒有9500次请求都是走redis缓存的，500次请求走数据库。同样的机器配置下，数据库每秒也就抗几千次请求，但redis每秒可以抗几万次请求到十万次的请求都可以做到。</p>
 
-  <nav aria-label="navigation">
-    <span class="pagination" id="pagination">
-      <a class="extend prev" rel="prev" href="/archives/2021/page/4/"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/archives/2021/">1</a><span class="space">&hellip;</span><a class="page-number" href="/archives/2021/page/3/">3</a><a class="page-number" href="/archives/2021/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/archives/2021/page/6/">6</a><a class="page-number" href="/archives/2021/page/7/">7</a><a class="extend next" rel="next" href="/archives/2021/page/6/"><i class="iconfont icon-arrowright"></i></a>
-    </span>
-  </nav>
-  
-  <script>
-    for (ele of document.getElementById("pagination").getElementsByTagName("a")) {
-      ele.href += '#board';
-    }
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/">中间件</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/Redis/">Redis</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Redis/">Redis</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/">缓存机制</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/05/07/%E3%80%90%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E3%80%91%E4%B8%AD%E4%BB%8B%E8%80%85%E6%A8%A1%E5%BC%8F/">
+                        <span class="hidden-mobile">【设计模式】中介者模式</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments">
+                
+                
+  <div id="SOHUCS" sid='http://example.com/2021/05/09/%E3%80%90Redis%E5%AE%9E%E6%88%98%E3%80%91%E5%9F%BA%E4%BA%8ERedis%E5%AE%9E%E7%8E%B0%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/'></div>
+  <script type="text/javascript">
+    Fluid.utils.waitElementVisible('SOHUCS', function() {
+      var appid = 'cyviJi7Eb';
+      var conf = 'prod_f1a0451d623ea0a29628bf6df8ca48fb';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      if (width < 960) {
+        window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>');
+      } else {
+        Fluid.utils.createScript("https://changyan.sohu.com/upload/changyan.js", function() {
+          window.changyan.api.config({
+            appid: appid,
+            conf: conf
+          })
+        });
+      }
+    })
   </script>
 
 
-
-
-              </div>
-            </div>
-          </div>
+              </article>
+            
+          </article>
         </div>
       </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
     
 
     
@@ -364,9 +444,15 @@
 
 
 
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
 
 
 
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
 
 
 

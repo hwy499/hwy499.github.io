@@ -4,6 +4,35 @@
   
   
   <entry>
+    <title>【Redis实战】基于Redis实现缓存机制</title>
+    <link href="/2021/05/09/%E3%80%90Redis%E5%AE%9E%E6%88%98%E3%80%91%E5%9F%BA%E4%BA%8ERedis%E5%AE%9E%E7%8E%B0%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/"/>
+    <url>/2021/05/09/%E3%80%90Redis%E5%AE%9E%E6%88%98%E3%80%91%E5%9F%BA%E4%BA%8ERedis%E5%AE%9E%E7%8E%B0%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/</url>
+    
+    <content type="html"><![CDATA[<h2 id="【Redis实战】基于Redis实现缓存机制"><a href="#【Redis实战】基于Redis实现缓存机制" class="headerlink" title="【Redis实战】基于Redis实现缓存机制"></a>【Redis实战】基于Redis实现缓存机制</h2><p>redis里面存放的就是一大堆的key-value对，set key value，往里面放一堆数据，然后通过get key，从里面获取一堆数据。基于此我们可以利用其实现缓存机制，redis缓存机制最经典的两个场景：1、高并发。2、高性能</p><h3 id="Redis缓存应对高并发和高性能"><a href="#Redis缓存应对高并发和高性能" class="headerlink" title="Redis缓存应对高并发和高性能"></a>Redis缓存应对高并发和高性能</h3><h4 id="高性能"><a href="#高性能" class="headerlink" title="高性能"></a>高性能</h4><p>高性能，你有一些很复杂的查询，或者是一些很大的数据资源（比如说图片之类的东西，超长文本之类的东西），可能平时执行的话呢是很慢的，复杂查询，上百行的SQL语句，从数据库里出，可能很慢，或者是一个大html页面，从磁盘上加载的时间也很慢。</p><p>这时你就可以把复杂查询以后的结果放入redis里作为缓存，下次再查询的时候就直接从redis缓存里出，不需要再次从数据库里执行上百行的SQL语句去查询了，只要10毫秒就可以做到了。我们只缓存查询结果，如果设计到删、改需要将对应的缓存数据修改或删除。</p><p>同样html页面，可以放在缓存里，每次就直接从缓存里出就可以了，不需要每次都做动态的渲染，比如说基于jsp动态渲染页面，再从磁盘上读取出来返回给浏览器，其实你也可以把一些静态资源放到redis缓存里去。</p><h4 id="高并发"><a href="#高并发" class="headerlink" title="高并发"></a>高并发</h4><p>高并发，假设你每次都查询数据库，数据库最多每秒抗4000个请求，但是你每秒有1万次请求，此时你可以把一些<strong>查询结果</strong>放在缓存里，但是对于<strong>删除和修改</strong>的请求我们要及时的<strong>更新redis缓存</strong>。后续可能每秒有9500次请求都是走redis缓存的，500次请求走数据库。同样的机器配置下，数据库每秒也就抗几千次请求，但redis每秒可以抗几万次请求到十万次的请求都可以做到。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>中间件</category>
+      
+      <category>Redis</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Redis</tag>
+      
+      <tag>缓存机制</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>【设计模式】中介者模式</title>
     <link href="/2021/05/07/%E3%80%90%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E3%80%91%E4%B8%AD%E4%BB%8B%E8%80%85%E6%A8%A1%E5%BC%8F/"/>
     <url>/2021/05/07/%E3%80%90%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E3%80%91%E4%B8%AD%E4%BB%8B%E8%80%85%E6%A8%A1%E5%BC%8F/</url>
@@ -20,9 +49,9 @@
     
     <tags>
       
-      <tag>中介者模式</tag>
-      
       <tag>设计模式</tag>
+      
+      <tag>中介者模式</tag>
       
     </tags>
     
@@ -483,14 +512,16 @@
       
       <category>中间件</category>
       
-      <category>redis</category>
+      <category>Redis</category>
       
     </categories>
     
     
     <tags>
       
-      <tag>redis</tag>
+      <tag>Redis</tag>
+      
+      <tag>命令</tag>
       
     </tags>
     
@@ -1434,11 +1465,11 @@
     
     <tags>
       
+      <tag>源码</tag>
+      
       <tag>框架</tag>
       
       <tag>IOC</tag>
-      
-      <tag>源码</tag>
       
       <tag>Spring</tag>
       
@@ -1553,7 +1584,7 @@
       
       <category>中间件</category>
       
-      <category>redis</category>
+      <category>Redis</category>
       
     </categories>
     
@@ -1562,7 +1593,7 @@
       
       <tag>中间件</tag>
       
-      <tag>redis</tag>
+      <tag>Redis</tag>
       
       <tag>读写分离</tag>
       
@@ -1584,7 +1615,7 @@
       
       <category>中间件</category>
       
-      <category>redis</category>
+      <category>Redis</category>
       
     </categories>
     
@@ -1593,7 +1624,7 @@
       
       <tag>中间件</tag>
       
-      <tag>redis</tag>
+      <tag>Redis</tag>
       
       <tag>缓存</tag>
       
