@@ -4,6 +4,37 @@
   
   
   <entry>
+    <title>【Redis实战】朋友圈点赞功能的实现</title>
+    <link href="/2021/05/09/%E3%80%90Redis%E5%AE%9E%E6%88%98%E3%80%91%E6%9C%8B%E5%8F%8B%E5%9C%88%E7%82%B9%E8%B5%9E%E5%8A%9F%E8%83%BD%E7%9A%84%E5%AE%9E%E7%8E%B0/"/>
+    <url>/2021/05/09/%E3%80%90Redis%E5%AE%9E%E6%88%98%E3%80%91%E6%9C%8B%E5%8F%8B%E5%9C%88%E7%82%B9%E8%B5%9E%E5%8A%9F%E8%83%BD%E7%9A%84%E5%AE%9E%E7%8E%B0/</url>
+    
+    <content type="html"><![CDATA[<h2 id="【Redis实战】朋友圈点赞功能的实现"><a href="#【Redis实战】朋友圈点赞功能的实现" class="headerlink" title="【Redis实战】朋友圈点赞功能的实现"></a>【Redis实战】朋友圈点赞功能的实现</h2><p>假设说你发了一条朋友圈，此时可能你的好友会对你的朋友圈进行点赞，还可以取消点赞，你的好友在刷朋友圈的时候可以查看到自己是否对你点赞过，你自己还可以查看到你的朋友圈有哪些人点赞了，有多少人给你点赞了。</p><p>sadd给某一条朋友圈添加点赞的一个好友，用户取消点赞的话，那就是srem删除某个好友的点赞，查看你是否对某条朋友圈进行过点赞，sismember，你发出的朋友圈被哪些人点赞了，smembers，你的朋友圈的点赞次数，scard。</p><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">/**</span><span class="hljs-comment"> * 朋友圈点赞案例</span><span class="hljs-comment"> */</span><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MomentsDemo</span> </span>&#123;    <span class="hljs-keyword">private</span> Jedis jedis = <span class="hljs-keyword">new</span> Jedis(<span class="hljs-string">&quot;127.0.0.1&quot;</span>);    <span class="hljs-comment">/**</span><span class="hljs-comment">     * 对朋友圈进行点赞</span><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> userId</span><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> momentId</span><span class="hljs-comment">     */</span>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">likeMoment</span><span class="hljs-params">(<span class="hljs-keyword">long</span> userId, <span class="hljs-keyword">long</span> momentId)</span> </span>&#123;        jedis.sadd(<span class="hljs-string">&quot;moment_like_users::&quot;</span> + momentId, String.valueOf(userId));    &#125;    <span class="hljs-comment">/**</span><span class="hljs-comment">     * 对朋友圈取消点赞</span><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> userId</span><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> momentId</span><span class="hljs-comment">     */</span>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">dislikeMoment</span><span class="hljs-params">(<span class="hljs-keyword">long</span> userId, <span class="hljs-keyword">long</span> momentId)</span> </span>&#123;        jedis.srem(<span class="hljs-string">&quot;moment_like_users::&quot;</span> + momentId, String.valueOf(userId));    &#125;    <span class="hljs-comment">/**</span><span class="hljs-comment">     * 查看自己是否对某条朋友圈点赞过</span><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> userId</span><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> momentId</span><span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span><span class="hljs-comment">     */</span>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">hasLikedMoment</span><span class="hljs-params">(<span class="hljs-keyword">long</span> userId, <span class="hljs-keyword">long</span> momentId)</span> </span>&#123;        <span class="hljs-keyword">return</span> jedis.sismember(<span class="hljs-string">&quot;moment_like_users::&quot;</span> + momentId, String.valueOf(userId));    &#125;    <span class="hljs-comment">/**</span><span class="hljs-comment">     * 获取你的一条朋友圈有哪些人点赞了</span><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> momentId</span><span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span><span class="hljs-comment">     */</span>    <span class="hljs-function"><span class="hljs-keyword">public</span> Set&lt;String&gt; <span class="hljs-title">getMomentLikeUsers</span><span class="hljs-params">(<span class="hljs-keyword">long</span> momentId)</span> </span>&#123;        <span class="hljs-keyword">return</span> jedis.smembers(<span class="hljs-string">&quot;moment_like_users::&quot;</span> + momentId);    &#125;    <span class="hljs-comment">/**</span><span class="hljs-comment">     * 获取你的一条朋友圈被几个人点赞了</span><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> momentId</span><span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span><span class="hljs-comment">     */</span>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">long</span> <span class="hljs-title">getMomentLikeUsersCount</span><span class="hljs-params">(<span class="hljs-keyword">long</span> momentId)</span> </span>&#123;        <span class="hljs-keyword">return</span> jedis.scard(<span class="hljs-string">&quot;moment_like_users::&quot;</span> + momentId);    &#125;    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> Exception </span>&#123;        MomentsDemo demo = <span class="hljs-keyword">new</span> MomentsDemo();        <span class="hljs-comment">// 你的用户id</span>        <span class="hljs-keyword">long</span> userId = <span class="hljs-number">11</span>;        <span class="hljs-comment">// 你的朋友圈id</span>        <span class="hljs-keyword">long</span> momentId = <span class="hljs-number">151</span>;        <span class="hljs-comment">// 你的朋友1的用户id</span>        <span class="hljs-keyword">long</span> friendId = <span class="hljs-number">12</span>;        <span class="hljs-comment">// 你的朋友2的用户id</span>        <span class="hljs-keyword">long</span> otherFriendId = <span class="hljs-number">13</span>;        <span class="hljs-comment">// 你的朋友1对你的朋友圈进行点赞</span>        demo.likeMoment(friendId, momentId);        <span class="hljs-comment">// 取消点赞</span>        demo.dislikeMoment(friendId, momentId);        <span class="hljs-comment">// 获取点赞状态</span>        <span class="hljs-keyword">boolean</span> hasLikedMoment = demo.hasLikedMoment(friendId, momentId);        System.out.println(<span class="hljs-string">&quot;朋友1刷朋友圈，看到是否对你的朋友圈点赞过：&quot;</span> + (hasLikedMoment ? <span class="hljs-string">&quot;是&quot;</span> : <span class="hljs-string">&quot;否&quot;</span>));        <span class="hljs-comment">// 你的朋友2对你的朋友圈进行点赞</span>        demo.likeMoment(otherFriendId, momentId);        <span class="hljs-comment">// 获取点赞状态</span>        hasLikedMoment = demo.hasLikedMoment(otherFriendId, momentId);        System.out.println(<span class="hljs-string">&quot;朋友2刷朋友圈，看到是否对你的朋友圈点赞过：&quot;</span> + (hasLikedMoment ? <span class="hljs-string">&quot;是&quot;</span> : <span class="hljs-string">&quot;否&quot;</span>));        <span class="hljs-comment">// 你自己刷朋友圈，看自己的朋友圈的点赞情况</span>        Set&lt;String&gt; momentLikeUsers = demo.getMomentLikeUsers(momentId);        <span class="hljs-keyword">long</span> momentLikeUsersCount = demo.getMomentLikeUsersCount(momentId);        System.out.println(<span class="hljs-string">&quot;你自己刷朋友圈，看到自己发的朋友圈被&quot;</span> + momentLikeUsersCount + <span class="hljs-string">&quot;个人点赞了，点赞的用户为：&quot;</span> + momentLikeUsers);    &#125;&#125;</code></pre></div>]]></content>
+    
+    
+    <categories>
+      
+      <category>中间件</category>
+      
+      <category>Redis</category>
+      
+      <category>实战</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Redis</tag>
+      
+      <tag>点赞功能</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>【Redis实战】社交网站的网址点击追踪机制</title>
     <link href="/2021/05/09/%E3%80%90Redis%E5%AE%9E%E6%88%98%E3%80%91%E7%A4%BE%E4%BA%A4%E7%BD%91%E7%AB%99%E7%9A%84%E7%BD%91%E5%9D%80%E7%82%B9%E5%87%BB%E8%BF%BD%E8%B8%AA%E6%9C%BA%E5%88%B6/"/>
     <url>/2021/05/09/%E3%80%90Redis%E5%AE%9E%E6%88%98%E3%80%91%E7%A4%BE%E4%BA%A4%E7%BD%91%E7%AB%99%E7%9A%84%E7%BD%91%E5%9D%80%E7%82%B9%E5%87%BB%E8%BF%BD%E8%B8%AA%E6%9C%BA%E5%88%B6/</url>
@@ -16,6 +47,8 @@
       <category>中间件</category>
       
       <category>Redis</category>
+      
+      <category>实战</category>
       
     </categories>
     
@@ -45,6 +78,8 @@
       <category>中间件</category>
       
       <category>Redis</category>
+      
+      <category>实战</category>
       
     </categories>
     
