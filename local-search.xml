@@ -4,6 +4,35 @@
   
   
   <entry>
+    <title>【Redis实战】社交网站的网址点击追踪机制</title>
+    <link href="/2021/05/09/%E3%80%90Redis%E5%AE%9E%E6%88%98%E3%80%91%E7%A4%BE%E4%BA%A4%E7%BD%91%E7%AB%99%E7%9A%84%E7%BD%91%E5%9D%80%E7%82%B9%E5%87%BB%E8%BF%BD%E8%B8%AA%E6%9C%BA%E5%88%B6/"/>
+    <url>/2021/05/09/%E3%80%90Redis%E5%AE%9E%E6%88%98%E3%80%91%E7%A4%BE%E4%BA%A4%E7%BD%91%E7%AB%99%E7%9A%84%E7%BD%91%E5%9D%80%E7%82%B9%E5%87%BB%E8%BF%BD%E8%B8%AA%E6%9C%BA%E5%88%B6/</url>
+    
+    <content type="html"><![CDATA[<h2 id="【Redis实战】社交网站的网址点击追踪机制"><a href="#【Redis实战】社交网站的网址点击追踪机制" class="headerlink" title="【Redis实战】社交网站的网址点击追踪机制"></a>【Redis实战】社交网站的网址点击追踪机制</h2><p>社交网站（微博）一般会把你发表的一些微博里的长连接转换为短连接，这样可以利用短连接进行点击数量追踪，然后再让你进入短连接对应的长连接地址里去，所以可以利用hash数据结构去实现网址点击追踪机制。</p><p>利用<code>redis</code>的<code>incr</code>自增长，让<code>short_url_seed</code>实现自增长，然后将<code>short_url_seed</code>10进制转为36进制，这个36进制的数就是短链接。接着把短链接<code>hset</code>存放在<code>hash</code>数据结构里，再提供一个映射转换的<code>hget</code>获取方法，hash数据结构，说白了就是我们的Java里的HashMap，redis里的hash就是一个map，一个map里可以放一些key-value对。</p><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-comment">// 短链接追踪演示</span><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ShortUrlDemo</span> </span>&#123;    <span class="hljs-comment">/**</span><span class="hljs-comment">     * 36 位加密字符</span><span class="hljs-comment">     */</span>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> String[] X36_ARRAY = <span class="hljs-string">&quot;0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z&quot;</span>.split(<span class="hljs-string">&quot;,&quot;</span>);    <span class="hljs-keyword">private</span> Jedis jedis = <span class="hljs-keyword">new</span> Jedis(<span class="hljs-string">&quot;127.0.0.1&quot;</span>);    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">ShortUrlDemo</span><span class="hljs-params">()</span> </span>&#123;        jedis.set(<span class="hljs-string">&quot;short_url_seed&quot;</span>, <span class="hljs-string">&quot;51167890045&quot;</span>);    &#125;    <span class="hljs-comment">/**</span><span class="hljs-comment">     * 获取短连接网址</span><span class="hljs-comment">     *</span><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> url</span><span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span><span class="hljs-comment">     */</span>    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">getShortUrl</span><span class="hljs-params">(String url)</span> </span>&#123;        <span class="hljs-keyword">long</span> shortUrlSeed = jedis.incr(<span class="hljs-string">&quot;short_url_seed&quot;</span>);        StringBuffer buffer = <span class="hljs-keyword">new</span> StringBuffer();        <span class="hljs-keyword">while</span> (shortUrlSeed &gt; <span class="hljs-number">0</span>) &#123;            buffer.append(X36_ARRAY[(<span class="hljs-keyword">int</span>) (shortUrlSeed % <span class="hljs-number">36</span>)]);            shortUrlSeed = shortUrlSeed / <span class="hljs-number">36</span>;        &#125;        <span class="hljs-comment">// 将buffer倒置获得短链接</span>        String shortUrl = buffer.reverse().toString();        jedis.hset(<span class="hljs-string">&quot;short_url_access_count&quot;</span>, shortUrl, <span class="hljs-string">&quot;0&quot;</span>);        jedis.hset(<span class="hljs-string">&quot;url_mapping&quot;</span>, shortUrl, url);        <span class="hljs-keyword">return</span> shortUrl;    &#125;    <span class="hljs-comment">/**</span><span class="hljs-comment">     * 给短连接地址进行访问次数的增长</span><span class="hljs-comment">     *</span><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> shortUrl</span><span class="hljs-comment">     */</span>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">incrementShortUrlAccessCount</span><span class="hljs-params">(String shortUrl)</span> </span>&#123;        jedis.hincrBy(<span class="hljs-string">&quot;short_url_access_count&quot;</span>, shortUrl, <span class="hljs-number">1</span>);    &#125;    <span class="hljs-comment">/**</span><span class="hljs-comment">     * 通过短链接获取长连接</span><span class="hljs-comment">     *</span><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> shortUrl</span><span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span><span class="hljs-comment">     */</span>    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">getLongUrlByShortUrl</span><span class="hljs-params">(String shortUrl)</span> </span>&#123;        <span class="hljs-keyword">return</span> jedis.hget(<span class="hljs-string">&quot;url_mapping&quot;</span>, shortUrl);    &#125;    <span class="hljs-comment">/**</span><span class="hljs-comment">     * 获取短连接地址的访问次数</span><span class="hljs-comment">     *</span><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> shortUrl</span><span class="hljs-comment">     */</span>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">long</span> <span class="hljs-title">getShortUrlAccessCount</span><span class="hljs-params">(String shortUrl)</span> </span>&#123;        <span class="hljs-keyword">return</span> Long.valueOf(jedis.hget(<span class="hljs-string">&quot;short_url_access_count&quot;</span>, shortUrl));    &#125;    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> Exception </span>&#123;        ShortUrlDemo demo = <span class="hljs-keyword">new</span> ShortUrlDemo();        String shortUrl = demo.getShortUrl(<span class="hljs-string">&quot;http://redis.com/index.html&quot;</span>);        System.out.println(<span class="hljs-string">&quot;页面上展示的短链接地址为：&quot;</span> + shortUrl);        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">152</span>; i++) &#123;            demo.incrementShortUrlAccessCount(shortUrl);        &#125;        <span class="hljs-keyword">long</span> accessCount = demo.getShortUrlAccessCount(shortUrl);        System.out.println(<span class="hljs-string">&quot;短链接被访问的次数为：&quot;</span> + accessCount);        String longUrl = demo.getLongUrlByShortUrl(shortUrl);        System.out.println(<span class="hljs-string">&quot;短链接对应的长链接为：&quot;</span> + longUrl);    &#125;&#125;</code></pre></div>]]></content>
+    
+    
+    <categories>
+      
+      <category>中间件</category>
+      
+      <category>Redis</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Redis</tag>
+      
+      <tag>社交网站的网址点击追踪机制</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>【Redis实战】基于Redis实现缓存机制</title>
     <link href="/2021/05/09/%E3%80%90Redis%E5%AE%9E%E6%88%98%E3%80%91%E5%9F%BA%E4%BA%8ERedis%E5%AE%9E%E7%8E%B0%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/"/>
     <url>/2021/05/09/%E3%80%90Redis%E5%AE%9E%E6%88%98%E3%80%91%E5%9F%BA%E4%BA%8ERedis%E5%AE%9E%E7%8E%B0%E7%BC%93%E5%AD%98%E6%9C%BA%E5%88%B6/</url>
@@ -1465,11 +1494,11 @@
     
     <tags>
       
-      <tag>源码</tag>
-      
       <tag>框架</tag>
       
       <tag>IOC</tag>
+      
+      <tag>源码</tag>
       
       <tag>Spring</tag>
       
