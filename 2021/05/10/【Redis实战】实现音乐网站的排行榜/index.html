@@ -17,7 +17,7 @@
   <meta name="description" content="good good study,day day up">
   <meta name="author" content="何文垚">
   <meta name="keywords" content="">
-  <title>【网络协议】DNS协议 - hwyblog</title>
+  <title>【Redis实战】实现音乐网站的排行榜 - hwyblog</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
 
@@ -162,7 +162,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="【网络协议】DNS协议">
+            <span class="h2" id="subtitle" title="【Redis实战】实现音乐网站的排行榜">
               
             </span>
 
@@ -172,8 +172,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2021-05-03 20:03" pubdate>
-        2021年5月3日 晚上
+      <time datetime="2021-05-10 00:13" pubdate>
+        2021年5月10日 凌晨
       </time>
     </span>
   
@@ -184,7 +184,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      319 字
+      542 字
     </span>
   
 
@@ -194,7 +194,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      3
+      7
        分钟
     </span>
   
@@ -232,23 +232,89 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">【网络协议】DNS协议</h1>
+            <h1 style="display: none">【Redis实战】实现音乐网站的排行榜</h1>
             
               <p class="note note-info">
                 
-                  本文最后更新于：7 天前
+                  本文最后更新于：1 分钟前
                 
               </p>
             
             <div class="markdown-body">
-              <h2 id="DNS"><a href="#DNS" class="headerlink" title="DNS"></a>DNS</h2><h3 id="DNS简介"><a href="#DNS简介" class="headerlink" title="DNS简介"></a>DNS简介</h3><p>域名系统（ Domain Name System 简称 DNS） 是一个应用层协议，DNS 的作用是将人类可读的域名 <a target="_blank" rel="noopener" href="http://www.example.com/">www.example.com</a> 转换为机器可读的 IP 地址 (如，192.0.2.44)。DNS 协议建立在 UDP 或 TCP 协议之上，默认使用 53 号端口。客户端默认通过 UDP 协议进行通讯，但是由于广域网中不适合传输过大的 UDP 数据包，因此规定当报文长度超过了 512 字节时，应转换为使用 TCP 协议进行数据传输。<br> 可能会出现如下的两种情况：</p>
-<ul>
-<li><p>客户端认为 UDP 响应包长度可能超过 512 字节，主动使用 TCP 协议；</p>
-</li>
-<li><p>客户端使用 UDP 协议发送 DNS 请求，服务端发现响应报文超过了 512 字节，在截断的 UDP 响应报文中将 TC 设置为 1 ，以通知客户端该报文已经被截断，客户端收到之后再发起一次 TCP 请求。</p>
-</li>
-</ul>
-<p>DNS 是一种可以将域名和IP地址相互映射的以层次结构分布的数据库系统。DNS系统采用递归查询请求的方式来响应用户的查询，为互联网的运行提供关键性的基础服务。</p>
+              <h2 id="【Redis实战】实现音乐网站的排行榜"><a href="#【Redis实战】实现音乐网站的排行榜" class="headerlink" title="【Redis实战】实现音乐网站的排行榜"></a>【Redis实战】实现音乐网站的排行榜</h2><p>利用：<code>sorted set</code>，<code>set</code>中不能有重复的数据，加入进去的每个数据都可以带一个分数，他里面的数据都会按照分数进行排序，有序的<code>set</code>，他自动按照分数来排序，相当于你可以定制他里面的排序规则了。</p>
+<p><code>zadd</code>，把音乐加入排行榜中，刚开始分数可能就是0；<code>zscore</code>可以获取音乐的分数；<code>zrem</code>可以删除某个音乐；<code>zincrby</code>可以给某个音乐增加分数，这个增加分数可能就是说有人下载了，或者是有人播放了，或者有人分享了， 有人点赞了，此时可以按照规则去加分，那么排序就会移动了；当然也可以减去分数；<code>zrevrank</code>获取音乐在排行榜里的排名；<code>zrevrange set 0 100 withscores</code>，可以获取排名前100的热门歌曲。</p>
+<p><strong>代码实现</strong></p>
+<div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MusicRankingListDemo</span> </span>&#123;
+
+    <span class="hljs-keyword">private</span> Jedis jedis = <span class="hljs-keyword">new</span> Jedis(<span class="hljs-string">&quot;127.0.0.1&quot;</span>);
+
+    <span class="hljs-comment">/**</span>
+<span class="hljs-comment">     * 把新的音乐加入到排行榜里去</span>
+<span class="hljs-comment">     *</span>
+<span class="hljs-comment">     * <span class="hljs-doctag">@param</span> songId</span>
+<span class="hljs-comment">     */</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">addSong</span><span class="hljs-params">(<span class="hljs-keyword">long</span> songId)</span> </span>&#123;
+        <span class="hljs-comment">// 把新的音乐加入到排行榜中，初始分数为0</span>
+        jedis.zadd(<span class="hljs-string">&quot;music_ranking_list&quot;</span>, <span class="hljs-number">0</span>, String.valueOf(songId));
+    &#125;
+
+    <span class="hljs-comment">/**</span>
+<span class="hljs-comment">     * 增加指定歌曲的分数</span>
+<span class="hljs-comment">     *</span>
+<span class="hljs-comment">     * <span class="hljs-doctag">@param</span> songId</span>
+<span class="hljs-comment">     * <span class="hljs-doctag">@param</span> score</span>
+<span class="hljs-comment">     */</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">incrementSongScore</span><span class="hljs-params">(<span class="hljs-keyword">long</span> songId, <span class="hljs-keyword">double</span> score)</span> </span>&#123;
+        <span class="hljs-comment">// 给某一个音乐加上多少分数</span>
+        jedis.zincrby(<span class="hljs-string">&quot;music_ranking_list&quot;</span>, score, String.valueOf(songId));
+    &#125;
+
+    <span class="hljs-comment">/**</span>
+<span class="hljs-comment">     * 获取某一个歌曲在排行榜里的排名</span>
+<span class="hljs-comment">     *</span>
+<span class="hljs-comment">     * <span class="hljs-doctag">@param</span> songId</span>
+<span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span>
+<span class="hljs-comment">     */</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">long</span> <span class="hljs-title">getSongRank</span><span class="hljs-params">(<span class="hljs-keyword">long</span> songId)</span> </span>&#123;
+        <span class="hljs-keyword">return</span> jedis.zrevrank(<span class="hljs-string">&quot;music_ranking_list&quot;</span>, String.valueOf(songId));
+    &#125;
+
+    <span class="hljs-comment">/**</span>
+<span class="hljs-comment">     * 获取音乐排行榜</span>
+<span class="hljs-comment">     *</span>
+<span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span>
+<span class="hljs-comment">     */</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> Set&lt;Tuple&gt; <span class="hljs-title">getMusicRankingList</span><span class="hljs-params">()</span> </span>&#123;
+        <span class="hljs-keyword">return</span> jedis.zrevrangeWithScores(<span class="hljs-string">&quot;music_ranking_list&quot;</span>, <span class="hljs-number">0</span>, <span class="hljs-number">2</span>);
+    &#125;
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> Exception </span>&#123;
+        MusicRankingListDemo demo = <span class="hljs-keyword">new</span> MusicRankingListDemo();
+
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">20</span>; i++) &#123;
+            demo.addSong(i + <span class="hljs-number">1</span>);
+        &#125;
+
+        <span class="hljs-comment">// 模拟点击了Id为5的音乐</span>
+        demo.incrementSongScore(<span class="hljs-number">5</span>, <span class="hljs-number">1</span>);
+        <span class="hljs-comment">// 模拟点击了Id为15的音乐</span>
+        demo.incrementSongScore(<span class="hljs-number">15</span>, <span class="hljs-number">1</span>);
+        <span class="hljs-comment">// 模拟点击了Id为15的音乐</span>
+        demo.incrementSongScore(<span class="hljs-number">15</span>, <span class="hljs-number">1</span>);
+        <span class="hljs-comment">// 模拟点击了Id为7的音乐</span>
+        demo.incrementSongScore(<span class="hljs-number">7</span>, <span class="hljs-number">1</span>);
+
+        <span class="hljs-keyword">long</span> songRank = demo.getSongRank(<span class="hljs-number">5</span>);
+        System.out.println(<span class="hljs-string">&quot;查看id为5的歌曲的排名：&quot;</span> + (songRank + <span class="hljs-number">1</span>));
+
+        Set&lt;Tuple&gt; musicRankingList = demo.getMusicRankingList();
+        System.out.println(<span class="hljs-string">&quot;查看音乐排行榜排名前3个的歌曲：&quot;</span> + musicRankingList);
+    &#125;
+
+&#125;
+</code></pre></div>
+
+
 
             </div>
             <hr>
@@ -258,7 +324,11 @@
                   <div class="post-meta mr-3">
                     <i class="iconfont icon-category"></i>
                     
-                      <a class="hover-with-bg" href="/categories/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/">网络协议</a>
+                      <a class="hover-with-bg" href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/">中间件</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/redis/">redis</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/redis/%E5%AE%9E%E6%88%98/">实战</a>
                     
                   </div>
                 
@@ -266,9 +336,11 @@
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/">网络协议</a>
+                      <a class="hover-with-bg" href="/tags/redis/">redis</a>
                     
-                      <a class="hover-with-bg" href="/tags/DNS%E5%8D%8F%E8%AE%AE/">DNS协议</a>
+                      <a class="hover-with-bg" href="/tags/%E5%AE%9E%E6%88%98/">实战</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%8E%92%E8%A1%8C%E6%A6%9C/">排行榜</a>
                     
                   </div>
                 
@@ -281,18 +353,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2021/05/03/%E3%80%90%E9%AB%98%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E3%80%91JUC%E5%90%8C%E6%AD%A5%E5%B7%A5%E5%85%B7%E7%B1%BB%E4%B9%8BCountDownLatch/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">【高并发编程】JUC同步工具类之CountDownLatch</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2021/05/03/%E3%80%90%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E3%80%91HTTP%E5%8D%8F%E8%AE%AE/">
-                        <span class="hidden-mobile">【网络协议】HTTP协议</span>
+                      <a href="/2021/05/09/%E3%80%90Redis%E5%AE%9E%E6%88%98%E3%80%91%E5%BE%AE%E5%8D%9A%E7%9A%84%E5%85%B1%E5%90%8C%E5%85%B3%E6%B3%A8%E4%B8%8E%E6%8E%A8%E8%8D%90%E5%85%B3%E6%B3%A8%E7%9A%84%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/">
+                        <span class="hidden-mobile">【Redis实战】微博的共同关注与推荐关注的功能实现</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -307,7 +373,7 @@
               <article class="comments" id="comments">
                 
                 
-  <div id="SOHUCS" sid='http://example.com/2021/05/03/%E3%80%90%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E3%80%91DNS%E5%8D%8F%E8%AE%AE/'></div>
+  <div id="SOHUCS" sid='http://example.com/2021/05/10/%E3%80%90Redis%E5%AE%9E%E6%88%98%E3%80%91%E5%AE%9E%E7%8E%B0%E9%9F%B3%E4%B9%90%E7%BD%91%E7%AB%99%E7%9A%84%E6%8E%92%E8%A1%8C%E6%A6%9C/'></div>
   <script type="text/javascript">
     Fluid.utils.waitElementVisible('SOHUCS', function() {
       var appid = 'cyviJi7Eb';

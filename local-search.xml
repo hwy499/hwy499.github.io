@@ -4,6 +4,39 @@
   
   
   <entry>
+    <title>【Redis实战】实现音乐网站的排行榜</title>
+    <link href="/2021/05/10/%E3%80%90Redis%E5%AE%9E%E6%88%98%E3%80%91%E5%AE%9E%E7%8E%B0%E9%9F%B3%E4%B9%90%E7%BD%91%E7%AB%99%E7%9A%84%E6%8E%92%E8%A1%8C%E6%A6%9C/"/>
+    <url>/2021/05/10/%E3%80%90Redis%E5%AE%9E%E6%88%98%E3%80%91%E5%AE%9E%E7%8E%B0%E9%9F%B3%E4%B9%90%E7%BD%91%E7%AB%99%E7%9A%84%E6%8E%92%E8%A1%8C%E6%A6%9C/</url>
+    
+    <content type="html"><![CDATA[<h2 id="【Redis实战】实现音乐网站的排行榜"><a href="#【Redis实战】实现音乐网站的排行榜" class="headerlink" title="【Redis实战】实现音乐网站的排行榜"></a>【Redis实战】实现音乐网站的排行榜</h2><p>利用：<code>sorted set</code>，<code>set</code>中不能有重复的数据，加入进去的每个数据都可以带一个分数，他里面的数据都会按照分数进行排序，有序的<code>set</code>，他自动按照分数来排序，相当于你可以定制他里面的排序规则了。</p><p><code>zadd</code>，把音乐加入排行榜中，刚开始分数可能就是0；<code>zscore</code>可以获取音乐的分数；<code>zrem</code>可以删除某个音乐；<code>zincrby</code>可以给某个音乐增加分数，这个增加分数可能就是说有人下载了，或者是有人播放了，或者有人分享了， 有人点赞了，此时可以按照规则去加分，那么排序就会移动了；当然也可以减去分数；<code>zrevrank</code>获取音乐在排行榜里的排名；<code>zrevrange set 0 100 withscores</code>，可以获取排名前100的热门歌曲。</p><p><strong>代码实现</strong></p><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MusicRankingListDemo</span> </span>&#123;    <span class="hljs-keyword">private</span> Jedis jedis = <span class="hljs-keyword">new</span> Jedis(<span class="hljs-string">&quot;127.0.0.1&quot;</span>);    <span class="hljs-comment">/**</span><span class="hljs-comment">     * 把新的音乐加入到排行榜里去</span><span class="hljs-comment">     *</span><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> songId</span><span class="hljs-comment">     */</span>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">addSong</span><span class="hljs-params">(<span class="hljs-keyword">long</span> songId)</span> </span>&#123;        <span class="hljs-comment">// 把新的音乐加入到排行榜中，初始分数为0</span>        jedis.zadd(<span class="hljs-string">&quot;music_ranking_list&quot;</span>, <span class="hljs-number">0</span>, String.valueOf(songId));    &#125;    <span class="hljs-comment">/**</span><span class="hljs-comment">     * 增加指定歌曲的分数</span><span class="hljs-comment">     *</span><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> songId</span><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> score</span><span class="hljs-comment">     */</span>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">incrementSongScore</span><span class="hljs-params">(<span class="hljs-keyword">long</span> songId, <span class="hljs-keyword">double</span> score)</span> </span>&#123;        <span class="hljs-comment">// 给某一个音乐加上多少分数</span>        jedis.zincrby(<span class="hljs-string">&quot;music_ranking_list&quot;</span>, score, String.valueOf(songId));    &#125;    <span class="hljs-comment">/**</span><span class="hljs-comment">     * 获取某一个歌曲在排行榜里的排名</span><span class="hljs-comment">     *</span><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> songId</span><span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span><span class="hljs-comment">     */</span>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">long</span> <span class="hljs-title">getSongRank</span><span class="hljs-params">(<span class="hljs-keyword">long</span> songId)</span> </span>&#123;        <span class="hljs-keyword">return</span> jedis.zrevrank(<span class="hljs-string">&quot;music_ranking_list&quot;</span>, String.valueOf(songId));    &#125;    <span class="hljs-comment">/**</span><span class="hljs-comment">     * 获取音乐排行榜</span><span class="hljs-comment">     *</span><span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span><span class="hljs-comment">     */</span>    <span class="hljs-function"><span class="hljs-keyword">public</span> Set&lt;Tuple&gt; <span class="hljs-title">getMusicRankingList</span><span class="hljs-params">()</span> </span>&#123;        <span class="hljs-keyword">return</span> jedis.zrevrangeWithScores(<span class="hljs-string">&quot;music_ranking_list&quot;</span>, <span class="hljs-number">0</span>, <span class="hljs-number">2</span>);    &#125;    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> Exception </span>&#123;        MusicRankingListDemo demo = <span class="hljs-keyword">new</span> MusicRankingListDemo();        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">20</span>; i++) &#123;            demo.addSong(i + <span class="hljs-number">1</span>);        &#125;        <span class="hljs-comment">// 模拟点击了Id为5的音乐</span>        demo.incrementSongScore(<span class="hljs-number">5</span>, <span class="hljs-number">1</span>);        <span class="hljs-comment">// 模拟点击了Id为15的音乐</span>        demo.incrementSongScore(<span class="hljs-number">15</span>, <span class="hljs-number">1</span>);        <span class="hljs-comment">// 模拟点击了Id为15的音乐</span>        demo.incrementSongScore(<span class="hljs-number">15</span>, <span class="hljs-number">1</span>);        <span class="hljs-comment">// 模拟点击了Id为7的音乐</span>        demo.incrementSongScore(<span class="hljs-number">7</span>, <span class="hljs-number">1</span>);        <span class="hljs-keyword">long</span> songRank = demo.getSongRank(<span class="hljs-number">5</span>);        System.out.println(<span class="hljs-string">&quot;查看id为5的歌曲的排名：&quot;</span> + (songRank + <span class="hljs-number">1</span>));        Set&lt;Tuple&gt; musicRankingList = demo.getMusicRankingList();        System.out.println(<span class="hljs-string">&quot;查看音乐排行榜排名前3个的歌曲：&quot;</span> + musicRankingList);    &#125;&#125;</code></pre></div>]]></content>
+    
+    
+    <categories>
+      
+      <category>中间件</category>
+      
+      <category>redis</category>
+      
+      <category>实战</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>redis</tag>
+      
+      <tag>实战</tag>
+      
+      <tag>排行榜</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>【Redis实战】微博的共同关注与推荐关注的功能实现</title>
     <link href="/2021/05/09/%E3%80%90Redis%E5%AE%9E%E6%88%98%E3%80%91%E5%BE%AE%E5%8D%9A%E7%9A%84%E5%85%B1%E5%90%8C%E5%85%B3%E6%B3%A8%E4%B8%8E%E6%8E%A8%E8%8D%90%E5%85%B3%E6%B3%A8%E7%9A%84%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/"/>
     <url>/2021/05/09/%E3%80%90Redis%E5%AE%9E%E6%88%98%E3%80%91%E5%BE%AE%E5%8D%9A%E7%9A%84%E5%85%B1%E5%90%8C%E5%85%B3%E6%B3%A8%E4%B8%8E%E6%8E%A8%E8%8D%90%E5%85%B3%E6%B3%A8%E7%9A%84%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/</url>
@@ -15,7 +48,7 @@
       
       <category>中间件</category>
       
-      <category>Redis</category>
+      <category>redis</category>
       
       <category>实战</category>
       
@@ -24,7 +57,7 @@
     
     <tags>
       
-      <tag>Redis</tag>
+      <tag>redis</tag>
       
       <tag>实战</tag>
       
@@ -46,7 +79,7 @@
       
       <category>中间件</category>
       
-      <category>Redis</category>
+      <category>redis</category>
       
       <category>实战</category>
       
@@ -55,7 +88,7 @@
     
     <tags>
       
-      <tag>Redis</tag>
+      <tag>redis</tag>
       
       <tag>点赞功能</tag>
       
@@ -77,7 +110,7 @@
       
       <category>中间件</category>
       
-      <category>Redis</category>
+      <category>redis</category>
       
       <category>实战</category>
       
@@ -86,7 +119,7 @@
     
     <tags>
       
-      <tag>Redis</tag>
+      <tag>redis</tag>
       
       <tag>社交网站的网址点击追踪机制</tag>
       
@@ -108,7 +141,7 @@
       
       <category>中间件</category>
       
-      <category>Redis</category>
+      <category>redis</category>
       
       <category>实战</category>
       
@@ -117,7 +150,7 @@
     
     <tags>
       
-      <tag>Redis</tag>
+      <tag>redis</tag>
       
       <tag>缓存机制</tag>
       
@@ -1679,7 +1712,7 @@
       
       <category>中间件</category>
       
-      <category>Redis</category>
+      <category>redis</category>
       
     </categories>
     
@@ -1688,7 +1721,7 @@
       
       <tag>中间件</tag>
       
-      <tag>Redis</tag>
+      <tag>redis</tag>
       
       <tag>读写分离</tag>
       
@@ -1719,9 +1752,9 @@
       
       <tag>中间件</tag>
       
-      <tag>Redis</tag>
-      
       <tag>缓存</tag>
+      
+      <tag>Redis</tag>
       
       <tag>持久化</tag>
       
