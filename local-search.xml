@@ -4,6 +4,39 @@
   
   
   <entry>
+    <title>【Redis实战】网站自动补全功能实现</title>
+    <link href="/2021/05/10/%E3%80%90Redis%E5%AE%9E%E6%88%98%E3%80%91%E7%BD%91%E7%AB%99%E8%87%AA%E5%8A%A8%E8%A1%A5%E5%85%A8%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/"/>
+    <url>/2021/05/10/%E3%80%90Redis%E5%AE%9E%E6%88%98%E3%80%91%E7%BD%91%E7%AB%99%E8%87%AA%E5%8A%A8%E8%A1%A5%E5%85%A8%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/</url>
+    
+    <content type="html"><![CDATA[<h2 id="【Redis实战】网站自动补全功能实现"><a href="#【Redis实战】网站自动补全功能实现" class="headerlink" title="【Redis实战】网站自动补全功能实现"></a>【Redis实战】网站自动补全功能实现</h2><p>对于输入的每个搜索词，都会遍历一下，得到前缀串，然后zincrby auto_complete::潜在搜索词 权重 完整搜索词（潜在搜索词就是完整搜索词的前缀串），这样的话，就是每个潜在搜索词都会有一个集合，集合里是各种可能对应的搜索词和权重分数。</p><p>然后真正你搜的时候，把你输入的潜在搜索词去执行，zrevrange set 0 9，就是对这个潜在搜索词按照权重分数倒序拿出最近的10个搜索词，做一个自动提示和补全。</p><div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AutoCompleteDemo</span> </span>&#123;    <span class="hljs-keyword">private</span> Jedis jedis = <span class="hljs-keyword">new</span> Jedis(<span class="hljs-string">&quot;127.0.0.1&quot;</span>);    <span class="hljs-comment">/**</span><span class="hljs-comment">     * 搜索某个关键词</span><span class="hljs-comment">     *</span><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> keyword</span><span class="hljs-comment">     */</span>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">search</span><span class="hljs-params">(String keyword)</span> </span>&#123;        <span class="hljs-keyword">char</span>[] keywordCharArray = keyword.toCharArray();        StringBuffer potentialKeyword = <span class="hljs-keyword">new</span> StringBuffer(<span class="hljs-string">&quot;&quot;</span>);        <span class="hljs-comment">// 我喜欢学习</span>        <span class="hljs-comment">// 我：时间+我喜欢学习</span>        <span class="hljs-comment">// 我喜：时间+我喜欢学习</span>        <span class="hljs-comment">// 我爱大家</span>        <span class="hljs-comment">// 我：时间+我爱大家</span>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">char</span> keywordChar : keywordCharArray) &#123;            potentialKeyword.append(keywordChar);            <span class="hljs-comment">// 根据搜索时间进行排序，我们把当前时间最为权重</span>            jedis.zincrby(<span class="hljs-string">&quot;potential_Keyword::&quot;</span> + potentialKeyword.toString() + <span class="hljs-string">&quot;::keywords&quot;</span>, <span class="hljs-keyword">new</span> Date().getTime(), keyword);        &#125;    &#125;    <span class="hljs-comment">/**</span><span class="hljs-comment">     * 获取自动补全列表</span><span class="hljs-comment">     *</span><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> potentialKeyword 需要补全的字符</span><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> length           期待获取的列表长度</span><span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span><span class="hljs-comment">     */</span>    <span class="hljs-function"><span class="hljs-keyword">public</span> Set&lt;String&gt; <span class="hljs-title">getAutoCompleteList</span><span class="hljs-params">(String potentialKeyword, Integer length)</span> </span>&#123;        <span class="hljs-keyword">return</span> jedis.zrevrange(<span class="hljs-string">&quot;potential_Keyword::&quot;</span> + potentialKeyword + <span class="hljs-string">&quot;::keywords&quot;</span>, <span class="hljs-number">0</span>, length);    &#125;    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> Exception </span>&#123;        AutoCompleteDemo demo = <span class="hljs-keyword">new</span> AutoCompleteDemo();        demo.search(<span class="hljs-string">&quot;我爱大家&quot;</span>);        demo.search(<span class="hljs-string">&quot;我喜欢学习Redis&quot;</span>);        demo.search(<span class="hljs-string">&quot;我很喜欢一个城市&quot;</span>);        demo.search(<span class="hljs-string">&quot;我不太喜欢玩儿&quot;</span>);        demo.search(<span class="hljs-string">&quot;我喜欢学习Spark&quot;</span>);        demo.search(<span class="hljs-string">&quot;我喜欢学习Spark1&quot;</span>);        demo.search(<span class="hljs-string">&quot;abcd&quot;</span>);        Set&lt;String&gt; autoCompleteList = demo.getAutoCompleteList(<span class="hljs-string">&quot;我&quot;</span>, <span class="hljs-number">5</span>);        System.out.println(<span class="hljs-string">&quot;第一次自动补全推荐：&quot;</span> + autoCompleteList);        autoCompleteList = demo.getAutoCompleteList(<span class="hljs-string">&quot;我喜欢&quot;</span>, <span class="hljs-number">3</span>);        System.out.println(<span class="hljs-string">&quot;第二次自动补全推荐：&quot;</span> + autoCompleteList);    &#125;&#125;</code></pre></div>]]></content>
+    
+    
+    <categories>
+      
+      <category>中间件</category>
+      
+      <category>redis</category>
+      
+      <category>实战</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>redis</tag>
+      
+      <tag>实战</tag>
+      
+      <tag>自动补全功能</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>【Redis实战】实现音乐网站的排行榜</title>
     <link href="/2021/05/10/%E3%80%90Redis%E5%AE%9E%E6%88%98%E3%80%91%E5%AE%9E%E7%8E%B0%E9%9F%B3%E4%B9%90%E7%BD%91%E7%AB%99%E7%9A%84%E6%8E%92%E8%A1%8C%E6%A6%9C/"/>
     <url>/2021/05/10/%E3%80%90Redis%E5%AE%9E%E6%88%98%E3%80%91%E5%AE%9E%E7%8E%B0%E9%9F%B3%E4%B9%90%E7%BD%91%E7%AB%99%E7%9A%84%E6%8E%92%E8%A1%8C%E6%A6%9C/</url>

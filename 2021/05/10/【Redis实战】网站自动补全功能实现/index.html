@@ -17,7 +17,7 @@
   <meta name="description" content="good good study,day day up">
   <meta name="author" content="何文垚">
   <meta name="keywords" content="">
-  <title>【Redis学习】命令汇总 - hwyblog</title>
+  <title>【Redis实战】网站自动补全功能实现 - hwyblog</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
 
@@ -162,7 +162,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="【Redis学习】命令汇总">
+            <span class="h2" id="subtitle" title="【Redis实战】网站自动补全功能实现">
               
             </span>
 
@@ -172,8 +172,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2021-04-16 08:02" pubdate>
-        2021年4月16日 早上
+      <time datetime="2021-05-10 10:00" pubdate>
+        2021年5月10日 上午
       </time>
     </span>
   
@@ -184,7 +184,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.8k 字
+      471 字
     </span>
   
 
@@ -194,7 +194,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      22
+      6
        分钟
     </span>
   
@@ -232,130 +232,71 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">【Redis学习】命令汇总</h1>
+            <h1 style="display: none">【Redis实战】网站自动补全功能实现</h1>
             
               <p class="note note-info">
                 
-                  本文最后更新于：17 小时前
+                  本文最后更新于：几秒前
                 
               </p>
             
             <div class="markdown-body">
-              <h2 id="Redis-命令汇总"><a href="#Redis-命令汇总" class="headerlink" title="Redis 命令汇总"></a>Redis 命令汇总</h2><h3 id="1、连接操作相关的命令"><a href="#1、连接操作相关的命令" class="headerlink" title="1、连接操作相关的命令"></a>1、连接操作相关的命令</h3><ul>
-<li>ping：测试连接是否存活如果正常会返回 pong</li>
-<li>echo：打印</li>
-<li>select：切换到指定的数据库，数据库索引号 index 用数字值指定，以 0 作为起始索引值</li>
-<li>quit：关闭连接（connection）</li>
-<li>auth：简单密码认证</li>
-</ul>
-<h3 id="2、服务端相关命令"><a href="#2、服务端相关命令" class="headerlink" title="2、服务端相关命令"></a>2、服务端相关命令</h3><ul>
-<li>time：返回当前服务器时间</li>
-<li>client list: 返回所有连接到服务器的客户端信息和统计数据 参见 - <a target="_blank" rel="noopener" href="http://redisdoc.com/server/client_list.html">http://redisdoc.com/server/client_list.html</a></li>
-<li>client kill ip:port：关闭地址为 ip:port 的客户端</li>
-<li>save：将数据同步保存到磁盘</li>
-<li>bgsave：将数据异步保存到磁盘</li>
-<li>lastsave：返回上次成功将数据保存到磁盘的Unix时戳</li>
-<li>shundown：将数据同步保存到磁盘，然后关闭服务</li>
-<li>info：提供服务器的信息和统计</li>
-<li>config resetstat：重置 info 命令中的某些统计数据</li>
-<li>config get：获取配置文件信息</li>
-<li>config set：动态地调整 Redis 服务器的配置(configuration)而无须重启，可以修改的配置参数可以使用命令 CONFIG GET * 来列出</li>
-<li>config rewrite：Redis 服务器时所指定的 redis.conf 文件进行改写</li>
-<li>monitor：实时转储收到的请求</li>
-<li>slaveof：改变复制策略设置</li>
-</ul>
-<h3 id="3、发布订阅相关命令"><a href="#3、发布订阅相关命令" class="headerlink" title="3、发布订阅相关命令"></a>3、发布订阅相关命令</h3><ul>
-<li>psubscribe：订阅一个或多个符合给定模式的频道 例如 psubscribe news.* tweet.*</li>
-<li>publish：将信息 message 发送到指定的频道 channel 例如 publish msg “good morning”</li>
-<li>pubsub channels：列出当前的活跃频道 例如 PUBSUB CHANNELS news.i*</li>
-<li>pubsub numsub：返回给定频道的订阅者数量 例如 PUBSUB NUMSUB <a target="_blank" rel="noopener" href="http://news.it/">news.it</a> news.internet news.sport news.music</li>
-<li>pubsub numpat：返回客户端订阅的所有模式的数量总和</li>
-<li>punsubscribe：指示客户端退订所有给定模式。</li>
-<li>subscribe：订阅给定的一个或多个频道的信息。例如 subscribe msg chat_room</li>
-<li>unsubscribe：指示客户端退订给定的频道。</li>
-</ul>
-<h3 id="4、对-KEY-操作的命令"><a href="#4、对-KEY-操作的命令" class="headerlink" title="4、对 KEY 操作的命令"></a>4、对 KEY 操作的命令</h3><ul>
-<li>exists(key)：确认一个 key 是否存在</li>
-<li>del(key)：删除一个 key</li>
-<li>type(key)：返回值的类型</li>
-<li>keys(pattern)：返回满足给定 pattern 的所有 key</li>
-<li>randomkey：随机返回 key 空间的一个</li>
-<li>keyrename(oldname, newname)：重命名 key</li>
-<li>dbsize：返回当前数据库中 key 的数目</li>
-<li>expire：设定一个 key 的活动时间（s）</li>
-<li>ttl：获得一个 key 的活动时间</li>
-<li>move(key, dbindex)：移动当前数据库中的 key 到 dbindex 数据库</li>
-<li>flushdb：删除当前选择数据库中的所有 key</li>
-<li>flushall：删除所有数据库中的所有 key</li>
-</ul>
-<h3 id="5、对-String-操作的命令"><a href="#5、对-String-操作的命令" class="headerlink" title="5、对 String 操作的命令"></a>5、对 String 操作的命令</h3><ul>
-<li>set(key, value)：给数据库中名称为 key 的 string 赋予值 value</li>
-<li>get(key)：返回数据库中名称为 key 的 string 的 value</li>
-<li>getset(key, value)：给名称为 key 的 string 赋予上一次的 value</li>
-<li>mget(key1, key2,…, key N)：返回库中多个 string 的 value</li>
-<li>setnx(key, value)：添加 string，名称为 key，值为 value</li>
-<li>setex(key, time, value)：向库中添加 string，设定过期时间 time</li>
-<li>mset(key N, value N)：批量设置多个 string 的值</li>
-<li>msetnx(key N, value N)：如果所有名称为 key i 的 string 都不存在</li>
-<li>incr(key)：名称为 key 的 string 增 1 操作</li>
-<li>incrby(key, integer)：名称为 key 的 string 增加 integer</li>
-<li>decr(key)：名称为 key 的 string 减 1 操作</li>
-<li>decrby(key, integer)：名称为 key 的 string 减少 integer</li>
-<li>append(key, value)：名称为 key 的 string 的值附加 value</li>
-<li>substr(key, start, end)：返回名称为 key 的 string 的 value 的子串</li>
-</ul>
-<h3 id="6、对-List-操作的命令"><a href="#6、对-List-操作的命令" class="headerlink" title="6、对 List 操作的命令"></a>6、对 List 操作的命令</h3><ul>
-<li>rpush(key, value)：在名称为 key 的 list 尾添加一个值为 value 的元素</li>
-<li>lpush(key, value)：在名称为 key 的 list 头添加一个值为 value 的元素</li>
-<li>llen(key)：返回名称为 key 的 list 的长度</li>
-<li>lrange(key, start, end)：返回名称为 key 的 list 中 start 至 end 之间的元素</li>
-<li>ltrim(key, start, end)：截取名称为 key 的 list</li>
-<li>lindex(key, index)：返回名称为 key 的 list 中 index 位置的元素</li>
-<li>lset(key, index, value)：给名称为 key 的 list 中 index 位置的元素赋值</li>
-<li>lrem(key, count, value)：删除 count 个 key 的 list 中值为 value 的元素</li>
-<li>lpop(key)：返回并删除名称为 key 的 list 中的首元素</li>
-<li>rpop(key)：返回并删除名称为 key 的 list 中的尾元素</li>
-<li>blpop(key1, key2,… key N, timeout)：lpop 命令的 block 版本。</li>
-<li>brpop(key1, key2,… key N, timeout)：rpop 的 block 版本。</li>
-<li>rpoplpush(srckey, dstkey)：返回并删除名称为 srckey 的 list 的尾元素，并将该元素添加到名称为 dstkey 的 list 的头部</li>
-</ul>
-<h3 id="7、对-Set-操作的命令"><a href="#7、对-Set-操作的命令" class="headerlink" title="7、对 Set 操作的命令"></a>7、对 Set 操作的命令</h3><ul>
-<li>sadd(key, member)：向名称为 key 的 set 中添加元素 member</li>
-<li>srem(key, member) ：删除名称为 key 的 set 中的元素 member</li>
-<li>spop(key) ：随机返回并删除名称为 key 的 set 中一个元素</li>
-<li>smove(srckey, dstkey, member) ：移到集合元素</li>
-<li>scard(key) ：返回名称为 key 的 set 的基数</li>
-<li>sismember(key, member) ：member 是否是名称为 key 的 set 的元素</li>
-<li>sinter(key1, key2,…key N) ：求交集</li>
-<li>sinterstore(dstkey, (keys)) ：求交集并将交集保存到 dstkey 的集合</li>
-<li>sunion(key1, (keys)) ：求并集</li>
-<li>sunionstore(dstkey, (keys)) ：求并集并将并集保存到 dstkey 的集合</li>
-<li>sdiff(key1, (keys)) ：求差集</li>
-<li>sdiffstore(dstkey, (keys)) ：求差集并将差集保存到 dstkey 的集合</li>
-<li>smembers(key) ：返回名称为 key 的 set 的所有元素</li>
-<li>srandmember(key) ：随机返回名称为 key 的 set 的一个元素</li>
-</ul>
-<h3 id="8、-Hash-操作的命令"><a href="#8、-Hash-操作的命令" class="headerlink" title="8、 Hash 操作的命令"></a>8、 Hash 操作的命令</h3><ul>
-<li>hset(key, field, value)：向名称为 key 的 hash 中添加元素 field</li>
-<li>hget(key, field)：返回名称为 key 的 hash 中 field 对应的 value</li>
-<li>hmget(key, (fields))：返回名称为 key 的 hash 中 field i 对应的 value</li>
-<li>hmset(key, (fields))：向名称为 key 的 hash 中添加元素 field</li>
-<li>hincrby(key, field, integer)：将名称为 key 的 hash 中 field 的 value 增加 integer</li>
-<li>hexists(key, field)：名称为 key 的 hash 中是否存在键为 field 的域</li>
-<li>hdel(key, field)：删除名称为 key 的 hash 中键为 field 的域</li>
-<li>hlen(key)：返回名称为 key 的 hash 中元素个数</li>
-<li>hkeys(key)：返回名称为 key 的 hash 中所有键</li>
-<li>hvals(key)：返回名称为 key 的 hash 中所有键对应的 value</li>
-<li>hgetall(key)：返回名称为 key 的 hash 中所有的键（field）及其对应的 value</li>
-</ul>
-<h3 id="9、Redis-Sentinel"><a href="#9、Redis-Sentinel" class="headerlink" title="9、Redis Sentinel"></a>9、Redis Sentinel</h3><ul>
-<li>ping ：返回 pong</li>
-<li>sentinel masters ：列出所有被监视的主服务器，以及这些主服务器的当前状态。</li>
-<li>sentinel slaves：列出给定主服务器的所有从服务器，以及这些从服务器的当前状态。</li>
-<li>sentinel get-master-addr-by-name：返回给定名字的主服务器的 IP 地址和端口号。如果这个主服务器正在执行故障转移操作，或者针对这个主服务器的故障转移操作已经完成，那么这个命令返回新的主服务器的 IP 地址和端口号。</li>
-<li>sentinel reset：重置所有名字和给定模式 pattern 相匹配的主服务器。pattern 参数是一个 Glob 风格的模式 重置操作清楚主服务器目前的所有状态，包括正在执行中的故障转移，并移除目前已经发现和关联的，主服务器的所有从服务器和 Sentinel 。</li>
-<li>sentinel failover：当主服务器失效时，在不询问其他 Sentinel 意见的情况下，强制开始一次自动故障迁移（不过发起故障转移的 Sentinel 会向其他 Sentinel 发送一个新的配置，其他 Sentinel 会根据这个配置进行相应的更新）。</li>
-</ul>
+              <h2 id="【Redis实战】网站自动补全功能实现"><a href="#【Redis实战】网站自动补全功能实现" class="headerlink" title="【Redis实战】网站自动补全功能实现"></a>【Redis实战】网站自动补全功能实现</h2><p>对于输入的每个搜索词，都会遍历一下，得到前缀串，然后zincrby auto_complete::潜在搜索词 权重 完整搜索词（潜在搜索词就是完整搜索词的前缀串），这样的话，就是每个潜在搜索词都会有一个集合，集合里是各种可能对应的搜索词和权重分数。</p>
+<p>然后真正你搜的时候，把你输入的潜在搜索词去执行，zrevrange set 0 9，就是对这个潜在搜索词按照权重分数倒序拿出最近的10个搜索词，做一个自动提示和补全。</p>
+<div class="hljs code-wrapper"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AutoCompleteDemo</span> </span>&#123;
+
+    <span class="hljs-keyword">private</span> Jedis jedis = <span class="hljs-keyword">new</span> Jedis(<span class="hljs-string">&quot;127.0.0.1&quot;</span>);
+
+    <span class="hljs-comment">/**</span>
+<span class="hljs-comment">     * 搜索某个关键词</span>
+<span class="hljs-comment">     *</span>
+<span class="hljs-comment">     * <span class="hljs-doctag">@param</span> keyword</span>
+<span class="hljs-comment">     */</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">search</span><span class="hljs-params">(String keyword)</span> </span>&#123;
+        <span class="hljs-keyword">char</span>[] keywordCharArray = keyword.toCharArray();
+        StringBuffer potentialKeyword = <span class="hljs-keyword">new</span> StringBuffer(<span class="hljs-string">&quot;&quot;</span>);
+        <span class="hljs-comment">// 我喜欢学习</span>
+        <span class="hljs-comment">// 我：时间+我喜欢学习</span>
+        <span class="hljs-comment">// 我喜：时间+我喜欢学习</span>
+        <span class="hljs-comment">// 我爱大家</span>
+        <span class="hljs-comment">// 我：时间+我爱大家</span>
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">char</span> keywordChar : keywordCharArray) &#123;
+            potentialKeyword.append(keywordChar);
+            <span class="hljs-comment">// 根据搜索时间进行排序，我们把当前时间最为权重</span>
+            jedis.zincrby(<span class="hljs-string">&quot;potential_Keyword::&quot;</span> + potentialKeyword.toString() + <span class="hljs-string">&quot;::keywords&quot;</span>, <span class="hljs-keyword">new</span> Date().getTime(), keyword);
+        &#125;
+    &#125;
+
+    <span class="hljs-comment">/**</span>
+<span class="hljs-comment">     * 获取自动补全列表</span>
+<span class="hljs-comment">     *</span>
+<span class="hljs-comment">     * <span class="hljs-doctag">@param</span> potentialKeyword 需要补全的字符</span>
+<span class="hljs-comment">     * <span class="hljs-doctag">@param</span> length           期待获取的列表长度</span>
+<span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span>
+<span class="hljs-comment">     */</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> Set&lt;String&gt; <span class="hljs-title">getAutoCompleteList</span><span class="hljs-params">(String potentialKeyword, Integer length)</span> </span>&#123;
+        <span class="hljs-keyword">return</span> jedis.zrevrange(<span class="hljs-string">&quot;potential_Keyword::&quot;</span> + potentialKeyword + <span class="hljs-string">&quot;::keywords&quot;</span>, <span class="hljs-number">0</span>, length);
+    &#125;
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> Exception </span>&#123;
+        AutoCompleteDemo demo = <span class="hljs-keyword">new</span> AutoCompleteDemo();
+
+        demo.search(<span class="hljs-string">&quot;我爱大家&quot;</span>);
+        demo.search(<span class="hljs-string">&quot;我喜欢学习Redis&quot;</span>);
+        demo.search(<span class="hljs-string">&quot;我很喜欢一个城市&quot;</span>);
+        demo.search(<span class="hljs-string">&quot;我不太喜欢玩儿&quot;</span>);
+        demo.search(<span class="hljs-string">&quot;我喜欢学习Spark&quot;</span>);
+        demo.search(<span class="hljs-string">&quot;我喜欢学习Spark1&quot;</span>);
+        demo.search(<span class="hljs-string">&quot;abcd&quot;</span>);
+
+        Set&lt;String&gt; autoCompleteList = demo.getAutoCompleteList(<span class="hljs-string">&quot;我&quot;</span>, <span class="hljs-number">5</span>);
+        System.out.println(<span class="hljs-string">&quot;第一次自动补全推荐：&quot;</span> + autoCompleteList);
+
+        autoCompleteList = demo.getAutoCompleteList(<span class="hljs-string">&quot;我喜欢&quot;</span>, <span class="hljs-number">3</span>);
+        System.out.println(<span class="hljs-string">&quot;第二次自动补全推荐：&quot;</span> + autoCompleteList);
+    &#125;
+
+&#125;</code></pre></div>
 
             </div>
             <hr>
@@ -367,7 +308,9 @@
                     
                       <a class="hover-with-bg" href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/">中间件</a>
                     
-                      <a class="hover-with-bg" href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/Redis/">Redis</a>
+                      <a class="hover-with-bg" href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/redis/">redis</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/redis/%E5%AE%9E%E6%88%98/">实战</a>
                     
                   </div>
                 
@@ -375,9 +318,11 @@
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/tags/Redis/">Redis</a>
+                      <a class="hover-with-bg" href="/tags/redis/">redis</a>
                     
-                      <a class="hover-with-bg" href="/tags/%E5%91%BD%E4%BB%A4/">命令</a>
+                      <a class="hover-with-bg" href="/tags/%E5%AE%9E%E6%88%98/">实战</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E8%87%AA%E5%8A%A8%E8%A1%A5%E5%85%A8%E5%8A%9F%E8%83%BD/">自动补全功能</a>
                     
                   </div>
                 
@@ -390,18 +335,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2021/05/02/%E3%80%90%E9%AB%98%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E3%80%91%E5%8E%9F%E5%AD%90%E5%8F%98%E9%87%8F%E7%B1%BB/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">【高并发编程】原子变量类</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2021/04/15/%E3%80%90JVM%E5%AD%A6%E4%B9%A0%E3%80%91-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E7%A7%8D%E7%B1%BB%E4%BB%A5%E5%8F%8A%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/">
-                        <span class="hidden-mobile">【JVM学习】-类加载器种类以及类加载机制</span>
+                      <a href="/2021/05/10/%E3%80%90Redis%E5%AE%9E%E6%88%98%E3%80%91%E5%AE%9E%E7%8E%B0%E9%9F%B3%E4%B9%90%E7%BD%91%E7%AB%99%E7%9A%84%E6%8E%92%E8%A1%8C%E6%A6%9C/">
+                        <span class="hidden-mobile">【Redis实战】实现音乐网站的排行榜</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -416,7 +355,7 @@
               <article class="comments" id="comments">
                 
                 
-  <div id="SOHUCS" sid='http://example.com/2021/04/16/%E3%80%90Redis%E5%AD%A6%E4%B9%A0%E3%80%91%E5%91%BD%E4%BB%A4%E6%B1%87%E6%80%BB/'></div>
+  <div id="SOHUCS" sid='http://example.com/2021/05/10/%E3%80%90Redis%E5%AE%9E%E6%88%98%E3%80%91%E7%BD%91%E7%AB%99%E8%87%AA%E5%8A%A8%E8%A1%A5%E5%85%A8%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0/'></div>
   <script type="text/javascript">
     Fluid.utils.waitElementVisible('SOHUCS', function() {
       var appid = 'cyviJi7Eb';
